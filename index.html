@@ -1,91 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ink & Destiny BaZi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Noto+Serif+SC:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Manrope:wght@200;400;600&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              paper: '#F7F5F0', // Warm Rice Paper
-              'paper-dark': '#EBE8E1',
-              ink: '#1C1C1C', // Deep Charcoal
-              'ink-light': '#4A4A4A', // Wash Grey
-              seal: '#A93832', // Cinnabar Red (Stamp)
-              wood: '#4A6741', // Muted Bamboo
-              fire: '#B24C3B', // Burnt Ochre Red
-              earth: '#8C7051', // Brown Earth
-              metal: '#D4AF37', // Metallic Gold
-              water: '#3D5A6C', // Deep Mineral Blue
-              gold: '#D4AF37',
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Knowing Destiny</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Noto+Serif+SC:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Manrope:wght@200;400;600&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            paper: '#F7F5F0', // Warm Rice Paper
+            'paper-dark': '#EBE8E1',
+            ink: '#1C1C1C', // Deep Charcoal
+            'ink-light': '#4A4A4A', // Wash Grey
+            seal: '#A93832', // Cinnabar Red (Stamp)
+            wood: '#4A6741', // Muted Bamboo
+            fire: '#B24C3B', // Burnt Ochre Red
+            earth: '#8C7051', // Brown Earth
+            metal: '#D4AF37', // Metallic Gold
+            water: '#3D5A6C', // Deep Mineral Blue
+            gold: '#D4AF37',
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'serif'],
+            sc: ['Noto Serif SC', 'serif'],
+            title: ['Cinzel', 'serif'],
+            sans: ['Manrope', 'sans-serif'],
+          },
+          backgroundImage: {
+            'rice-paper': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjdGNUYwIi8+CjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiMwMDAiIG9wYWNpdHk9IjAuMDI1Ii8+Cjwvc3ZnPg==')",
+          },
+          animation: {
+            'fade-in': 'fadeIn 1.2s ease-out forwards',
+            'slide-up': 'slideUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
+            'grow-bar': 'growBar 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+            'ink-spread': 'inkSpread 0.8s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
             },
-            fontFamily: {
-              serif: ['Playfair Display', 'serif'],
-              sc: ['Noto Serif SC', 'serif'],
-              title: ['Cinzel', 'serif'],
-              sans: ['Manrope', 'sans-serif'],
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(40px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
             },
-            backgroundImage: {
-              'rice-paper': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjdGNUYwIi8+CjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiMwMDAiIG9wYWNpdHk9IjAuMDI1Ii8+Cjwvc3ZnPg==')",
+            growBar: {
+              '0%': { height: '0%' },
+              '100%': { height: 'var(--target-height)' },
             },
-            animation: {
-              'fade-in': 'fadeIn 1.2s ease-out forwards',
-              'slide-up': 'slideUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
-              'grow-bar': 'growBar 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards',
-              'ink-spread': 'inkSpread 0.8s ease-out forwards',
-            },
-            keyframes: {
-              fadeIn: {
-                '0%': { opacity: '0' },
-                '100%': { opacity: '1' },
-              },
-              slideUp: {
-                '0%': { opacity: '0', transform: 'translateY(40px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              },
-              growBar: {
-                '0%': { height: '0%' },
-                '100%': { height: 'var(--target-height)' },
-              },
-              inkSpread: {
-                '0%': { transform: 'scale(0.9)', opacity: '0' },
-                '100%': { transform: 'scale(1)', opacity: '1' },
-              }
+            inkSpread: {
+              '0%': { transform: 'scale(0.9)', opacity: '0' },
+              '100%': { transform: 'scale(1)', opacity: '1' },
             }
           }
         }
       }
-    </script>
-    <style>
-      .mask-fade {
-        mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-      }
-      .vertical-text {
-        writing-mode: vertical-rl;
-        text-orientation: upright;
-      }
-      /* Custom Scrollbar for panels */
-      ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #F7F5F0; 
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #D1CFC8; 
-        border-radius: 3px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #A93832; 
-      }
-    </style>
+    }
+  </script>
+  <style>
+    .mask-fade {
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+
+    .vertical-text {
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+    }
+
+    /* Custom Scrollbar for panels */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #F7F5F0;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #D1CFC8;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #A93832;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -97,10 +105,13 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body class="bg-rice-paper text-ink font-sans antialiased selection:bg-seal selection:text-white overflow-x-hidden min-h-screen">
-    <div id="root"></div>
+
+<body
+  class="bg-rice-paper text-ink font-sans antialiased selection:bg-seal selection:text-white overflow-x-hidden min-h-screen">
+  <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>

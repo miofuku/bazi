@@ -56,3 +56,34 @@ export const ELEMENT_BG_COLORS: Record<ElementType, string> = {
   [ElementType.METAL]: 'bg-metal',
   [ElementType.WATER]: 'bg-water',
 };
+
+// Symbol type mappings for 天干 (Heavenly Stems)
+// These map to custom SVG icons
+export const STEM_SYMBOLS: Record<string, string> = {
+  '甲': 'tree',      // Big Tree - Yang Wood
+  '乙': 'sprout',    // Grass/Sprout - Yin Wood
+  '丙': 'sun',       // Sun - Yang Fire
+  '丁': 'lantern',   // Lantern/Candle - Yin Fire
+  '戊': 'rock',      // Rock/Mountain - Yang Earth
+  '己': 'field',     // Field/Farmland - Yin Earth
+  '庚': 'sword',     // Sword - Yang Metal
+  '辛': 'gem',       // Gem/Jewelry - Yin Metal
+  '壬': 'river',     // River - Yang Water
+  '癸': 'rain',      // Rain/Dew - Yin Water
+};
+
+// Symbol type mappings for 地支 (Earthly Branches)
+export const BRANCH_SYMBOLS: Record<string, string> = {
+  '寅': 'tree',      // Tiger - Wood (Tree)
+  '卯': 'sprout',    // Rabbit - Wood (Sprout)
+  '巳': 'sun',       // Snake - Fire (Sun)
+  '午': 'lantern',   // Horse - Fire (Lantern)
+  '丑': 'field',     // Ox - Earth (Field)
+  '未': 'field',     // Goat - Earth (Field)
+  '辰': 'rock',      // Dragon - Earth (Rock)
+  '戌': 'rock',      // Dog - Earth (Rock)
+  '申': 'sword',     // Monkey - Metal (Sword)
+  '酉': 'gem',       // Rooster - Metal (Gem)
+  '子': 'rain',      // Rat - Water (Rain/Dew)
+  '亥': 'river',     // Pig - Water (River)
+};
