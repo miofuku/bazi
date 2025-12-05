@@ -382,7 +382,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
           type="submit"
           className="w-full mt-6 bg-ink hover:bg-stone-800 text-paper font-title font-bold py-4 border border-ink shadow-lg hover:shadow-xl transition-all duration-300 tracking-[0.2em] uppercase"
         >
-          Reveal Destiny
+          Reveal My Archetype
         </button>
       </div>
     </form>

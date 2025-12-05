@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ServiceCard: React.FC<{ title: string; subtitle: string; desc: string; icon: React.ReactNode; features: string[]; price: string }> = ({ title, subtitle, desc, icon, features, price }) => (
-  <div className="relative bg-white p-8 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 cursor-pointer group border border-stone-100 flex flex-col h-full">
+  <div className="relative bg-white/40 backdrop-blur-md border border-white/60 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 cursor-pointer group flex flex-col h-full rounded-sm">
 
     <div className="flex flex-col items-center text-center mb-6">
       <div className="text-ink/60 group-hover:text-seal group-hover:scale-110 transition-all duration-500 mb-5">

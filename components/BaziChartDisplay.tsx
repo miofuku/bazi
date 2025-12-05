@@ -131,31 +131,34 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
         </div>
       </div>
 
-      {/* The Scroll Strip */}
-      <div className="relative w-24 md:w-32 bg-white border-x-2 border-stone-200 shadow-lg transition-all duration-500 transform group-hover:-translate-y-2 group-hover:shadow-xl overflow-hidden flex flex-col pb-6">
+      {/* The Scroll Strip (Tech Panel Style) */}
+      <div className="relative w-24 md:w-32 bg-white/40 backdrop-blur-md border border-white/50 shadow-xl transition-all duration-500 transform group-hover:-translate-y-2 group-hover:shadow-2xl overflow-hidden flex flex-col pb-6 rounded-sm">
 
-        {/* Decorative Top Pattern */}
-        <div className="h-2 bg-ink/5 w-full mb-2 border-b border-ink/5"></div>
+        {/* Decorative Top Pattern (Tech Lines) */}
+        <div className="h-1 bg-ink/5 w-full mb-2 flex justify-between px-2">
+          <div className="w-px h-full bg-ink/20"></div>
+          <div className="w-px h-full bg-ink/20"></div>
+          <div className="w-px h-full bg-ink/20"></div>
+        </div>
 
         {/* Stem */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-1 py-3 border-b border-dashed border-stone-300 relative">
+        <div className="flex-1 flex flex-col items-center justify-center gap-1 py-3 border-b border-white/20 relative">
           {/* Stem Deity Label */}
           {pillar.stem.deity && (
-            <span className="absolute top-1 text-[9px] font-serif text-ink/50 bg-paper px-1 rounded border border-ink/10">
+            <span className="absolute top-1 text-[9px] font-sans font-bold uppercase tracking-wider text-ink/50 bg-white/60 px-1.5 py-0.5 rounded-sm border border-white/40 backdrop-blur-sm">
               {pillar.stem.deity}
             </span>
           )}
 
-          <span className={`text-4xl md:text-5xl font-sc font-bold ${ELEMENT_COLORS[pillar.stem.element]}`}>
+          <span className={`text-4xl md:text-5xl font-sc font-bold ${ELEMENT_COLORS[pillar.stem.element]} drop-shadow-sm`}>
             {pillar.stem.chinese}
           </span>
-          <span className="font-serif italic text-sm text-ink/60">{pillar.stem.name}</span>
-          <span className="text-[10px] uppercase tracking-wider text-ink/40">{pillar.stem.element}</span>
-          <div className="flex flex-col items-center gap-1 mt-1">
+          <span className="font-sans font-medium text-xs text-ink/70 uppercase tracking-widest">{pillar.stem.name}</span>
+          <div className="flex flex-col items-center gap-1 mt-2">
             <span className={`${ELEMENT_COLORS[pillar.stem.element]}`}>
               <ElementIcon
                 type={STEM_SYMBOLS[pillar.stem.chinese]}
-                className="w-7 h-7"
+                className="w-6 h-6 stroke-[1.5]"
               />
             </span>
           </div>
@@ -163,31 +166,35 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
 
         {/* Branch */}
         <div className="flex-1 flex flex-col items-center justify-center gap-1 py-3 relative">
-          <span className={`text-4xl md:text-5xl font-sc font-bold ${ELEMENT_COLORS[pillar.branch.element]}`}>
+          <span className={`text-4xl md:text-5xl font-sc font-bold ${ELEMENT_COLORS[pillar.branch.element]} drop-shadow-sm`}>
             {pillar.branch.chinese}
           </span>
 
           {/* Branch Main Deity Label */}
           {pillar.branch.deity && (
-            <span className="text-[10px] font-serif text-ink/50 bg-paper px-1 rounded border border-ink/10 mb-1">
+            <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-ink/50 bg-white/60 px-1.5 py-0.5 rounded-sm border border-white/40 backdrop-blur-sm mb-1">
               {pillar.branch.deity}
             </span>
           )}
 
-          <span className="font-serif italic text-sm text-ink/60">{pillar.branch.name}</span>
-          <span className="text-[10px] uppercase font-bold text-ink/30">{pillar.branch.zodiac}</span>
-          <div className="flex flex-col items-center gap-1 mt-1">
+          <span className="font-sans font-medium text-xs text-ink/70 uppercase tracking-widest">{pillar.branch.name}</span>
+          <span className="text-[9px] font-sans font-bold text-ink/30 uppercase tracking-[0.2em]">{pillar.branch.zodiac}</span>
+          <div className="flex flex-col items-center gap-1 mt-2">
             <span className={`${ELEMENT_COLORS[pillar.branch.element]}`}>
               <ElementIcon
                 type={BRANCH_SYMBOLS[pillar.branch.chinese]}
-                className="w-7 h-7"
+                className="w-6 h-6 stroke-[1.5]"
               />
             </span>
           </div>
         </div>
 
-        {/* Decorative Bottom */}
-        <div className="absolute bottom-0 w-full h-1 bg-seal/80"></div>
+        {/* Decorative Bottom (Tech Locking Mechanism) */}
+        <div className="absolute bottom-0 w-full h-1 bg-ink/10 flex justify-center gap-1">
+          <div className="w-1 h-full bg-ink/20"></div>
+          <div className="w-8 h-full bg-seal/80"></div>
+          <div className="w-1 h-full bg-ink/20"></div>
+        </div>
       </div>
 
       {/* Hidden Stems 藏干 (Reveal below) */}
