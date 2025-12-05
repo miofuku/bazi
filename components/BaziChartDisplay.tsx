@@ -143,6 +143,7 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
             {pillar.stem.chinese}
           </span>
           <span className="font-serif italic text-sm text-ink/60">{pillar.stem.name}</span>
+          <span className="text-[10px] uppercase tracking-wider text-ink/40">{pillar.stem.element}</span>
           <div className="flex flex-col items-center gap-1 mt-1">
             <span className={`${ELEMENT_COLORS[pillar.stem.element]}`}>
               <ElementIcon
@@ -158,10 +159,8 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
           <span className={`text-4xl md:text-5xl font-sc font-bold ${ELEMENT_COLORS[pillar.branch.element]}`}>
             {pillar.branch.chinese}
           </span>
-          <div className="flex flex-col items-center leading-none">
-            <span className="font-serif italic text-sm text-ink/60">{pillar.branch.name}</span>
-            <span className="text-[10px] uppercase font-bold text-ink/30 mt-1">{pillar.branch.zodiac}</span>
-          </div>
+          <span className="font-serif italic text-sm text-ink/60">{pillar.branch.name}</span>
+          <span className="text-[10px] uppercase font-bold text-ink/30">{pillar.branch.zodiac}</span>
           <div className="flex flex-col items-center gap-1 mt-1">
             <span className={`${ELEMENT_COLORS[pillar.branch.element]}`}>
               <ElementIcon

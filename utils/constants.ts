@@ -76,14 +76,14 @@ export const STEM_SYMBOLS: Record<string, string> = {
 export const BRANCH_SYMBOLS: Record<string, string> = {
   '寅': 'tree',      // Tiger - Wood (Tree)
   '卯': 'sprout',    // Rabbit - Wood (Sprout)
-  '巳': 'sun',       // Snake - Fire (Sun)
-  '午': 'lantern',   // Horse - Fire (Lantern)
+  '巳': 'lantern',   // Snake - Fire (Candle/Lantern)
+  '午': 'sun',       // Horse - Fire (Sun)
   '丑': 'field',     // Ox - Earth (Field)
   '未': 'field',     // Goat - Earth (Field)
   '辰': 'rock',      // Dragon - Earth (Rock)
   '戌': 'rock',      // Dog - Earth (Rock)
   '申': 'sword',     // Monkey - Metal (Sword)
   '酉': 'gem',       // Rooster - Metal (Gem)
-  '子': 'rain',      // Rat - Water (Rain/Dew)
-  '亥': 'river',     // Pig - Water (River)
+  '子': 'river',      // Rat - Water (Rain/Dew)
+  '亥': 'rain',     // Pig - Water (River)
 };

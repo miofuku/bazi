@@ -1,20 +1,22 @@
 import React from 'react';
 import { ElementType } from '../types';
 import { ELEMENT_BG_COLORS, ELEMENT_COLORS } from '../utils/constants';
+import { ElementIcon } from './BaziChartDisplay';
+
+const ELEMENT_TO_ICON_TYPE: Record<ElementType, string> = {
+  [ElementType.WOOD]: 'tree',
+  [ElementType.FIRE]: 'sun',
+  [ElementType.EARTH]: 'rock',
+  [ElementType.METAL]: 'sword',
+  [ElementType.WATER]: 'river',
+};
 
 interface ElementBalanceProps {
   counts: Record<ElementType, number>;
 }
 
 const getElementIcon = (element: ElementType, className: string = "w-4 h-4") => {
-  switch (element) {
-    case ElementType.WOOD: return <svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L12 22 M12 6L8 10 M12 10L16 14 M12 14L8 18" stroke="currentColor" strokeWidth="2" /></svg>;
-    case ElementType.FIRE: return <svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c0 0-6 5-6 11a6 6 0 1 0 12 0c0-6-6-11-6-11z"/></svg>;
-    case ElementType.EARTH: return <svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M3 20h18L12 4z"/></svg>;
-    case ElementType.METAL: return <svg className={className} viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" fill="none"/></svg>;
-    case ElementType.WATER: return <svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2s-6 7-6 12a6 6 0 1 0 12 0c0-5-6-12-6-12z"/></svg>;
-    default: return null;
-  }
+  return <ElementIcon type={ELEMENT_TO_ICON_TYPE[element]} className={className} />;
 };
 
 // SVG Diagram Component
@@ -51,25 +53,25 @@ const FiveElementsDiagram: React.FC = () => {
 
           {/* Generating Cycle (Circle/Outer) */}
           <g className="opacity-20">
-             <path 
-               d={`M${pos[ElementType.FIRE].x},${pos[ElementType.FIRE].y} L${pos[ElementType.EARTH].x},${pos[ElementType.EARTH].y} L${pos[ElementType.METAL].x},${pos[ElementType.METAL].y} L${pos[ElementType.WATER].x},${pos[ElementType.WATER].y} L${pos[ElementType.WOOD].x},${pos[ElementType.WOOD].y} Z`}
-               fill="none"
-               stroke="currentColor"
-               strokeWidth="1"
-               strokeDasharray="4 2"
-             />
+            <path
+              d={`M${pos[ElementType.FIRE].x},${pos[ElementType.FIRE].y} L${pos[ElementType.EARTH].x},${pos[ElementType.EARTH].y} L${pos[ElementType.METAL].x},${pos[ElementType.METAL].y} L${pos[ElementType.WATER].x},${pos[ElementType.WATER].y} L${pos[ElementType.WOOD].x},${pos[ElementType.WOOD].y} Z`}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeDasharray="4 2"
+            />
           </g>
-           {/* Generation Arrows (Curved slightly) */}
-           <path d={`M${pos[ElementType.FIRE].x},${pos[ElementType.FIRE].y+10} Q135,50 ${pos[ElementType.EARTH].x-5},${pos[ElementType.EARTH].y-5}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
-           <path d={`M${pos[ElementType.EARTH].x-5},${pos[ElementType.EARTH].y+5} Q160,120 ${pos[ElementType.METAL].x},${pos[ElementType.METAL].y-10}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
-           <path d={`M${pos[ElementType.METAL].x-10},${pos[ElementType.METAL].y} Q100,170 ${pos[ElementType.WATER].x+10},${pos[ElementType.WATER].y}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
-           <path d={`M${pos[ElementType.WATER].x},${pos[ElementType.WATER].y-10} Q40,120 ${pos[ElementType.WOOD].x+5},${pos[ElementType.WOOD].y+5}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
-           <path d={`M${pos[ElementType.WOOD].x+5},${pos[ElementType.WOOD].y-5} Q65,50 ${pos[ElementType.FIRE].x},${pos[ElementType.FIRE].y+10}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
+          {/* Generation Arrows (Curved slightly) */}
+          <path d={`M${pos[ElementType.FIRE].x},${pos[ElementType.FIRE].y + 10} Q135,50 ${pos[ElementType.EARTH].x - 5},${pos[ElementType.EARTH].y - 5}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
+          <path d={`M${pos[ElementType.EARTH].x - 5},${pos[ElementType.EARTH].y + 5} Q160,120 ${pos[ElementType.METAL].x},${pos[ElementType.METAL].y - 10}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
+          <path d={`M${pos[ElementType.METAL].x - 10},${pos[ElementType.METAL].y} Q100,170 ${pos[ElementType.WATER].x + 10},${pos[ElementType.WATER].y}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
+          <path d={`M${pos[ElementType.WATER].x},${pos[ElementType.WATER].y - 10} Q40,120 ${pos[ElementType.WOOD].x + 5},${pos[ElementType.WOOD].y + 5}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
+          <path d={`M${pos[ElementType.WOOD].x + 5},${pos[ElementType.WOOD].y - 5} Q65,50 ${pos[ElementType.FIRE].x},${pos[ElementType.FIRE].y + 10}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
 
 
           {/* Controlling Cycle (Star/Inner) */}
           <g className="opacity-10">
-            <path 
+            <path
               d={`M${pos[ElementType.FIRE].x},${pos[ElementType.FIRE].y} L${pos[ElementType.METAL].x},${pos[ElementType.METAL].y} L${pos[ElementType.WOOD].x},${pos[ElementType.WOOD].y} L${pos[ElementType.EARTH].x},${pos[ElementType.EARTH].y} L${pos[ElementType.WATER].x},${pos[ElementType.WATER].y} Z`}
               fill="none"
               stroke="currentColor"
@@ -92,15 +94,15 @@ const FiveElementsDiagram: React.FC = () => {
             );
           })}
         </svg>
-        
+
         {/* Legend */}
         <div className="flex justify-center gap-6 mt-2 text-[9px] uppercase tracking-widest text-stone-400">
-           <div className="flex items-center gap-1">
-             <span className="w-3 h-px bg-stone-400"></span> Creation
-           </div>
-           <div className="flex items-center gap-1">
-             <span className="w-3 h-px bg-stone-300 opacity-50"></span> Control
-           </div>
+          <div className="flex items-center gap-1">
+            <span className="w-3 h-px bg-stone-400"></span> Creation
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="w-3 h-px bg-stone-300 opacity-50"></span> Control
+          </div>
         </div>
       </div>
     </div>
@@ -122,27 +124,27 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts }) => {
       <h3 className="text-lg font-title text-ink mb-6 tracking-widest text-center border-b border-stone-100 pb-4">
         Elemental Qi
       </h3>
-      
+
       <div className="space-y-6">
         {Object.values(ElementType).map((type, idx) => {
           const count = counts[type];
           const percentage = (count / max) * 100;
-          
+
           return (
             <div key={type} className="group">
               <div className="flex justify-between items-end mb-2 text-xs uppercase tracking-wider font-bold text-stone-500">
-                 <div className="flex items-center gap-2">
-                    <span className={`${ELEMENT_COLORS[type]}`}>{getElementIcon(type)}</span>
-                    <span>{type}</span>
-                 </div>
-                 <span className="text-ink">{count}</span>
+                <div className="flex items-center gap-2">
+                  <span className={`${ELEMENT_COLORS[type]}`}>{getElementIcon(type)}</span>
+                  <span>{type}</span>
+                </div>
+                <span className="text-ink">{count}</span>
               </div>
-              
+
               <div className="h-2 w-full bg-stone-100 rounded-full overflow-hidden">
-                  <div 
-                    className={`h-full ${ELEMENT_BG_COLORS[type]} opacity-80 group-hover:opacity-100 transition-all duration-1000 ease-out rounded-full`}
-                    style={{ width: `${percentage}%` }}
-                  ></div>
+                <div
+                  className={`h-full ${ELEMENT_BG_COLORS[type]} opacity-80 group-hover:opacity-100 transition-all duration-1000 ease-out rounded-full`}
+                  style={{ width: `${percentage}%` }}
+                ></div>
               </div>
             </div>
           );
