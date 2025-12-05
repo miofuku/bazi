@@ -21,6 +21,7 @@ export interface Stem {
   chinese: string; // e.g., 甲
   element: ElementType;
   polarity: Polarity;
+  deity?: string; // Ten Deity relative to Day Master (e.g., 比肩)
 }
 
 export interface Branch {
@@ -29,7 +30,8 @@ export interface Branch {
   element: ElementType; // Main Qi
   polarity: Polarity;
   zodiac: string; // e.g., Rat
-  hiddenStems: Stem[];
+  hiddenStems: Stem[]; // Now these stems will also carry deity info
+  deity?: string; // Main Qi Deity
 }
 
 export interface Pillar {

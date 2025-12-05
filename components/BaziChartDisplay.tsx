@@ -138,7 +138,14 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
         <div className="h-2 bg-ink/5 w-full mb-2 border-b border-ink/5"></div>
 
         {/* Stem */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-2 py-3 border-b border-dashed border-stone-300">
+        <div className="flex-1 flex flex-col items-center justify-center gap-1 py-3 border-b border-dashed border-stone-300 relative">
+          {/* Stem Deity Label */}
+          {pillar.stem.deity && (
+            <span className="absolute top-1 text-[9px] font-serif text-ink/50 bg-paper px-1 rounded border border-ink/10">
+              {pillar.stem.deity}
+            </span>
+          )}
+
           <span className={`text-4xl md:text-5xl font-sc font-bold ${ELEMENT_COLORS[pillar.stem.element]}`}>
             {pillar.stem.chinese}
           </span>
@@ -155,10 +162,18 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
         </div>
 
         {/* Branch */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-2 py-3">
+        <div className="flex-1 flex flex-col items-center justify-center gap-1 py-3 relative">
           <span className={`text-4xl md:text-5xl font-sc font-bold ${ELEMENT_COLORS[pillar.branch.element]}`}>
             {pillar.branch.chinese}
           </span>
+
+          {/* Branch Main Deity Label */}
+          {pillar.branch.deity && (
+            <span className="text-[10px] font-serif text-ink/50 bg-paper px-1 rounded border border-ink/10 mb-1">
+              {pillar.branch.deity}
+            </span>
+          )}
+
           <span className="font-serif italic text-sm text-ink/60">{pillar.branch.name}</span>
           <span className="text-[10px] uppercase font-bold text-ink/30">{pillar.branch.zodiac}</span>
           <div className="flex flex-col items-center gap-1 mt-1">
@@ -181,6 +196,7 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
         <div className="bg-white border border-stone-200 px-4 py-3 rounded shadow-sm flex gap-4">
           {pillar.branch.hiddenStems.map((hs, i) => (
             <div key={i} className="flex flex-col items-center gap-1">
+              {hs.deity && <span className="text-[8px] text-ink/60">{hs.deity}</span>}
               <span className={`text-xl font-sc font-bold ${ELEMENT_COLORS[hs.element]}`}>{hs.chinese}</span>
               <span className={`${ELEMENT_COLORS[hs.element]}`}>
                 <ElementIcon

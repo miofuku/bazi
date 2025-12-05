@@ -89,6 +89,8 @@ export const calculateBazi = (
   }
 };
 
+import { calculateDeity, getHiddenStemsForBranch, DEITY_FULL_NAMES } from '../utils/baziCalculator';
+
 // Helper to aggregate counts and return final chart structure
 const generateChartResult = (
   yearPillar: Pillar,
@@ -105,7 +107,37 @@ const generateChartResult = (
     [ElementType.WATER]: 0,
   };
 
+  const dayMasterChar = dayPillar.stem.chinese;
+
+  // Enrich Pillars with Deities
+  const enrichPillar = (pillar: Pillar) => {
+    // 1. Stem Deity
+    const stemDeityShort = calculateDeity(dayMasterChar, pillar.stem.chinese);
+    pillar.stem.deity = DEITY_FULL_NAMES[stemDeityShort];
+
+    // 2. Branch Hidden Stems & Deities
+    const hiddenStemData = getHiddenStemsForBranch(pillar.branch.chinese);
+
+    // Convert generic hidden stems to full Stem objects with Deities
+    pillar.branch.hiddenStems = hiddenStemData.map(hs => {
+      const stemConst = STEMS[hs.stem];
+      const deityShort = calculateDeity(dayMasterChar, stemConst.chinese);
+      return {
+        ...stemConst,
+        deity: DEITY_FULL_NAMES[deityShort]
+      };
+    });
+
+    // 3. Branch Main Qi Deity (First hidden stem is usually Main Qi)
+    if (pillar.branch.hiddenStems.length > 0) {
+      pillar.branch.deity = pillar.branch.hiddenStems[0].deity;
+    }
+  };
+
   [yearPillar, monthPillar, dayPillar, hourPillar].forEach(p => {
+    enrichPillar(p);
+
+    // Element Counting
     if (p.stem) elementCounts[p.stem.element]++;
     if (p.branch) elementCounts[p.branch.element]++;
   });

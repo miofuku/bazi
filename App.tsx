@@ -3,6 +3,7 @@ import { InputForm } from './components/InputForm';
 import { BaziChartDisplay, DaYunDisplay, ElementIcon } from './components/BaziChartDisplay';
 import { ElementBalance } from './components/ElementBalance';
 import { PremiumServices } from './components/PremiumServices';
+import { SoulSymbolReveal } from './components/SoulSymbolReveal';
 import { calculateBazi } from './services/baziService';
 import { BaziChart, Gender, Polarity } from './types';
 import { ELEMENT_COLORS, STEM_SYMBOLS } from './utils/constants';
@@ -31,11 +32,11 @@ const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (
           <h1 className="text-lg md:text-xl font-title tracking-[0.15em] text-ink group-hover:text-seal transition-colors font-bold uppercase">
             Knowing Destiny
           </h1>
-          <span className="text-[10px] md:text-xs font-sc text-stone-500 tracking-[0.3em]">求真知命</span>
+          <span className="text-[10px] md:text-xs font-sc text-stone-500 tracking-[0.3em]">五行蓝图</span>
         </div>
       </div>
       <nav className="hidden md:flex items-center gap-10">
-        {['Chart', 'Philosophy', 'About'].map((item) => (
+        {['Blueprint', 'Philosophy', 'About'].map((item) => (
           <span key={item} className="text-xs font-serif italic text-ink/60 hover:text-seal cursor-pointer transition-colors border-b border-transparent hover:border-seal pb-1">
             {item}
           </span>
@@ -48,6 +49,7 @@ const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (
 const App: React.FC = () => {
   const [chart, setChart] = useState<BaziChart | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showReveal, setShowReveal] = useState(false);
 
   const handleCalculate = (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender }) => {
     setLoading(true);
@@ -55,6 +57,7 @@ const App: React.FC = () => {
       try {
         const result = calculateBazi(data.year, data.month, data.day, data.hour, data.minute, data.gender);
         setChart(result);
+        setShowReveal(true); // Trigger Reveal
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch (error) {
         alert("Could not calculate chart. Please ensure the date is valid and libraries are loaded.");
@@ -67,6 +70,7 @@ const App: React.FC = () => {
 
   const resetApp = () => {
     setChart(null);
+    setShowReveal(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -80,12 +84,12 @@ const App: React.FC = () => {
           <div className="flex flex-col items-center justify-center min-h-[60vh] animate-fade-in">
             <div className="mb-16 text-center">
               <h2 className="text-4xl md:text-6xl font-sc font-bold text-ink mb-2 tracking-tight opacity-90">
-                知命
+                五行蓝图
               </h2>
-              <p className="text-lg md:text-xl font-title uppercase tracking-[0.2em] text-ink/70 mb-6">Know Your Destiny</p>
+              <p className="text-lg md:text-xl font-title uppercase tracking-[0.2em] text-ink/70 mb-6">Unlock Your Elemental Blueprint</p>
               <div className="w-px h-16 bg-gradient-to-b from-ink to-transparent mx-auto mb-6"></div>
               <p className="text-lg md:text-xl font-serif italic text-ink/60 whitespace-nowrap">
-                "To know your destiny is to flow with the river, not against it."
+                "Ancient Wisdom for Modern Clarity. Decode Your Nature. Design Your Life."
               </p>
             </div>
 
@@ -95,7 +99,7 @@ const App: React.FC = () => {
                   <div className="absolute inset-0 border border-ink/20 rounded-full animate-[spin_10s_linear_infinite]"></div>
                   <div className="absolute inset-2 border border-seal/80 rounded-full animate-[spin_3s_ease-in-out_infinite]"></div>
                 </div>
-                <span className="font-sc text-ink tracking-[0.2em] text-sm">Calculations in progress...</span>
+                <span className="font-sc text-ink tracking-[0.2em] text-sm">Decoding your energy...</span>
               </div>
             ) : (
               <div className="animate-slide-up w-full flex justify-center">
@@ -114,7 +118,7 @@ const App: React.FC = () => {
                 >
                   <span>←</span> Return
                 </button>
-                <h2 className="text-3xl font-title text-ink">The Destiny Scroll</h2>
+                <h2 className="text-3xl font-title text-ink">Your Elemental Blueprint</h2>
               </div>
               <div className="text-right hidden md:block">
                 <div className="text-xs text-ink/40 uppercase tracking-widest mb-1">Day Master</div>
@@ -164,8 +168,12 @@ const App: React.FC = () => {
         <div className="w-12 h-12 border border-ink text-ink flex items-center justify-center mx-auto mb-4 rotate-45 hover:bg-seal hover:text-white hover:border-seal hover:rotate-[225deg] transition-all duration-500 cursor-default group">
           <span className="font-sc text-xl -rotate-45 group-hover:rotate-[-225deg] transition-all duration-500">知</span>
         </div>
-        <p className="text-ink/40 text-xs uppercase tracking-widest">&copy; {new Date().getFullYear()} Knowing Destiny.</p>
+        <p className="text-ink/40 text-xs uppercase tracking-widest">&copy; {new Date().getFullYear()} Elemental Blueprint.</p>
       </footer>
+
+      {chart && showReveal && (
+        <SoulSymbolReveal chart={chart} onComplete={() => setShowReveal(false)} />
+      )}
     </div>
   );
 };
