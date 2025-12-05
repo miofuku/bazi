@@ -1,4 +1,4 @@
-import { SolarTime, ChildLimit, Gender as TymeGender } from 'tyme4ts'; 
+import { SolarTime, ChildLimit, Gender as TymeGender } from 'tyme4ts';
 import { BaziChart, Gender, Pillar, ElementType, DaYun } from '../types';
 import { STEMS, BRANCHES } from '../utils/constants';
 
@@ -14,7 +14,7 @@ export const calculateBazi = (
   minute: number,
   gender: Gender
 ): BaziChart => {
-  
+
   if (!SafeSolarTime || !SafeChildLimit) {
     throw new Error("Tyme4ts library not loaded. Cannot calculate BaZi chart.");
   }
@@ -24,7 +24,7 @@ export const calculateBazi = (
     // We use SolarTime as the single source of truth to ensure all pillars (Year, Month, Day, Hour)
     // are consistent with the exact solar term (Jie Qi) timestamp.
     const t = SafeSolarTime.fromYmdHms(year, month, day, hour, minute, 0);
-    
+
     // 2. Retrieve GanZhi (Pillars) via chaining
     // In the tyme4ts library, we traverse up from the Hour pillar to ensure context is preserved.
     // Hour -> Day -> Month -> Year
@@ -39,13 +39,13 @@ export const calculateBazi = (
       const branchChar = ganZhiStr.charAt(1);
       const stem = STEMS[stemChar];
       const branch = BRANCHES[branchChar];
-      
+
       if (!stem || !branch) {
         console.error(`Critical Error: Invalid GanZhi returned from library: ${ganZhiStr}`);
-        return { 
-            stem: STEMS['甲'], 
-            branch: BRANCHES['子'], 
-            name: pillarName 
+        return {
+          stem: STEMS['甲'],
+          branch: BRANCHES['子'],
+          name: pillarName
         };
       }
       return { stem, branch, name: pillarName };
@@ -61,22 +61,22 @@ export const calculateBazi = (
     const tymeGender = gender === Gender.MALE ? TymeGender.MAN : TymeGender.WOMAN;
     const childLimit = SafeChildLimit.fromSolarTime(t, tymeGender);
     const startDecade = childLimit.getStartDecadeFortune();
-    
+
     const daYunList: DaYun[] = [];
     let currentDecade = startDecade;
-    
+
     // Generate 8 cycles (approx 80 years)
     for (let i = 0; i < 8; i++) {
       const startAge = currentDecade.getStartAge();
       const endAge = currentDecade.getEndAge();
       // robust calculation: Birth Year + Start Age = Cycle Start Year
       const startYear = year + startAge;
-      
+
       daYunList.push({
         startAge: startAge,
         endAge: endAge,
         year: startYear,
-        pillar: parseGanZhi(currentDecade.getName(), `Cycle ${i+1}`)
+        pillar: parseGanZhi(currentDecade.getName(), `Cycle ${i + 1}`)
       });
       currentDecade = currentDecade.next(1);
     }
@@ -91,10 +91,10 @@ export const calculateBazi = (
 
 // Helper to aggregate counts and return final chart structure
 const generateChartResult = (
-  yearPillar: Pillar, 
-  monthPillar: Pillar, 
-  dayPillar: Pillar, 
-  hourPillar: Pillar, 
+  yearPillar: Pillar,
+  monthPillar: Pillar,
+  dayPillar: Pillar,
+  hourPillar: Pillar,
   daYun: DaYun[]
 ): BaziChart => {
   const elementCounts: Record<ElementType, number> = {
@@ -119,3 +119,4 @@ const generateChartResult = (
     daYun,
     elementCounts
   };
+};
