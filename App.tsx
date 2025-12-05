@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { InputForm } from './components/InputForm';
-import { BaziChartDisplay, DaYunDisplay } from './components/BaziChartDisplay';
+import { BaziChartDisplay, DaYunDisplay, ElementIcon } from './components/BaziChartDisplay';
 import { ElementBalance } from './components/ElementBalance';
 import { PremiumServices } from './components/PremiumServices';
 import { calculateBazi } from './services/baziService';
-import { BaziChart, Gender } from './types';
+import { BaziChart, Gender, Polarity } from './types';
+import { ELEMENT_COLORS, STEM_SYMBOLS } from './utils/constants';
 
 // Decorative Ink Mountains SVG
 const InkMountains = () => (
@@ -30,7 +31,7 @@ const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (
           <h1 className="text-lg md:text-xl font-title tracking-[0.15em] text-ink group-hover:text-seal transition-colors font-bold uppercase">
             Knowing Destiny
           </h1>
-          <span className="text-[10px] md:text-xs font-sc text-stone-500 tracking-[0.3em]">探真知命</span>
+          <span className="text-[10px] md:text-xs font-sc text-stone-500 tracking-[0.3em]">求真知命</span>
         </div>
       </div>
       <nav className="hidden md:flex items-center gap-10">
@@ -117,9 +118,17 @@ const App: React.FC = () => {
               </div>
               <div className="text-right hidden md:block">
                 <div className="text-xs text-ink/40 uppercase tracking-widest mb-1">Day Master</div>
-                <div className="flex items-center justify-end gap-2">
-                  <span className="font-sc text-2xl font-bold text-ink">{chart.dayMaster.chinese}</span>
-                  <span className={`font-serif text-lg italic opacity-80`}>
+                <div className="flex items-center justify-end gap-3">
+                  <span className={`font-sc text-2xl font-bold ${ELEMENT_COLORS[chart.dayMaster.element]}`}>
+                    {chart.dayMaster.chinese}
+                  </span>
+                  <span className={`${ELEMENT_COLORS[chart.dayMaster.element]}`}>
+                    <ElementIcon
+                      type={STEM_SYMBOLS[chart.dayMaster.chinese]}
+                      className="w-8 h-8"
+                    />
+                  </span>
+                  <span className={`font-serif text-lg italic ${ELEMENT_COLORS[chart.dayMaster.element]}`}>
                     {chart.dayMaster.polarity} {chart.dayMaster.element}
                   </span>
                 </div>
