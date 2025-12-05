@@ -162,14 +162,17 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
         <div className="absolute bottom-0 w-full h-1 bg-seal/80"></div>
       </div>
 
-      {/* Hidden Stems (Reveal below) */}
+      {/* Hidden Stems 藏干 (Reveal below) */}
       <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center gap-1">
         <div className="h-4 w-px bg-ink/20"></div>
-        <div className="bg-white border border-stone-200 px-3 py-2 rounded shadow-sm flex gap-3">
+        <div className="bg-white border border-stone-200 px-4 py-3 rounded shadow-sm flex gap-4">
           {pillar.branch.hiddenStems.map((hs, i) => (
-            <div key={i} className="flex flex-col items-center">
-              <span className={`text-sm font-sc ${ELEMENT_COLORS[hs.element]}`}>{hs.chinese}</span>
-              <span className="text-[8px] text-ink/40 font-serif">{hs.name}</span>
+            <div key={i} className="flex flex-col items-center gap-1">
+              <span className={`text-xl font-sc font-bold ${ELEMENT_COLORS[hs.element]}`}>{hs.chinese}</span>
+              <span className={`${ELEMENT_COLORS[hs.element]}`}>
+                <ElementIcon type={STEM_SYMBOLS[hs.chinese]} className="w-4 h-4" />
+              </span>
+              <span className="text-[9px] text-ink/40 font-serif">{hs.name}</span>
             </div>
           ))}
         </div>
