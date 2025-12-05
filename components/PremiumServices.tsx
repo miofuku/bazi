@@ -36,44 +36,49 @@ export const PremiumServices: React.FC = () => {
   return (
     <div className="mt-24 mb-24">
       <div className="flex flex-col items-center mb-16 text-center">
-        <h2 className="text-3xl font-bold text-ink mb-3 tracking-tight">Strategic Blueprints</h2>
+        <h2 className="text-3xl font-bold text-ink mb-3 tracking-tight">The Premium Lab</h2>
         <div className="w-16 h-1 bg-seal/20 mb-4"></div>
-        <p className="text-ink/50 text-base max-w-2xl">
-          Go beyond the chart. Actionable strategies for love, career, and growth.
+        <p className="text-ink/50 text-base max-w-2xl font-serif italic">
+          Classic Wisdom x Modern Consulting
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
         <ServiceCard
-          title="Elemental Chemistry"
-          subtitle="Love & Relationships"
-          desc="Love isn't just about fate; it's about flow. Discover how your energies dance together."
+          title="The Synergy Lab"
+          subtitle="Love & Compatibility"
+          desc="Chemistry is not random. It's elemental."
           features={[
-            "Communication Style Analysis",
-            "Emotional Needs & Compatibility",
-            "Conflict Resolution Strategy"
+            "Friction & Flow Analysis",
+            "The Trigger (Reformer vs Conformist)",
+            "Ancient Wisdom x Modern Advice"
           ]}
           icon={
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              <circle cx="9" cy="12" r="7" className="opacity-80" />
+              <circle cx="15" cy="12" r="7" className="opacity-80" />
             </svg>
           }
           price="$29"
         />
         <ServiceCard
-          title="Co-Founder Synergy"
-          subtitle="Business & Career"
-          desc="Build the perfect team based on elemental strengths, not just resumes."
+          title="The Business Radar"
+          subtitle="Career & Partnership"
+          desc="Align your ambitions with your energy."
           features={[
-            "Power Dynamics (Visionary vs Executor)",
-            "Risk Profile Assessment",
-            "Talent Gap Identification"
+            "Founder's Circle Matching",
+            "Talent Gap Identification",
+            "Team Radar Overlay"
           ]}
           icon={
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 16v-4" />
-              <path d="M12 8h.01" />
+              <path d="M12 2L2 9L5 21H19L22 9L12 2Z" />
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 2V5" />
+              <path d="M22 9L19 11" />
+              <path d="M19 21L17 18" />
+              <path d="M5 21L7 18" />
+              <path d="M2 9L5 11" />
             </svg>
           }
           price="$39"

@@ -47,13 +47,28 @@ const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (
   </header>
 );
 
+const QUOTES = [
+  "Water does not resist. Water flows. — Lao Tzu",
+  "The green reed which bends in the wind is stronger than the mighty oak which breaks. — Confucius",
+  "Nature does not hurry, yet everything is accomplished. — Lao Tzu",
+  "Knowing others is intelligence; knowing yourself is true wisdom. — Lao Tzu",
+  "The journey of a thousand miles begins with a single step. — Lao Tzu",
+  "He who knows he has enough is rich. — Lao Tzu",
+  "When I let go of what I am, I become what I might be. — Lao Tzu",
+  "Life is a series of natural and spontaneous changes. Don't resist them. — Lao Tzu"
+];
+
 const App: React.FC = () => {
   const [chart, setChart] = useState<BaziChart | null>(null);
   const [loading, setLoading] = useState(false);
   const [showReveal, setShowReveal] = useState(false);
+  const [quote, setQuote] = useState(QUOTES[0]);
 
   const handleCalculate = (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender }) => {
     setLoading(true);
+    // Pick random quote
+    setQuote(QUOTES[Math.floor(Math.random() * QUOTES.length)]);
+
     setTimeout(() => {
       try {
         const result = calculateBazi(data.year, data.month, data.day, data.hour, data.minute, data.gender);
@@ -66,7 +81,7 @@ const App: React.FC = () => {
       } finally {
         setLoading(false);
       }
-    }, 2000); // Slightly longer for the ink effect
+    }, 3000); // Longer duration to read the quote (3s)
   };
 
   const resetApp = () => {
@@ -95,19 +110,38 @@ const App: React.FC = () => {
                 Ancient Wisdom, Decoded for Modern Life.
               </p>
 
-              <div className="max-w-2xl mx-auto bg-white/40 backdrop-blur-sm border border-white/60 p-6 md:p-8 rounded-sm shadow-sm mb-12">
-                <h3 className="font-title text-lg text-ink mb-4 font-bold">The Ecosystem of You</h3>
-                <p className="font-serif italic text-ink/70 text-lg leading-relaxed mb-4">
-                  "Think of your life as a garden. Bazi analyzes the soil (your base nature), the weather (the timing/luck cycles), and the seeds (your talents)."
-                </p>
-                <p className="font-sans text-xs uppercase tracking-widest text-ink/40">
+              <div className="bg-white/40 backdrop-blur-md border border-white/60 p-10 md:p-14 rounded-sm shadow-xl max-w-4xl mx-auto my-16 relative overflow-hidden group hover:shadow-2xl transition-all duration-500">
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-wood via-earth to-water opacity-50"></div>
+
+                <h3 className="font-title text-2xl md:text-3xl text-ink mb-8 tracking-wide font-bold uppercase text-center relative z-10">
+                  The Ecosystem of You
+                </h3>
+
+                <blockquote className="font-serif text-xl md:text-2xl text-ink/80 leading-relaxed text-center mb-8 relative z-10">
+                  "Think of your life as a <span className="text-wood font-bold">garden</span>.
+                  Bazi analyzes the <span className="text-earth font-bold">soil</span> <span className="text-base text-ink/50 italic">(your base nature)</span>,
+                  the <span className="text-water font-bold">weather</span> <span className="text-base text-ink/50 italic">(the timing/luck cycles)</span>,
+                  and the <span className="text-wood font-bold">seeds</span> <span className="text-base text-ink/50 italic">(your talents)</span>."
+                </blockquote>
+
+                <p className="font-sans text-xs md:text-sm text-center tracking-[0.2em] text-ink/60 uppercase font-bold relative z-10">
                   You cannot change the weather, but you can choose when to plant.
                 </p>
+
+                {/* Decor elements */}
+                <div className="absolute -bottom-10 -right-10 text-wood/5 rotate-[-15deg]">
+                  <svg width="150" height="150" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 22H22L12 2Z" /></svg>
+                </div>
               </div>
 
-              <p className="text-sm font-sans text-ink/50 max-w-lg mx-auto leading-relaxed mb-8">
-                Your birth time isn't just a number. It's an energy coordinate. We translate the 2,000-year-old Bazi system into actionable strategies for your career and relationships.
-              </p>
+              <div className="max-w-4xl mx-auto mb-12 text-center space-y-4">
+                <p className="text-xl md:text-2xl font-serif text-seal/100 italic">
+                  "Your birth time isn't just a number. It's an energy coordinate."
+                </p>
+                <p className="text-base md:text-lg text-ink/80 font-sans max-w-2xl mx-auto">
+                  We translate the 2,000-year-old Bazi system into actionable strategies for your career and relationships.
+                </p>
+              </div>
             </div>
 
             {loading ? (
@@ -117,7 +151,10 @@ const App: React.FC = () => {
                   <div className="w-4 h-4 bg-ink rounded-full animate-ink-spread opacity-80 blur-sm absolute"></div>
                   <div className="w-4 h-4 bg-ink/50 rounded-full animate-ping absolute"></div>
                 </div>
-                <span className="mt-16 font-sans font-bold text-ink/40 tracking-[0.3em] text-xs uppercase animate-pulse">Initializing Core...</span>
+                <div className="mt-12 text-center max-w-md px-4 animate-fade-in">
+                  <p className="font-serif italic text-ink/70 text-lg mb-2">"{quote.split('—')[0].trim()}"</p>
+                  <p className="font-sc text-xs text-ink/40 tracking-widest uppercase">— {quote.split('—')[1]?.trim()}</p>
+                </div>
               </div>
             ) : (
               <div className="animate-slide-up w-full flex justify-center">

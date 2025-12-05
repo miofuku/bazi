@@ -5,318 +5,160 @@ interface InputFormProps {
   onCalculate: (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender }) => void;
 }
 
-// Helper to get days in a month
-const getDaysInMonth = (year: number, month: number) => new Date(year, month, 0).getDate();
+// --- Wheel Picker Components ---
 
-// Helper to get day of week for first day of month (0 = Sunday)
-const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month - 1, 1).getDay();
-
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const WEEKDAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-
-type DateView = 'year' | 'month' | 'day';
-
-interface DatePickerProps {
-  value: { year: number; month: number; day: number };
-  onChange: (value: { year: number; month: number; day: number }) => void;
+interface WheelColumnProps {
+  items: (string | number)[];
+  value: string | number;
+  onChange: (val: string | number) => void;
+  label?: string;
 }
 
-const DatePicker: React.FC<DatePickerProps> = ({ value, onChange }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [view, setView] = useState<DateView>('day');
-  const [viewYear, setViewYear] = useState(value.year);
-  const [viewMonth, setViewMonth] = useState(value.month);
-  const [yearRangeStart, setYearRangeStart] = useState(Math.floor(value.year / 12) * 12);
+const WheelColumn: React.FC<WheelColumnProps> = ({ items, value, onChange, label }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastWheelTime = useRef(0);
 
-  // Close on outside click
+  // Scroll to selected item on mount or value change
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
+    if (containerRef.current) {
+      const selectedIndex = items.findIndex(item => item === value);
+      if (selectedIndex >= 0) {
+        // Item height is 40px (h-10)
+        // To center the selected item in the h-32 (128px) window,
+        // the top of the item should be at (128/2 - 40/2) = 44px from the top of the visible area.
+        // The scrollable area has py-[44px] padding.
+        // So, scrollTop should be (selectedIndex * itemHeight) - padding_top_offset_to_center
+        containerRef.current.scrollTop = (selectedIndex * 40); // This aligns the top of the item with the top of the scrollable area's content.
+        // The py-[44px] padding then effectively centers it within the h-32 window.
+      }
+    }
+  }, [value, items]); // Re-run when value changes externally
+
+  // Non-passive wheel listener for "One Digit per Step" control
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault(); // Stop native fast scroll
+
+      const now = Date.now();
+      // Throttle to prevent high-res wheel spam
+      if (now - lastWheelTime.current > 75) {
+        lastWheelTime.current = now;
+        const direction = e.deltaY > 0 ? 1 : -1;
+
+        const selectedIndex = items.findIndex(item => item === value);
+        const newIndex = selectedIndex + direction;
+
+        if (newIndex >= 0 && newIndex < items.length) {
+          onChange(items[newIndex]);
+        }
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
-  const handleSelectYear = (year: number) => {
-    setViewYear(year);
-    setView('month');
-  };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [items, value, onChange]);
 
-  const handleSelectMonth = (month: number) => {
-    setViewMonth(month);
-    setView('day');
-  };
+  const handleScroll = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
 
-  const handleSelectDay = (day: number) => {
-    onChange({ year: viewYear, month: viewMonth, day });
-    setIsOpen(false);
-    setView('day');
-  };
-
-  const daysInMonth = getDaysInMonth(viewYear, viewMonth);
-  const firstDay = getFirstDayOfMonth(viewYear, viewMonth);
-  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-  const emptyDays = Array.from({ length: firstDay }, (_, i) => i);
-
-  const displayValue = `${value.year}-${String(value.month).padStart(2, '0')}-${String(value.day).padStart(2, '0')}`;
-
-  return (
-    <div ref={containerRef} className="relative">
-      <div
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-transparent font-sans text-ink text-lg cursor-pointer py-1 flex items-center justify-between"
-      >
-        <span>{displayValue}</span>
-        <span className="text-ink/40 text-sm">▼</span>
-      </div>
-
-      {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-80 bg-paper border-2 border-ink/10 shadow-2xl z-50 animate-[fadeIn_0.15s_ease-out]">
-          {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-ink/10">
-            <button
-              type="button"
-              onClick={() => {
-                if (view === 'year') setYearRangeStart(yearRangeStart - 12);
-                else if (view === 'month') setViewYear(viewYear - 1);
-                else {
-                  if (viewMonth === 1) {
-                    setViewMonth(12);
-                    setViewYear(viewYear - 1);
-                  } else {
-                    setViewMonth(viewMonth - 1);
-                  }
-                }
-              }}
-              className="w-8 h-8 flex items-center justify-center text-ink/60 hover:text-seal hover:bg-seal/10 transition-colors"
-            >
-              ←
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                if (view === 'day') setView('month');
-                else if (view === 'month') setView('year');
-              }}
-              className="font-title text-sm tracking-wider text-ink hover:text-seal transition-colors"
-            >
-              {view === 'year' && `${yearRangeStart} - ${yearRangeStart + 11}`}
-              {view === 'month' && viewYear}
-              {view === 'day' && `${MONTHS[viewMonth - 1]} ${viewYear}`}
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                if (view === 'year') setYearRangeStart(yearRangeStart + 12);
-                else if (view === 'month') setViewYear(viewYear + 1);
-                else {
-                  if (viewMonth === 12) {
-                    setViewMonth(1);
-                    setViewYear(viewYear + 1);
-                  } else {
-                    setViewMonth(viewMonth + 1);
-                  }
-                }
-              }}
-              className="w-8 h-8 flex items-center justify-center text-ink/60 hover:text-seal hover:bg-seal/10 transition-colors"
-            >
-              →
-            </button>
-          </div>
-
-          {/* Year Grid */}
-          {view === 'year' && (
-            <div className="p-4 grid grid-cols-4 gap-2">
-              {Array.from({ length: 12 }, (_, i) => yearRangeStart + i).map((year) => (
-                <button
-                  key={year}
-                  type="button"
-                  onClick={() => handleSelectYear(year)}
-                  className={`py-3 text-sm transition-all duration-200 border ${year === value.year
-                    ? 'bg-seal text-white border-seal'
-                    : 'border-transparent hover:border-ink/20 hover:bg-ink/5 text-ink'
-                    }`}
-                >
-                  {year}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Month Grid */}
-          {view === 'month' && (
-            <div className="p-4 grid grid-cols-4 gap-2">
-              {MONTHS.map((month, i) => (
-                <button
-                  key={month}
-                  type="button"
-                  onClick={() => handleSelectMonth(i + 1)}
-                  className={`py-3 text-sm transition-all duration-200 border ${i + 1 === value.month && viewYear === value.year
-                    ? 'bg-seal text-white border-seal'
-                    : 'border-transparent hover:border-ink/20 hover:bg-ink/5 text-ink'
-                    }`}
-                >
-                  {month}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Day Grid */}
-          {view === 'day' && (
-            <div className="p-4">
-              {/* Weekday headers */}
-              <div className="grid grid-cols-7 gap-1 mb-2">
-                {WEEKDAYS.map((day) => (
-                  <div key={day} className="text-center text-xs text-ink/40 font-serif italic py-1">
-                    {day}
-                  </div>
-                ))}
-              </div>
-              {/* Days */}
-              <div className="grid grid-cols-7 gap-1">
-                {emptyDays.map((i) => (
-                  <div key={`empty-${i}`} />
-                ))}
-                {days.map((day) => (
-                  <button
-                    key={day}
-                    type="button"
-                    onClick={() => handleSelectDay(day)}
-                    className={`w-9 h-9 flex items-center justify-center text-sm transition-all duration-200 ${day === value.day && viewMonth === value.month && viewYear === value.year
-                      ? 'bg-seal text-white'
-                      : 'hover:bg-ink/5 text-ink'
-                      }`}
-                  >
-                    {day}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-};
-
-interface TimePickerProps {
-  value: { hour: number; minute: number };
-  onChange: (value: { hour: number; minute: number }) => void;
-}
-
-const TimePicker: React.FC<TimePickerProps> = ({ value, onChange }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [view, setView] = useState<'hour' | 'minute'>('hour');
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
+    // Only auto-snap if triggered by touch/drag (wheel is handled manually above)
+    timeoutRef.current = setTimeout(() => {
+      if (containerRef.current) {
+        const scrollTop = containerRef.current.scrollTop;
+        const index = Math.round(scrollTop / 40);
+        if (index >= 0 && index < items.length) {
+          const newItem = items[index];
+          if (newItem !== value) {
+            onChange(newItem);
+          }
+        }
       }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleSelectHour = (hour: number) => {
-    onChange({ ...value, hour });
-    setView('minute');
+    }, 100);
   };
 
-  const handleSelectMinute = (minute: number) => {
-    onChange({ ...value, minute });
-    setIsOpen(false);
-    setView('hour');
+  const shift = (direction: -1 | 1) => {
+    const selectedIndex = items.findIndex(item => item === value);
+    const newIndex = selectedIndex + direction;
+    if (newIndex >= 0 && newIndex < items.length) {
+      onChange(items[newIndex]);
+    }
   };
-
-  const displayValue = `${String(value.hour).padStart(2, '0')}:${String(value.minute).padStart(2, '0')}`;
 
   return (
-    <div ref={containerRef} className="relative">
-      <div
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-transparent font-sans text-ink text-lg cursor-pointer py-1 flex items-center justify-between"
+    <div className="flex flex-col items-center mx-1 relative group">
+      {label && <div className="text-[10px] uppercase font-bold text-ink/40 mb-1 tracking-widest">{label}</div>}
+
+      {/* Up Button */}
+      <button
+        type="button"
+        onClick={() => shift(-1)}
+        className="w-full h-6 flex items-center justify-center text-ink/20 hover:text-seal hover:bg-seal/5 transition-colors mb-1"
       >
-        <span>{displayValue}</span>
-        <span className="text-ink/40 text-sm">▼</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 15l-6-6-6 6" /></svg>
+      </button>
+
+      <div className="relative h-32 w-16 md:w-20 overflow-hidden border-y border-ink/10 bg-paper-dark/30 rounded-sm">
+        {/* Selection Lens */}
+        <div className="absolute top-1/2 left-0 w-full h-10 -translate-y-1/2 border-y-2 border-seal/50 bg-seal/5 pointer-events-none z-10 box-border"></div>
+
+        {/* Helper gradient for depth */}
+        <div className="absolute inset-0 bg-gradient-to-b from-paper via-transparent to-paper pointer-events-none z-20"></div>
+
+        <div
+          ref={containerRef}
+          className="h-full overflow-y-auto snap-y snap-mandatory py-[44px]"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollBehavior: 'smooth' }}
+          onScroll={handleScroll}
+        >
+          <style>{`
+            .no-scrollbar::-webkit-scrollbar { display: none; }
+          `}</style>
+          {items.map((item) => (
+            <div
+              key={item}
+              onClick={() => onChange(item)}
+              className={`h-10 flex items-center justify-center snap-center cursor-pointer transition-all duration-200 select-none ${item === value ? 'text-ink font-bold text-xl scale-110' : 'text-ink/30 text-sm'
+                }`}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-64 bg-paper border-2 border-ink/10 shadow-2xl z-50 animate-[fadeIn_0.15s_ease-out]">
-          {/* Header Tabs */}
-          <div className="flex border-b border-ink/10">
-            <button
-              type="button"
-              onClick={() => setView('hour')}
-              className={`flex-1 py-3 text-sm font-title tracking-wider transition-colors ${view === 'hour' ? 'text-seal border-b-2 border-seal' : 'text-ink/60 hover:text-ink'
-                }`}
-            >
-              Hour
-            </button>
-            <button
-              type="button"
-              onClick={() => setView('minute')}
-              className={`flex-1 py-3 text-sm font-title tracking-wider transition-colors ${view === 'minute' ? 'text-seal border-b-2 border-seal' : 'text-ink/60 hover:text-ink'
-                }`}
-            >
-              Minute
-            </button>
-          </div>
+      {/* Down Button */}
+      <button
+        type="button"
+        onClick={() => shift(1)}
+        className="w-full h-6 flex items-center justify-center text-ink/20 hover:text-seal hover:bg-seal/5 transition-colors mt-1"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6" /></svg>
+      </button>
 
-          {/* Hour Grid */}
-          {view === 'hour' && (
-            <div className="p-3 grid grid-cols-6 gap-1">
-              {Array.from({ length: 24 }, (_, i) => i).map((hour) => (
-                <button
-                  key={hour}
-                  type="button"
-                  onClick={() => handleSelectHour(hour)}
-                  className={`py-2 text-sm transition-all duration-200 ${hour === value.hour
-                    ? 'bg-seal text-white'
-                    : 'hover:bg-ink/5 text-ink'
-                    }`}
-                >
-                  {String(hour).padStart(2, '0')}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Minute Grid */}
-          {view === 'minute' && (
-            <div className="p-3 grid grid-cols-6 gap-1">
-              {Array.from({ length: 12 }, (_, i) => i * 5).map((minute) => (
-                <button
-                  key={minute}
-                  type="button"
-                  onClick={() => handleSelectMinute(minute)}
-                  className={`py-2 text-sm transition-all duration-200 ${minute === value.minute
-                    ? 'bg-seal text-white'
-                    : 'hover:bg-ink/5 text-ink'
-                    }`}
-                >
-                  {String(minute).padStart(2, '0')}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 };
 
 export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
   const now = new Date();
+
+  // Data Generation
+  const years = Array.from({ length: 150 }, (_, i) => 1900 + i);
+  const months = Array.from({ length: 12 }, (_, i) => i + 1);
+  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+  const hours = Array.from({ length: 24 }, (_, i) => i);
+  const minutes = Array.from({ length: 60 }, (_, i) => i); // Usually just every 15 mins is enough? User might want precise. Let's do all.
+
   const [dateValue, setDateValue] = useState({
-    year: now.getFullYear(),
-    month: now.getMonth() + 1,
-    day: now.getDate()
+    year: 1990,
+    month: 6,
+    day: 15
   });
   const [timeValue, setTimeValue] = useState({ hour: 12, minute: 0 });
   const [gender, setGender] = useState<Gender>(Gender.MALE);
@@ -334,32 +176,34 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md bg-paper border-2 border-ink/10 p-8 relative shadow-2xl">
-
-      {/* Seal Decoration */}
-      <div className="absolute -top-4 -right-4 w-16 h-16 bg-seal rounded-sm text-white font-sc font-bold flex items-center justify-center text-2xl shadow-lg rotate-12 border-4 border-double border-white/20">
-        命
-      </div>
+    <form onSubmit={handleSubmit} className="w-full max-w-lg bg-paper border-2 border-ink/10 p-8 relative shadow-2xl">
 
       <div className="text-center mb-8 border-b border-ink/10 pb-4">
-        <h3 className="font-title text-lg tracking-widest text-ink">Chart Registration</h3>
+        <h3 className="font-title text-lg tracking-widest text-ink">Astrolabe Registration</h3>
+        <p className="text-[10px] font-sans text-ink/40 uppercase tracking-[0.3em] mt-2">Align Your Coordinates</p>
       </div>
 
       <div className="space-y-8 relative z-10">
-        <div className="space-y-6">
-          <div className="border-b border-ink/20 pb-1">
-            <label className="block text-xs font-serif italic text-stone-500 mb-1">Date of Birth</label>
-            <DatePicker value={dateValue} onChange={setDateValue} />
-          </div>
 
-          <div className="border-b border-ink/20 pb-1">
-            <label className="block text-xs font-serif italic text-stone-500 mb-1">Time of Birth</label>
-            <TimePicker value={timeValue} onChange={setTimeValue} />
-          </div>
+        {/* Date Wheels */}
+        <div className="flex justify-center gap-2">
+          <WheelColumn items={years} value={dateValue.year} onChange={(v) => setDateValue({ ...dateValue, year: Number(v) })} label="Year" />
+          <div className="h-40 flex items-center text-ink/20 pb-4 text-2xl">/</div>
+          <WheelColumn items={months} value={dateValue.month} onChange={(v) => setDateValue({ ...dateValue, month: Number(v) })} label="Month" />
+          <div className="h-40 flex items-center text-ink/20 pb-4 text-2xl">/</div>
+          <WheelColumn items={days} value={dateValue.day} onChange={(v) => setDateValue({ ...dateValue, day: Number(v) })} label="Day" />
         </div>
 
+        {/* Time Wheels */}
+        <div className="flex justify-center gap-2">
+          <WheelColumn items={hours} value={timeValue.hour} onChange={(v) => setTimeValue({ ...timeValue, hour: Number(v) })} label="Hour" />
+          <div className="h-40 flex items-center text-ink/20 pb-4 text-2xl">:</div>
+          <WheelColumn items={minutes} value={timeValue.minute} onChange={(v) => setTimeValue({ ...timeValue, minute: Number(v) })} label="Minute" />
+        </div>
+
+        {/* Gender Toggle */}
         <div>
-          <label className="block text-xs font-serif italic text-stone-500 mb-3 text-center">Gender (Yin/Yang)</label>
+          <label className="block text-xs font-serif italic text-stone-500 mb-3 text-center">Polarity (Gender)</label>
           <div className="flex justify-center gap-6">
             <button
               type="button"
@@ -380,9 +224,10 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
 
         <button
           type="submit"
-          className="w-full mt-6 bg-ink hover:bg-stone-800 text-paper font-title font-bold py-4 border border-ink shadow-lg hover:shadow-xl transition-all duration-300 tracking-[0.2em] uppercase"
+          className="w-full mt-6 bg-ink hover:bg-stone-800 text-paper font-title font-bold py-4 border border-ink shadow-lg hover:shadow-xl transition-all duration-300 tracking-[0.2em] uppercase group relative overflow-hidden"
         >
-          Reveal My Archetype
+          <span className="relative z-10 group-hover:tracking-[0.4em] transition-all duration-500">Reveal My Archetype</span>
+          <div className="absolute inset-0 bg-seal/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
         </button>
       </div>
     </form>
