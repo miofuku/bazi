@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { InputForm } from './components/InputForm';
-import { BaziChartDisplay, DaYunDisplay, ElementIcon } from './components/BaziChartDisplay';
+import { BaziChartDisplay } from './components/BaziChartDisplay';
 import { ResultDashboard } from './components/ResultDashboard';
-import { SoulSymbolReveal } from './components/SoulSymbolReveal';
 import { calculateBazi } from './services/baziService';
-import { BaziChart, Gender, Polarity } from './types';
-import { ELEMENT_COLORS, STEM_SYMBOLS } from './utils/constants';
+import { BaziChart, Gender } from './types';
 
 // Decorative Ink Mountains SVG
 const InkMountains = () => (
@@ -46,48 +44,26 @@ const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (
   </header>
 );
 
-const QUOTES = [
-  "Water does not resist. Water flows. — Lao Tzu",
-  "The green reed which bends in the wind is stronger than the mighty oak which breaks. — Confucius",
-  "Nature does not hurry, yet everything is accomplished. — Lao Tzu",
-  "Knowing others is intelligence; knowing yourself is true wisdom. — Lao Tzu",
-  "The journey of a thousand miles begins with a single step. — Lao Tzu",
-  "He who knows he has enough is rich. — Lao Tzu",
-  "When I let go of what I am, I become what I might be. — Lao Tzu",
-  "Life is a series of natural and spontaneous changes. Don't resist them. — Lao Tzu"
-];
+
 
 const App: React.FC = () => {
   const [chart, setChart] = useState<BaziChart | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [showReveal, setShowReveal] = useState(false);
-  const [quote, setQuote] = useState(QUOTES[0]);
 
   const handleCalculate = (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender }) => {
-    setLoading(true);
-    // Pick random quote
-    setQuote(QUOTES[Math.floor(Math.random() * QUOTES.length)]);
-
-    setTimeout(() => {
-      try {
-        const result = calculateBazi(data.year, data.month, data.day, data.hour, data.minute, data.gender);
-        // Add date to result
-        result.date = new Date(data.year, data.month - 1, data.day, data.hour, data.minute);
-        setChart(result);
-        setShowReveal(true); // Trigger Reveal
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } catch (error) {
-        alert("Could not calculate chart. Please ensure the date is valid and libraries are loaded.");
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    }, 3000); // Longer duration to read the quote (3s)
+    try {
+      const result = calculateBazi(data.year, data.month, data.day, data.hour, data.minute, data.gender);
+      // Add date to result
+      result.date = new Date(data.year, data.month - 1, data.day, data.hour, data.minute);
+      setChart(result);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      alert("Could not calculate chart. Please ensure the date is valid and libraries are loaded.");
+      console.error(error);
+    }
   };
 
   const resetApp = () => {
     setChart(null);
-    setShowReveal(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -145,26 +121,10 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {loading ? (
-              <div className="flex flex-col items-center justify-center w-full h-32">
-                <div className="relative flex items-center justify-center">
-                  {/* Ink Spreading Effect */}
-                  <div className="w-4 h-4 bg-ink rounded-full animate-ink-spread opacity-80 blur-sm absolute"></div>
-                  <div className="w-4 h-4 bg-ink/50 rounded-full animate-ping absolute"></div>
-                </div>
-                <div className="mt-12 text-center max-w-md px-4 animate-fade-in">
-                  <p className="font-serif italic text-ink/70 text-lg mb-2">"{quote.split('—')[0].trim()}"</p>
-                  <p className="font-sc text-xs text-ink/40 tracking-widest uppercase">— {quote.split('—')[1]?.trim()}</p>
-                </div>
-              </div>
-            ) : (
-              <div className="animate-slide-up w-full flex justify-center">
-                <InputForm onCalculate={handleCalculate} />
-              </div>
-            )}
+            <div className="animate-slide-up w-full flex justify-center">
+              <InputForm onCalculate={handleCalculate} />
+            </div>
           </div>
-        ) : showReveal ? (
-          <SoulSymbolReveal chart={chart} onComplete={() => setShowReveal(false)} />
         ) : (
           <div className="animate-fade-in space-y-16">
             {/* Top Bar: Back & Title */}
@@ -179,21 +139,7 @@ const App: React.FC = () => {
                 <h2 className="text-3xl font-title text-ink">My Blueprint</h2>
               </div>
               <div className="text-right hidden md:block">
-                <div className="text-xs text-ink/40 uppercase tracking-widest mb-1">Day Master</div>
-                <div className="flex items-center justify-end gap-3">
-                  <span className={`font-sc text-2xl font-bold ${ELEMENT_COLORS[chart.dayMaster.element]}`}>
-                    {chart.dayMaster.chinese}
-                  </span>
-                  <span className={`${ELEMENT_COLORS[chart.dayMaster.element]}`}>
-                    <ElementIcon
-                      type={STEM_SYMBOLS[chart.dayMaster.chinese]}
-                      className="w-8 h-8"
-                    />
-                  </span>
-                  <span className={`font-serif text-lg italic ${ELEMENT_COLORS[chart.dayMaster.element]}`}>
-                    {chart.dayMaster.polarity} {chart.dayMaster.element}
-                  </span>
-                </div>
+                {/* Day Master header removed */}
               </div>
             </div>
 
@@ -211,9 +157,7 @@ const App: React.FC = () => {
         <p className="text-ink/40 text-xs font-sans uppercase tracking-widest">&copy; {new Date().getFullYear()} Elementa.</p>
       </footer>
 
-      {chart && showReveal && (
-        <SoulSymbolReveal chart={chart} onComplete={() => setShowReveal(false)} />
-      )}
+
     </div>
   );
 };
