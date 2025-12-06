@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { InputForm } from './components/InputForm';
 import { BaziChartDisplay, DaYunDisplay, ElementIcon } from './components/BaziChartDisplay';
-import { ElementBalance } from './components/ElementBalance';
-import { PremiumServices } from './components/PremiumServices';
+import { ResultDashboard } from './components/ResultDashboard';
 import { SoulSymbolReveal } from './components/SoulSymbolReveal';
 import { calculateBazi } from './services/baziService';
 import { BaziChart, Gender, Polarity } from './types';
@@ -199,25 +198,7 @@ const App: React.FC = () => {
             </div>
 
             {/* Main Dashboard Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-
-              {/* Left: Pillars (8 cols) */}
-              <div className="lg:col-span-8 space-y-8">
-                <BaziChartDisplay chart={chart} />
-              </div>
-
-              {/* Right: Stats (4 cols) */}
-              <div className="lg:col-span-4 space-y-8">
-                <ElementBalance counts={chart.elementCounts} />
-              </div>
-            </div>
-
-            <PremiumServices />
-
-            {/* Da Yun Section - Full Width Bottom */}
-            <div className="w-full">
-              <DaYunDisplay chart={chart} />
-            </div>
+            <ResultDashboard chart={chart} />
 
           </div>
         )}

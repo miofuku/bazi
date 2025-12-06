@@ -1,158 +1,75 @@
 import React from 'react';
 import { ElementType } from '../types';
-import { ELEMENT_BG_COLORS, ELEMENT_COLORS } from '../utils/constants';
-import { ElementIcon } from './BaziChartDisplay';
-
-const ELEMENT_TO_ICON_TYPE: Record<ElementType, string> = {
-  [ElementType.WOOD]: 'tree',
-  [ElementType.FIRE]: 'sun',
-  [ElementType.EARTH]: 'rock',
-  [ElementType.METAL]: 'sword',
-  [ElementType.WATER]: 'river',
-};
+import { ELEMENT_BG_COLORS, ELEMENT_COLORS, FIVE_ELEMENTS_INFO } from '../utils/constants';
 
 interface ElementBalanceProps {
   counts: Record<ElementType, number>;
 }
 
-const getElementIcon = (element: ElementType, className: string = "w-4 h-4") => {
-  return <ElementIcon type={ELEMENT_TO_ICON_TYPE[element]} className={className} />;
-};
-
-// SVG Diagram Component
-const FiveElementsDiagram: React.FC = () => {
-  // Positions based on 200x200 viewBox, center 100,100, Radius ~70
-  // Order clockwise: Fire(Top) -> Earth -> Metal -> Water -> Wood -> Fire
-  const pos = {
-    [ElementType.FIRE]: { x: 100, y: 25 },
-    [ElementType.EARTH]: { x: 171, y: 77 },
-    [ElementType.METAL]: { x: 144, y: 163 },
-    [ElementType.WATER]: { x: 56, y: 163 },
-    [ElementType.WOOD]: { x: 29, y: 77 },
-  };
-
-  // Tailwind Colors (Hardcoded to match constants for SVG usage)
-  const colors = {
-    [ElementType.WOOD]: '#4A6741',
-    [ElementType.FIRE]: '#B24C3B',
-    [ElementType.EARTH]: '#8C7051',
-    [ElementType.METAL]: '#D4AF37',
-    [ElementType.WATER]: '#3D5A6C',
-  };
-
-  return (
-    <div className="mt-8 pt-8 border-t border-stone-100 flex flex-col items-center">
-      <h4 className="text-xs font-title font-bold uppercase tracking-widest text-ink/50 mb-4">Cycle of Qi</h4>
-      <div className="relative w-64 h-64">
-        <svg viewBox="0 0 200 200" className="w-full h-full overflow-visible">
-          <defs>
-            <marker id="arrowhead" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
-              <path d="M0,0 L0,4 L6,2 z" fill="#999" />
-            </marker>
-          </defs>
-
-          {/* Generating Cycle (Circle/Outer) */}
-          <g className="opacity-20">
-            <path
-              d={`M${pos[ElementType.FIRE].x},${pos[ElementType.FIRE].y} L${pos[ElementType.EARTH].x},${pos[ElementType.EARTH].y} L${pos[ElementType.METAL].x},${pos[ElementType.METAL].y} L${pos[ElementType.WATER].x},${pos[ElementType.WATER].y} L${pos[ElementType.WOOD].x},${pos[ElementType.WOOD].y} Z`}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-              strokeDasharray="4 2"
-            />
-          </g>
-          {/* Generation Arrows (Curved slightly) */}
-          <path d={`M${pos[ElementType.FIRE].x},${pos[ElementType.FIRE].y + 10} Q135,50 ${pos[ElementType.EARTH].x - 5},${pos[ElementType.EARTH].y - 5}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
-          <path d={`M${pos[ElementType.EARTH].x - 5},${pos[ElementType.EARTH].y + 5} Q160,120 ${pos[ElementType.METAL].x},${pos[ElementType.METAL].y - 10}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
-          <path d={`M${pos[ElementType.METAL].x - 10},${pos[ElementType.METAL].y} Q100,170 ${pos[ElementType.WATER].x + 10},${pos[ElementType.WATER].y}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
-          <path d={`M${pos[ElementType.WATER].x},${pos[ElementType.WATER].y - 10} Q40,120 ${pos[ElementType.WOOD].x + 5},${pos[ElementType.WOOD].y + 5}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
-          <path d={`M${pos[ElementType.WOOD].x + 5},${pos[ElementType.WOOD].y - 5} Q65,50 ${pos[ElementType.FIRE].x},${pos[ElementType.FIRE].y + 10}`} fill="none" stroke="#ccc" strokeWidth="1" markerEnd="url(#arrowhead)" />
-
-
-          {/* Controlling Cycle (Star/Inner) */}
-          <g className="opacity-10">
-            <path
-              d={`M${pos[ElementType.FIRE].x},${pos[ElementType.FIRE].y} L${pos[ElementType.METAL].x},${pos[ElementType.METAL].y} L${pos[ElementType.WOOD].x},${pos[ElementType.WOOD].y} L${pos[ElementType.EARTH].x},${pos[ElementType.EARTH].y} L${pos[ElementType.WATER].x},${pos[ElementType.WATER].y} Z`}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="0.5"
-            />
-          </g>
-
-          {/* Element Nodes */}
-          {Object.keys(pos).map((key) => {
-            const type = key as ElementType;
-            const p = pos[type];
-            return (
-              <g key={type} transform={`translate(${p.x}, ${p.y})`}>
-                <circle r="14" fill="white" stroke={colors[type]} strokeWidth="2" />
-                <g transform="translate(-7, -7)" className={ELEMENT_COLORS[type]}>
-                  <ElementIcon type={ELEMENT_TO_ICON_TYPE[type]} className={ELEMENT_COLORS[type]} width="14" height="14" />
-                </g>
-                <text y="24" textAnchor="middle" className="text-[8px] font-serif uppercase fill-stone-500 tracking-wider">{type}</text>
-              </g>
-            );
-          })}
-        </svg>
-
-        {/* Legend */}
-        <div className="flex justify-center gap-6 mt-2 text-[9px] uppercase tracking-widest text-stone-400">
-          <div className="flex items-center gap-1">
-            <span className="w-3 h-px bg-stone-400"></span> Creation
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="w-3 h-px bg-stone-300 opacity-50"></span> Control
-          </div>
-        </div>
-      </div>
-    </div >
-  );
-};
-
 export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts }) => {
-  const values = Object.values(counts) as number[];
-  const max = Math.max(...values) || 1;
+  const total = (Object.values(counts) as number[]).reduce((sum: number, val: number) => sum + val, 0) || 1;
+
+  // Find Dominant and Missing
+  const entries = Object.entries(counts) as [ElementType, number][];
+  const dominant = entries.reduce((a, b) => a[1] > b[1] ? a : b)[0];
+  const missing = entries.filter(e => e[1] === 0).map(e => e[0]);
 
   return (
-    <div className="bg-white p-8 border-2 border-stone-100 relative w-full shadow-sm">
-      {/* Corner accents */}
-      <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-ink/30"></div>
-      <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-ink/30"></div>
-      <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-ink/30"></div>
-      <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-ink/30"></div>
+    <div className="w-full max-w-md mx-auto">
+      <h3 className="text-center font-serif italic text-seal/60 text-lg mb-8">Your Elemental Composition</h3>
 
-      <h3 className="text-lg font-title text-ink mb-6 tracking-widest text-center border-b border-stone-100 pb-4">
-        Elemental Qi
-      </h3>
-
-      <div className="space-y-6">
-        {Object.values(ElementType).map((type, idx) => {
-          const count = counts[type];
-          const percentage = (count / max) * 100;
+      <div className="space-y-5">
+        {(Object.values(ElementType) as ElementType[]).map((type) => {
+          const count = counts[type] || 0;
+          const percentage = Math.round((count / total) * 100);
+          const isDominant = type === dominant;
+          const isMissing = count === 0;
 
           return (
-            <div key={type} className="group">
-              <div className="flex justify-between items-end mb-2 text-xs uppercase tracking-wider font-bold text-stone-500">
+            <div key={type} className="group relative">
+              <div className="flex justify-between items-end mb-2 text-xs uppercase tracking-widest text-ink/40">
                 <div className="flex items-center gap-2">
-                  <span className={`${ELEMENT_COLORS[type]}`}>{getElementIcon(type)}</span>
-                  <span>{type}</span>
+                  <span className={`font-bold transition-colors duration-300 ${isDominant ? ELEMENT_COLORS[type].split(' ')[0] : ''}`}>
+                    {FIVE_ELEMENTS_INFO[type].english}
+                  </span>
+                  {isDominant && (
+                    <span className="bg-ink/5 text-[9px] px-1.5 py-0.5 rounded text-ink/60 font-bold">DOMINANT</span>
+                  )}
+                  {isMissing && (
+                    <span className="bg-stone-100 text-[9px] px-1.5 py-0.5 rounded text-stone-400 font-bold">VOID</span>
+                  )}
                 </div>
-                <span className="text-ink">{count}</span>
+                <span className="font-mono text-[10px] opacity-50">{percentage}%</span>
               </div>
 
-              <div className="h-2 w-full bg-stone-100 rounded-full overflow-hidden">
+              <div className="h-1.5 w-full bg-stone-100 rounded-full overflow-hidden">
                 <div
-                  className={`h-full ${ELEMENT_BG_COLORS[type]} opacity-80 group-hover:opacity-100 transition-all duration-1000 ease-out rounded-full`}
-                  style={{ width: `${percentage}%` }}
+                  className={`h-full ${ELEMENT_BG_COLORS[type]} transition-all duration-1000 ease-out rounded-full ${isDominant ? 'opacity-100' : 'opacity-60 grayscale-[0.3]'}`}
+                  style={{ width: `${percentage === 0 ? 2 : percentage}%` }} // Minimal width for visibility
                 ></div>
+              </div>
+
+              {/* Tooltip-like details on hover (optional) */}
+              <div className="text-[10px] text-ink/30 mt-1 opacity-0 
+              group-hover:opacity-100 transition-opacity duration-300 absolute right-0 -bottom-4">
+                {FIVE_ELEMENTS_INFO[type].keywords}
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* New Interaction Diagram */}
-      <FiveElementsDiagram />
+      <div className="mt-12 text-center">
+        <div className="inline-block p-4 bg-paper/50 rounded-lg border border-ink/5 backdrop-blur-sm">
+          <div className="text-xs text-ink/40 uppercase tracking-widest mb-1">Your Superpower</div>
+          <div className={`font-serif text-xl ${ELEMENT_COLORS[dominant].split(' ')[0]}`}>
+            {FIVE_ELEMENTS_INFO[dominant].english}
+          </div>
+          <div className="text-sm text-ink/60 mt-1 italic">
+            {FIVE_ELEMENTS_INFO[dominant].keywords}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
