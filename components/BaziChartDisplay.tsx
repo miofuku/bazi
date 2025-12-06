@@ -232,6 +232,21 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
 export const BaziChartDisplay: React.FC<BaziChartDisplayProps> = ({ chart }) => {
   return (
     <div className="w-full animate-fade-in">
+      {/* Date Header */}
+      {chart.date && (
+        <div className="flex justify-center mb-8">
+          <div className="inline-flex items-center gap-3 px-6 py-2 border border-ink/10 rounded-full bg-paper/50">
+            <span className="text-[10px] uppercase tracking-widest text-ink/40 font-bold">Chart Date</span>
+            <span className="w-px h-3 bg-ink/10"></span>
+            <span className="font-serif text-seal/70 italic text-base">
+              {chart.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              <span className="mx-2 text-ink/20">|</span>
+              {chart.date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Pillars Grid */}
       <div className="flex flex-wrap justify-center md:justify-between gap-6 px-2 md:px-8">
         <PillarCard pillar={chart.yearPillar} label="Year" delay={0} />

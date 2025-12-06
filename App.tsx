@@ -72,6 +72,8 @@ const App: React.FC = () => {
     setTimeout(() => {
       try {
         const result = calculateBazi(data.year, data.month, data.day, data.hour, data.minute, data.gender);
+        // Add date to result
+        result.date = new Date(data.year, data.month - 1, data.day, data.hour, data.minute);
         setChart(result);
         setShowReveal(true); // Trigger Reveal
         window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -48,6 +48,7 @@ export interface DaYun {
 }
 
 export interface BaziChart {
+  date?: Date;
   yearPillar: Pillar;
   monthPillar: Pillar;
   dayPillar: Pillar;
