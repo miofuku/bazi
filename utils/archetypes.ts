@@ -9,55 +9,55 @@ export interface ArchetypeResult {
 // Map the "Ten Deities" (Shi Shen) to modern Archetypes
 // Based on the 'deity' string calculated in baziCalculator (e.g., '七杀', '正官')
 const ARCHETYPE_MAP: Record<string, ArchetypeResult> = {
-    '七杀': {
-        title: 'The Strategic Warrior',
-        tagline: 'Resilient. Decisive. Transformative.',
-        description: 'You thrive under pressure and possess the courage to break boundaries. You are not afraid of chaos; you master it.'
-    },
-    '正官': {
-        title: 'The Noble Guardian',
-        tagline: 'Principled. Reliable. Diplomatic.',
-        description: 'You are the pillar of society. Your integrity and sense of duty inspire trust and bring order to any situation.'
-    },
-    '食神': {
-        title: 'The Creative Nurturer',
-        tagline: 'Artistic. Thoughtful. Expressive.',
-        description: 'You see the beauty in the world and have a gift for creation. Your gentle intelligence flows like a river.'
-    },
-    '伤官': {
-        title: 'The Charismatic Maverick',
-        tagline: 'Bold. Innovative. Unconventional.',
-        description: 'You challenge the status quo. Your sharp wit and talent for performance make you a natural spotlight magnet.'
-    },
-    '偏财': {
-        title: 'The Opportunity Hunter',
-        tagline: 'Dynamic. Generous. Entrepreneurial.',
-        description: 'You have an eye for value and a talent for seizing the moment. You play the game of life with flair and big vision.'
-    },
-    '正财': {
-        title: 'The Architect of Abundance',
-        tagline: 'Diligent. Prudent. Builder.',
-        description: 'You build lasting wealth effectively. Your practicality and persistence ensure that every step you take leads to solid ground.'
-    },
-    '偏印': {
-        title: 'The Mystic Intuitive',
-        tagline: 'Unconventional. Deep. Insightful.',
-        description: 'You perceive what others miss. Your mind operates on a different frequency, capable of profound and unique breakthroughs.'
-    },
-    '正印': {
-        title: 'The Wise Sage',
-        tagline: 'Knowledgeable. Caring. Mentor.',
-        description: 'You are a seeker of truth and a protector of wisdom. Your presence provides comfort and guidance to those around you.'
-    },
     '比肩': {
-        title: 'The Collaborative Connector',
-        tagline: 'Loyal. Social. Steadfast.',
+        title: 'The Peer',
+        tagline: 'Identity & Independence',
         description: 'You value equality and friendship. Your strength lies in your ability to stand shoulder-to-shoulder with your peers.'
     },
     '劫财': {
-        title: 'The Competitive Trailblazer',
-        tagline: 'Ambitious. Daring. Charismatic.',
+        title: 'The Charmer',
+        tagline: 'Ambition & Social Leverage',
         description: 'You have a drive to win and the charisma to lead. You are at your best when you are pushing limits and rallying a team.'
+    },
+    '食神': {
+        title: 'The Artist',
+        tagline: 'Creativity & Enjoyment',
+        description: 'You see the beauty in the world and have a gift for creation. Your gentle intelligence flows like a river.'
+    },
+    '伤官': {
+        title: 'The Innovator',
+        tagline: 'Rebellion & Brilliance',
+        description: 'You challenge the status quo. Your sharp wit and talent for performance make you a natural spotlight magnet.'
+    },
+    '正财': {
+        title: 'The Manager',
+        tagline: 'Hard Work & Stability',
+        description: 'You build lasting wealth effectively. Your practicality and persistence ensure that every step you take leads to solid ground.'
+    },
+    '偏财': {
+        title: 'The Entrepreneur',
+        tagline: 'Opportunity & Flow',
+        description: 'You have an eye for value and a talent for seizing the moment. You play the game of life with flair and big vision.'
+    },
+    '正官': {
+        title: 'The Diplomat',
+        tagline: 'Order & Reputation',
+        description: 'You are the pillar of society. Your integrity and sense of duty inspire trust and bring order to any situation.'
+    },
+    '七杀': {
+        title: 'The Warrior',
+        tagline: 'Action & Resilience',
+        description: 'You thrive under pressure and possess the courage to break boundaries. You are not afraid of chaos; you master it.'
+    },
+    '正印': {
+        title: 'The Guardian',
+        tagline: 'Knowledge & Support',
+        description: 'You are a seeker of truth and a protector of wisdom. Your presence provides comfort and guidance to those around you.'
+    },
+    '偏印': {
+        title: 'The Philosopher',
+        tagline: 'Intuition & Mystery',
+        description: 'You perceive what others miss. Your mind operates on a different frequency, capable of profound and unique breakthroughs.'
     },
     // Fallbacks
     '': {

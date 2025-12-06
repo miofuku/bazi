@@ -16,12 +16,22 @@ export enum Polarity {
   YIN = 'Yin',
 }
 
+export interface ElementInfo {
+  chinese: string;
+  english: string;
+  keywords: string;
+}
+
 export interface Stem {
   name: string; // e.g., Jia
   chinese: string; // e.g., 甲
   element: ElementType;
   polarity: Polarity;
   deity?: string; // Ten Deity relative to Day Master (e.g., 比肩)
+  // New Metadata
+  natureImage?: string;
+  personality?: string;
+  fullEnglishName?: string;
 }
 
 export interface Branch {
@@ -32,6 +42,17 @@ export interface Branch {
   zodiac: string; // e.g., Rat
   hiddenStems: Stem[]; // Now these stems will also carry deity info
   deity?: string; // Main Qi Deity
+  // New Metadata
+  time?: string;
+  keywords?: string;
+}
+
+export interface InteractionInfo {
+  relation: string;
+  traditional: string;
+  modern: string;
+  context: string;
+  keyword?: string;
 }
 
 export interface Pillar {
