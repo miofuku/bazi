@@ -21,7 +21,7 @@ export const ResultDashboard: React.FC<ResultDashboardProps> = ({ chart }) => {
 
             {/* 2. Energy DNA (Data) */}
             <section className="py-20 px-4 bg-white">
-                <ElementBalance counts={chart.elementCounts} />
+                <ElementBalance counts={chart.elementCounts} scores={chart.elementScores} />
             </section>
 
             {/* 3. Personality Blueprint (Validation) */}

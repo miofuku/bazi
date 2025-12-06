@@ -77,4 +77,5 @@ export interface BaziChart {
   dayMaster: Stem; // The Day Stem
   daYun: DaYun[];
   elementCounts: Record<ElementType, number>;
+  elementScores?: Record<ElementType, number>; // Detailed strength scores
 }

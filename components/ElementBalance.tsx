@@ -4,13 +4,16 @@ import { ELEMENT_BG_COLORS, ELEMENT_COLORS, FIVE_ELEMENTS_INFO } from '../utils/
 
 interface ElementBalanceProps {
   counts: Record<ElementType, number>;
+  scores?: Record<ElementType, number>;
 }
 
-export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts }) => {
-  const total = (Object.values(counts) as number[]).reduce((sum: number, val: number) => sum + val, 0) || 1;
+export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores }) => {
+  // Use scores if available, otherwise fallback to counts (for backward compatibility)
+  const data = scores || counts;
+  const total = (Object.values(data) as number[]).reduce((sum: number, val: number) => sum + val, 0) || 1;
 
   // Find Dominant and Missing
-  const entries = Object.entries(counts) as [ElementType, number][];
+  const entries = Object.entries(data) as [ElementType, number][];
   const dominant = entries.reduce((a, b) => a[1] > b[1] ? a : b)[0];
   const missing = entries.filter(e => e[1] === 0).map(e => e[0]);
 
@@ -20,10 +23,10 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts }) => {
 
       <div className="space-y-5">
         {(Object.values(ElementType) as ElementType[]).map((type) => {
-          const count = counts[type] || 0;
-          const percentage = Math.round((count / total) * 100);
+          const value = data[type] || 0;
+          const percentage = Math.round((value / total) * 100);
           const isDominant = type === dominant;
-          const isMissing = count === 0;
+          const isMissing = value === 0;
 
           return (
             <div key={type} className="group relative">
