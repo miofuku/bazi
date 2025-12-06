@@ -87,7 +87,7 @@ const FiveElementsDiagram: React.FC = () => {
               <g key={type} transform={`translate(${p.x}, ${p.y})`}>
                 <circle r="14" fill="white" stroke={colors[type]} strokeWidth="2" />
                 <g transform="translate(-7, -7)" className={ELEMENT_COLORS[type]}>
-                  {getElementIcon(type, "w-3.5 h-3.5")}
+                  <ElementIcon type={ELEMENT_TO_ICON_TYPE[type]} className={ELEMENT_COLORS[type]} width="14" height="14" />
                 </g>
                 <text y="24" textAnchor="middle" className="text-[8px] font-serif uppercase fill-stone-500 tracking-wider">{type}</text>
               </g>
@@ -105,7 +105,7 @@ const FiveElementsDiagram: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

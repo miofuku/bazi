@@ -8,8 +8,17 @@ interface BaziChartDisplayProps {
 
 // Custom SVG icons matching the elegant flat design style
 // All icons are outlined to match the reference style
-export const ElementIcon: React.FC<{ type: string; className?: string }> = ({ type, className = "w-5 h-5" }) => {
-  const iconProps = { className, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+export const ElementIcon: React.FC<{ type: string } & React.SVGProps<SVGSVGElement>> = ({ type, className, ...props }) => {
+  const iconProps = {
+    className: className || "w-5 h-5",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    ...props
+  };
 
   switch (type) {
     case 'tree': // 甲/寅 - Christmas Tree / Pine shape
