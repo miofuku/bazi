@@ -1,16 +1,46 @@
 import React from 'react';
-import { ElementType } from '../types';
+import { ElementType, Stem } from '../types';
 import { ELEMENT_BG_COLORS, ELEMENT_COLORS, FIVE_ELEMENTS_INFO } from '../utils/constants';
+
+// Element that produces the key element (Resource)
+const RESOURCE_MAP: Record<ElementType, ElementType> = {
+  [ElementType.WOOD]: ElementType.WATER,
+  [ElementType.FIRE]: ElementType.WOOD,
+  [ElementType.EARTH]: ElementType.FIRE,
+  [ElementType.METAL]: ElementType.EARTH,
+  [ElementType.WATER]: ElementType.METAL,
+};
 
 interface ElementBalanceProps {
   counts: Record<ElementType, number>;
   scores?: Record<ElementType, number>;
+  dayMaster?: Stem;
 }
 
-export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores }) => {
+export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores, dayMaster }) => {
   // Use scores if available, otherwise fallback to counts (for backward compatibility)
   const data = scores || counts;
   const total = (Object.values(data) as number[]).reduce((sum: number, val: number) => sum + val, 0) || 1;
+
+  // Strength Calculation if Day Master is provided
+  let strengthInfo = null;
+  if (dayMaster) {
+    const selfElement = dayMaster.element;
+    const resourceElement = RESOURCE_MAP[selfElement];
+    const selfScore = data[selfElement] || 0;
+    const resourceScore = data[resourceElement] || 0;
+    const strengthScore = selfScore + resourceScore;
+    const isStrong = strengthScore >= (total / 2);
+
+    strengthInfo = {
+      isStrong,
+      score: strengthScore,
+      total,
+      advice: isStrong
+        ? "Output, Challenge, Management"
+        : "Learning, Cooperation, Rest"
+    };
+  }
 
   // Find Dominant and Missing
   const entries = Object.entries(data) as [ElementType, number][];
@@ -62,7 +92,7 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores }
         })}
       </div>
 
-      <div className="mt-12 text-center">
+      <div className="mt-12 text-center space-y-6">
         <div className="inline-block p-4 bg-paper/50 rounded-lg border border-ink/5 backdrop-blur-sm">
           <div className="text-xs text-ink/40 uppercase tracking-widest mb-1">Your Superpower</div>
           <div className={`font-serif text-xl ${ELEMENT_COLORS[dominant].split(' ')[0]}`}>
@@ -72,6 +102,21 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores }
             {FIVE_ELEMENTS_INFO[dominant].keywords}
           </div>
         </div>
+
+        {strengthInfo && (
+          <div className="p-4 border-t border-ink/5">
+            <div className="text-xs text-ink/40 uppercase tracking-widest mb-2">Life Strategy</div>
+            <div className="font-serif text-lg text-ink/80">
+              {strengthInfo.isStrong ? "Strong Structure" : "Weak Structure"}
+            </div>
+            <div className="text-sm text-ink/60 mt-1 mb-3">
+              (Self + Resource = {Math.round(strengthInfo.score)} / {strengthInfo.total})
+            </div>
+            <div className="inline-block bg-stone-100 px-4 py-2 rounded-full text-sm font-medium text-ink/70">
+              {strengthInfo.advice}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
