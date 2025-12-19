@@ -135,7 +135,7 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
     >
       {/* Pillar Title */}
       <div className="mb-4">
-        <div className="py-1 px-3 border border-ink/20 rounded-full bg-paper text-[10px] font-bold uppercase tracking-[0.2em] text-ink/60">
+        <div className="py-1.5 px-4 border border-gold/30 rounded-full bg-midnight-light text-[10px] font-bold uppercase tracking-[0.3em] text-gold/80 shadow-[0_0_10px_rgba(197,160,89,0.1)]">
           {label}
         </div>
       </div>
@@ -151,10 +151,10 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
         </div>
 
         {/* Stem */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-1 py-3 border-b border-white/20 relative">
+        <div className="flex-1 flex flex-col items-center justify-center gap-1 py-4 border-b border-white/10 relative">
           {/* Stem Deity Label */}
           {pillar.stem.deity && (
-            <span className="absolute top-1 text-[9px] font-sans font-bold uppercase tracking-wider text-ink/50 bg-white/60 px-1.5 py-0.5 rounded-sm border border-white/40 backdrop-blur-sm">
+            <span className="absolute top-1 text-[9px] font-sans font-bold uppercase tracking-wider text-gold/60 bg-midnight/80 px-2 py-0.5 rounded-sm border border-gold/20 backdrop-blur-sm">
               {pillar.stem.deity}
             </span>
           )}
@@ -162,7 +162,7 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
           <span className={`text-4xl md:text-5xl font-sc font-bold ${ELEMENT_COLORS[pillar.stem.element]} drop-shadow-sm`}>
             {pillar.stem.chinese}
           </span>
-          <span className="font-sans font-medium text-xs text-ink/70 uppercase tracking-widest">{pillar.stem.name}</span>
+          <span className="font-sans font-medium text-xs text-slate-400 uppercase tracking-widest">{pillar.stem.name}</span>
           <div className="flex flex-col items-center gap-1 mt-2">
             <span className={`${ELEMENT_COLORS[pillar.stem.element]}`}>
               <ElementIcon
@@ -174,20 +174,20 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
         </div>
 
         {/* Branch */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-1 py-3 relative">
+        <div className="flex-1 flex flex-col items-center justify-center gap-1 py-4 relative">
           <span className={`text-4xl md:text-5xl font-sc font-bold ${ELEMENT_COLORS[pillar.branch.element]} drop-shadow-sm`}>
             {pillar.branch.chinese}
           </span>
 
           {/* Branch Main Deity Label */}
           {pillar.branch.deity && (
-            <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-ink/50 bg-white/60 px-1.5 py-0.5 rounded-sm border border-white/40 backdrop-blur-sm mb-1">
+            <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-gold/60 bg-midnight/80 px-2 py-0.5 rounded-sm border border-gold/20 backdrop-blur-sm mb-1">
               {pillar.branch.deity}
             </span>
           )}
 
-          <span className="font-sans font-medium text-xs text-ink/70 uppercase tracking-widest">{pillar.branch.name}</span>
-          <span className="text-[9px] font-sans font-bold text-ink/30 uppercase tracking-[0.2em]">{pillar.branch.zodiac}</span>
+          <span className="font-sans font-medium text-xs text-slate-400 uppercase tracking-widest">{pillar.branch.name}</span>
+          <span className="text-[9px] font-sans font-bold text-slate-600 uppercase tracking-[0.3em]">{pillar.branch.zodiac}</span>
           <div className="flex flex-col items-center gap-1 mt-2">
             <span className={`${ELEMENT_COLORS[pillar.branch.element]}`}>
               <ElementIcon
@@ -198,29 +198,29 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
           </div>
         </div>
 
-        {/* Decorative Bottom (Tech Locking Mechanism) */}
-        <div className="absolute bottom-0 w-full h-1 bg-ink/10 flex justify-center gap-1">
-          <div className="w-1 h-full bg-ink/20"></div>
-          <div className="w-8 h-full bg-seal/80"></div>
-          <div className="w-1 h-full bg-ink/20"></div>
+        {/* Decorative Bottom */}
+        <div className="absolute bottom-0 w-full h-1 bg-white/5 flex justify-center gap-1">
+          <div className="w-1 h-full bg-white/10"></div>
+          <div className="w-8 h-full bg-gold/60 shadow-[0_0_10px_rgba(197,160,89,0.3)]"></div>
+          <div className="w-1 h-full bg-white/10"></div>
         </div>
       </div>
 
-      {/* Hidden Stems 藏干 (Reveal below) */}
-      <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center gap-1">
-        <div className="h-4 w-px bg-ink/20"></div>
-        <div className="bg-white border border-stone-200 px-4 py-3 rounded shadow-sm flex gap-4">
+      {/* Hidden Stems */}
+      <div className="mt-6 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col items-center gap-1">
+        <div className="h-4 w-px bg-gold/30"></div>
+        <div className="glass-midnight border-gold/10 px-5 py-4 rounded-sm shadow-xl flex gap-6">
           {pillar.branch.hiddenStems.map((hs, i) => (
             <div key={i} className="flex flex-col items-center gap-1">
-              {hs.deity && <span className="text-[8px] text-ink/60">{hs.deity}</span>}
-              <span className={`text-xl font-sc font-bold ${ELEMENT_COLORS[hs.element]}`}>{hs.chinese}</span>
+              {hs.deity && <span className="text-[8px] text-gold/60 font-bold uppercase tracking-wider mb-1">{hs.deity}</span>}
+              <span className={`text-2xl font-sc font-bold ${ELEMENT_COLORS[hs.element]} drop-shadow-sm`}>{hs.chinese}</span>
               <span className={`${ELEMENT_COLORS[hs.element]}`}>
                 <ElementIcon
                   type={STEM_SYMBOLS[hs.chinese]}
-                  className="w-5 h-5"
+                  className="w-5 h-5 opacity-80"
                 />
               </span>
-              <span className="text-[9px] text-ink/40 font-serif">{hs.name}</span>
+              <span className="text-[9px] text-slate-500 font-sans uppercase tracking-widest mt-1">{hs.name}</span>
             </div>
           ))}
         </div>
@@ -234,13 +234,13 @@ export const BaziChartDisplay: React.FC<BaziChartDisplayProps> = ({ chart }) => 
     <div className="w-full animate-fade-in">
       {/* Date Header */}
       {chart.date && (
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex items-center gap-3 px-6 py-2 border border-ink/10 rounded-full bg-paper/50">
-            <span className="text-[10px] uppercase tracking-widest text-ink/40 font-bold">Chart Date</span>
-            <span className="w-px h-3 bg-ink/10"></span>
-            <span className="font-serif text-seal/70 italic text-base">
+        <div className="flex justify-center mb-16">
+          <div className="inline-flex items-center gap-4 px-8 py-3 border border-white/10 rounded-full bg-white/5 backdrop-blur-md">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-slate-500 font-bold">Chart Calibration</span>
+            <span className="w-px h-4 bg-white/10"></span>
+            <span className="font-serif text-gold/80 italic text-lg">
               {chart.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-              <span className="mx-2 text-ink/20">|</span>
+              <span className="mx-3 text-white/10">|</span>
               {chart.date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             </span>
           </div>
@@ -260,10 +260,10 @@ export const BaziChartDisplay: React.FC<BaziChartDisplayProps> = ({ chart }) => 
 
 export const DaYunDisplay: React.FC<{ chart: BaziChart }> = ({ chart }) => {
   return (
-    <div className="relative pt-12 mt-4 border-t-2 border-ink/5 w-full">
-      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-paper px-6 py-1 border border-ink/10 rounded-full shadow-sm flex items-center gap-2">
-        <span className="font-title text-sm text-ink font-bold tracking-widest uppercase">Great Cycles</span>
-        <span className="font-sc text-sm text-ink/40">大运</span>
+    <div className="relative pt-16 mt-12 border-t border-white/5 w-full">
+      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-midnight px-8 py-1.5 border border-gold/20 rounded-full shadow-gold/10 flex items-center gap-3">
+        <span className="font-serif text-sm text-gold font-bold tracking-[0.2em] uppercase">Great Cycles</span>
+        <span className="font-sc text-sm text-gold/40">大运</span>
       </div>
 
       {/* Full width scrolling container with more padding for breathability */}
@@ -272,14 +272,14 @@ export const DaYunDisplay: React.FC<{ chart: BaziChart }> = ({ chart }) => {
           <div key={idx} className="min-w-[100px] flex-1 group flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-2">
 
             {/* Age Label */}
-            <div className="mb-3 text-center">
-              <div className="text-xs font-title font-bold text-ink/60 uppercase tracking-wider">Age {yun.startAge}</div>
-              <div className="text-[10px] font-serif text-ink/30 mt-1">{yun.year}</div>
+            <div className="mb-4 text-center">
+              <div className="text-[10px] font-sans font-bold text-slate-500 uppercase tracking-[0.2em]">Age {yun.startAge}</div>
+              <div className="text-[10px] font-serif text-gold/40 mt-1 italic">{yun.year}</div>
             </div>
 
             {/* Coin Style Cycle */}
-            <div className="w-20 h-20 rounded-full bg-paper border-2 border-stone-200 group-hover:border-seal transition-colors flex items-center justify-center shadow-md relative hover:shadow-lg hover:bg-white">
-              <div className="absolute inset-1 rounded-full border border-dashed border-stone-300 group-hover:border-seal/30 transition-colors"></div>
+            <div className="w-24 h-24 rounded-full bg-white/2 border border-white/10 group-hover:border-gold transition-all duration-500 flex items-center justify-center shadow-lg relative hover:bg-gold/5 group-hover:shadow-gold/10">
+              <div className="absolute inset-1.5 rounded-full border border-dashed border-white/5 group-hover:border-gold/30 transition-all"></div>
 
               <div className="flex flex-col items-center leading-none z-10 gap-1">
                 <div className="flex items-center gap-1">

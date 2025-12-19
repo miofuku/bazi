@@ -48,12 +48,12 @@ export const generateBaziInterpretation = async (chart: BaziChart, question: str
 
     try {
         const response = await client.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-2.0-flash-exp',
             contents: prompt,
         });
-        return response.text || "The stars are clouded. Please try again.";
+        return response.text || "Systemic feedback loop offline. Please re-initiate.";
     } catch (error) {
         console.error("Gemini API Error:", error);
-        return "The connection to the celestial realm is currently disrupted. (API Error)";
+        return "The connection to the neural processing layer is currently disrupted. (Protocol Error)";
     }
 };

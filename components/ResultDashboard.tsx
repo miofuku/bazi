@@ -16,37 +16,39 @@ export const ResultDashboard: React.FC<ResultDashboardProps> = ({ chart }) => {
     const structure = mapChartToStructure(chart);
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-midnight text-slate-200">
             {/* 1. Hero Section (Identity) */}
             <ResultHero chart={chart} structure={structure} />
 
             {/* 2. Systemic Performance (Metrics) */}
             {chart.systemMetrics && (
-                <section className="py-20 px-4 bg-stone-50/30 border-y border-ink/5">
+                <section className="py-24 px-4 bg-midnight border-b border-white/5">
                     <SystemPerformance metrics={chart.systemMetrics} />
                 </section>
             )}
 
             {/* 3. Infrastructure Layer (DNA/Data) */}
-            <section className="py-20 px-4 bg-white">
+            <section className="py-24 px-4 bg-white/2 backdrop-blur-sm border-b border-white/5">
                 <ElementBalance counts={chart.elementCounts} scores={chart.elementScores} dayMaster={chart.dayMaster} />
             </section>
 
-            {/* 3. Personality Blueprint (Validation) */}
-            <section className="py-10 bg-stone-50/50 border-t border-stone-100">
+            {/* 4. Personality Blueprint (Validation) */}
+            <section className="py-24 border-b border-white/5">
                 <ArchetypeCards structure={structure} />
             </section>
 
-            {/* 4. The Cliffhanger (Paywall) */}
-            <section className="py-10 bg-gradient-to-b from-white to-stone-50">
+            {/* 5. The Cliffhanger (Paywall) */}
+            <section className="py-24 bg-gradient-to-b from-midnight to-midnight-light">
                 <LockedContent />
             </section>
 
-            {/* 5. Legacy Chart Display (For Verification/Hardcore users - Tucked away at bottom or optional) */}
-            <div className="border-t border-stone-200 py-20 bg-stone-100">
-                <div className="max-w-5xl mx-auto px-4 opacity-70 hover:opacity-100 transition-opacity">
-                    <h4 className="text-center text-xs uppercase tracking-widest text-ink/30 mb-8">Technical Chart View</h4>
-                    <BaziChartDisplay chart={chart} />
+            {/* 6. Technical Chart View (Optional/Legacy) */}
+            <div className="border-t border-white/5 py-32 bg-midnight-light/50">
+                <div className="max-w-5xl mx-auto px-4 opacity-40 hover:opacity-100 transition-all duration-700">
+                    <h4 className="text-center text-[10px] uppercase font-sans tracking-[0.5em] text-gold/60 mb-12">Technical Chart View</h4>
+                    <div className="bg-midnight/40 p-12 rounded-sm border border-white/5">
+                        <BaziChartDisplay chart={chart} />
+                    </div>
                 </div>
             </div>
         </div>

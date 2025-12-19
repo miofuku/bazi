@@ -92,38 +92,35 @@ const WheelColumn: React.FC<WheelColumnProps> = ({ items, value, onChange, label
 
   return (
     <div className="flex flex-col items-center mx-1 relative group">
-      {label && <div className="text-[10px] uppercase font-bold text-ink/40 mb-1 tracking-widest">{label}</div>}
+      {label && <div className="text-[10px] uppercase font-bold text-gold/60 mb-2 tracking-[0.2em]">{label}</div>}
 
       {/* Up Button */}
       <button
         type="button"
         onClick={() => shift(-1)}
-        className="w-full h-6 flex items-center justify-center text-ink/20 hover:text-seal hover:bg-seal/5 transition-colors mb-1"
+        className="w-full h-8 flex items-center justify-center text-slate-600 hover:text-gold hover:bg-gold/5 transition-colors mb-1"
       >
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 15l-6-6-6 6" /></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 15l-6-6-6 6" /></svg>
       </button>
 
-      <div className="relative h-32 w-16 md:w-20 overflow-hidden border-y border-ink/10 bg-paper-dark/30 rounded-sm">
+      <div className="relative h-36 w-20 md:w-24 overflow-hidden border-y border-white/10 bg-midnight/20 rounded-sm">
         {/* Selection Lens */}
-        <div className="absolute top-1/2 left-0 w-full h-10 -translate-y-1/2 border-y-2 border-seal/50 bg-seal/5 pointer-events-none z-10 box-border"></div>
+        <div className="absolute top-1/2 left-0 w-full h-10 -translate-y-1/2 border-y border-gold/40 bg-gold/5 pointer-events-none z-10 box-border"></div>
 
-        {/* Helper gradient for depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-paper via-transparent to-paper pointer-events-none z-20"></div>
+        {/* Helper gradient for depth - updated for midnight background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-midnight via-transparent to-midnight pointer-events-none z-20 opacity-80"></div>
 
         <div
           ref={containerRef}
-          className="h-full overflow-y-auto snap-y snap-mandatory py-[44px]"
+          className="h-full overflow-y-auto no-scrollbar snap-y snap-mandatory py-[44px]"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollBehavior: 'smooth' }}
           onScroll={handleScroll}
         >
-          <style>{`
-            .no-scrollbar::-webkit-scrollbar { display: none; }
-          `}</style>
           {items.map((item) => (
             <div
               key={item}
               onClick={() => onChange(item)}
-              className={`h-10 flex items-center justify-center snap-center cursor-pointer transition-all duration-200 select-none ${item === value ? 'text-ink font-bold text-xl scale-110' : 'text-ink/30 text-sm'
+              className={`h-10 flex items-center justify-center snap-center cursor-pointer transition-all duration-300 select-none ${item === value ? 'text-slate-100 font-bold text-xl scale-110 text-glow-gold' : 'text-slate-600 text-sm'
                 }`}
             >
               {item}
@@ -136,9 +133,9 @@ const WheelColumn: React.FC<WheelColumnProps> = ({ items, value, onChange, label
       <button
         type="button"
         onClick={() => shift(1)}
-        className="w-full h-6 flex items-center justify-center text-ink/20 hover:text-seal hover:bg-seal/5 transition-colors mt-1"
+        className="w-full h-8 flex items-center justify-center text-slate-600 hover:text-gold hover:bg-gold/5 transition-colors mt-1"
       >
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6" /></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M6 9l6 6 6-6" /></svg>
       </button>
 
     </div>
@@ -176,58 +173,57 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-lg bg-paper border-2 border-ink/10 p-8 relative shadow-2xl">
+    <form onSubmit={handleSubmit} className="w-full max-w-lg glass-midnight p-10 relative shadow-2xl border-white/10">
 
-      <div className="text-center mb-8 border-b border-ink/10 pb-4">
-        <h3 className="font-title text-lg tracking-widest text-ink">Systemic Parameterization</h3>
-        <p className="text-[10px] font-sans text-ink/40 uppercase tracking-[0.3em] mt-2">Calibrate Initial Conditions</p>
+      <div className="text-center mb-10 border-b border-white/5 pb-6">
+        <h3 className="font-serif text-2xl tracking-widest text-slate-100">Systemic Parameterization</h3>
+        <p className="text-[10px] font-sans text-gold/60 uppercase tracking-[0.3em] mt-3">Calibrate Initial Conditions</p>
       </div>
 
-      <div className="space-y-8 relative z-10">
+      <div className="space-y-10 relative z-10">
 
         {/* Date Wheels */}
-        <div className="flex justify-center gap-2">
+        <div className="flex justify-center gap-4">
           <WheelColumn items={years} value={dateValue.year} onChange={(v) => setDateValue({ ...dateValue, year: Number(v) })} label="Year" />
-          <div className="h-40 flex items-center text-ink/20 pb-4 text-2xl">/</div>
+          <div className="h-40 flex items-center text-white/5 pb-4 text-2xl font-light">/</div>
           <WheelColumn items={months} value={dateValue.month} onChange={(v) => setDateValue({ ...dateValue, month: Number(v) })} label="Month" />
-          <div className="h-40 flex items-center text-ink/20 pb-4 text-2xl">/</div>
+          <div className="h-40 flex items-center text-white/5 pb-4 text-2xl font-light">/</div>
           <WheelColumn items={days} value={dateValue.day} onChange={(v) => setDateValue({ ...dateValue, day: Number(v) })} label="Day" />
         </div>
 
         {/* Time Wheels */}
-        <div className="flex justify-center gap-2">
+        <div className="flex justify-center gap-4">
           <WheelColumn items={hours} value={timeValue.hour} onChange={(v) => setTimeValue({ ...timeValue, hour: Number(v) })} label="Hour" />
-          <div className="h-40 flex items-center text-ink/20 pb-4 text-2xl">:</div>
+          <div className="h-40 flex items-center text-white/5 pb-4 text-2xl font-light">:</div>
           <WheelColumn items={minutes} value={timeValue.minute} onChange={(v) => setTimeValue({ ...timeValue, minute: Number(v) })} label="Minute" />
         </div>
 
-        {/* Gender Toggle */}
-        <div>
-          <label className="block text-xs font-serif italic text-stone-500 mb-3 text-center">Baseline Polarity</label>
-          <div className="flex justify-center gap-6">
+        {/* Polarity Toggle */}
+        <div className="bg-white/2 p-6 border border-white/5">
+          <label className="block text-[10px] font-sans uppercase tracking-[0.2em] text-slate-500 mb-6 text-center">Baseline Polarity</label>
+          <div className="flex justify-center gap-8">
             <button
               type="button"
               onClick={() => setGender(Gender.MALE)}
-              className={`w-24 py-2 border font-bold text-sm transition-all duration-300 ${gender === Gender.MALE ? 'border-ink bg-ink text-paper shadow-md' : 'border-stone-300 text-stone-400 hover:border-ink hover:text-ink'}`}
+              className={`w-28 py-3 border font-bold text-xs uppercase tracking-widest transition-all duration-500 ${gender === Gender.MALE ? 'border-gold bg-gold text-midnight shadow-lg shadow-gold/20' : 'border-white/10 text-slate-500 hover:border-gold hover:text-gold'}`}
             >
-              Male
+              Plus (+)
             </button>
             <button
               type="button"
               onClick={() => setGender(Gender.FEMALE)}
-              className={`w-24 py-2 border font-bold text-sm transition-all duration-300 ${gender === Gender.FEMALE ? 'border-seal bg-seal text-white shadow-md' : 'border-stone-300 text-stone-400 hover:border-seal hover:text-seal'}`}
+              className={`w-28 py-3 border font-bold text-xs uppercase tracking-widest transition-all duration-500 ${gender === Gender.FEMALE ? 'border-slate-400 bg-slate-400 text-midnight shadow-lg' : 'border-white/10 text-slate-500 hover:border-slate-400 hover:text-slate-400'}`}
             >
-              Female
+              Minus (-)
             </button>
           </div>
         </div>
 
         <button
           type="submit"
-          className="w-full mt-6 bg-ink hover:bg-stone-800 text-paper font-title font-bold py-4 border border-ink shadow-lg hover:shadow-xl transition-all duration-300 tracking-[0.2em] uppercase group relative overflow-hidden"
+          className="w-full mt-6 bg-gold hover:bg-gold-light text-midnight font-serif font-bold py-5 border border-gold shadow-xl hover:shadow-gold/20 transition-all duration-500 tracking-[0.2em] uppercase group relative overflow-hidden"
         >
           <span className="relative z-10 group-hover:tracking-[0.4em] transition-all duration-500">Generate System Audit</span>
-          <div className="absolute inset-0 bg-seal/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
         </button>
       </div>
     </form>
