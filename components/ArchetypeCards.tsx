@@ -17,7 +17,7 @@ export const ArchetypeCards: React.FC<ArchetypeCardsProps> = ({ structure }) => 
 
     return (
         <div className="w-full max-w-4xl mx-auto px-4 mt-12 mb-20">
-            <h3 className="text-center font-serif italic text-seal/60 text-lg mb-8">Personality Blueprint</h3>
+            <h3 className="text-center font-serif italic text-seal/60 text-lg mb-8">Cognitive Architecture</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {/* Positive Tags */}

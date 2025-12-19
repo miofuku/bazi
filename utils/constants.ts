@@ -3,33 +3,6 @@ import { ElementType, Polarity, Stem, Branch, ElementInfo, InteractionInfo } fro
 // Simplified static data for mapping if library returns raw strings, 
 // or for UI display purposes.
 
-export const FIVE_ELEMENTS_INFO: Record<ElementType, ElementInfo> = {
-  [ElementType.WOOD]: {
-    chinese: '木',
-    english: 'Wood',
-    keywords: 'Growth, Vision, Benevolence'
-  },
-  [ElementType.FIRE]: {
-    chinese: '火',
-    english: 'Fire',
-    keywords: 'Passion, Visibility, Action'
-  },
-  [ElementType.EARTH]: {
-    chinese: '土',
-    english: 'Earth',
-    keywords: 'Stability, Trust, Storage'
-  },
-  [ElementType.METAL]: {
-    chinese: '金',
-    english: 'Metal',
-    keywords: 'Order, Precision, Structure'
-  },
-  [ElementType.WATER]: {
-    chinese: '水',
-    english: 'Water',
-    keywords: 'Wisdom, Flow, Adaptability'
-  }
-};
 
 export const STEMS: Record<string, Stem> = {
   '甲': { name: 'Jia', chinese: '甲', element: ElementType.WOOD, polarity: Polarity.YANG, fullEnglishName: 'Yang Wood', natureImage: 'The Mighty Oak', personality: 'Resilient, direct, uncompromising' },
@@ -104,6 +77,34 @@ export const STEM_SYMBOLS: Record<string, string> = {
 };
 
 // Symbol type mappings for 地支 (Earthly Branches)
+export const FIVE_ELEMENTS_INFO: Record<ElementType, ElementInfo> = {
+  [ElementType.WOOD]: {
+    chinese: '木',
+    english: 'Visionary Force',
+    keywords: 'Growth Architecture, Strategic Intent, Vertical Expansion'
+  },
+  [ElementType.FIRE]: {
+    chinese: '火',
+    english: 'Visibility Energy',
+    keywords: 'Signal Intensity, Social Proof, Dynamic Transformation'
+  },
+  [ElementType.EARTH]: {
+    chinese: '土',
+    english: 'System Stability',
+    keywords: 'Infrastructure Reliability, Baseline Integrity, Equilibrium'
+  },
+  [ElementType.METAL]: {
+    chinese: '金',
+    english: 'Analytical Rigor',
+    keywords: 'Precision Engineering, Rule Sets, Optimization'
+  },
+  [ElementType.WATER]: {
+    chinese: '水',
+    english: 'Systemic Intelligence',
+    keywords: 'Adaptive Flow, Fluid Connectivity, Deep Insight'
+  }
+};
+
 export const BRANCH_SYMBOLS: Record<string, string> = {
   '寅': 'tree',      // Tiger - Wood (Tree)
   '卯': 'sprout',    // Rabbit - Wood (Sprout)
@@ -120,16 +121,16 @@ export const BRANCH_SYMBOLS: Record<string, string> = {
 };
 
 export const INTERACTIONS: InteractionInfo[] = [
-  // Creation / Support
-  { relation: 'Wood feeds Fire', traditional: '木生火', modern: 'Fueling the Passion', context: 'Your creativity (Wood) transforms into action (Fire).', keyword: 'Ignition' },
-  { relation: 'Fire creates Earth', traditional: '火生土', modern: 'Consolidating Results', context: 'Your actions (Fire) build solid trust and assets (Earth).', keyword: 'Consolidation' },
-  { relation: 'Earth bears Metal', traditional: '土生金', modern: 'Mining for Value', context: 'Your accumulation (Earth) yields core structure and rules (Metal).', keyword: 'Refinement' },
-  { relation: 'Metal holds Water', traditional: '金生水', modern: 'Structuring the Wisdom', context: 'Your logic and discipline (Metal) clarify your flow of thought (Water).', keyword: 'Clarity' },
-  { relation: 'Water nourishes Wood', traditional: '水生木', modern: 'Nurturing Growth', context: 'Your wisdom and network (Water) nourish new development (Wood).', keyword: 'Nurture' },
-  // Control / Shape
-  { relation: 'Wood parts Earth', traditional: '木克土', modern: 'Breaking New Ground', context: 'Innovation (Wood) breaks through stagnation (Earth).', keyword: 'Expansion' },
-  { relation: 'Earth dams Water', traditional: '土克水', modern: 'Channeling the Flow', context: 'Stability (Earth) focuses scattered emotions (Water).', keyword: 'Focus' },
-  { relation: 'Water extinguishes Fire', traditional: '水克火', modern: 'Cooling the Heat', context: 'Wisdom (Water) regulates impulsive action (Fire).', keyword: 'Regulation' },
-  { relation: 'Fire melts Metal', traditional: '火克金', modern: 'Forging the Tool', context: 'Passion (Fire) reshapes rigid structures (Metal).', keyword: 'Transformation' },
-  { relation: 'Metal chops Wood', traditional: '金克木', modern: 'Pruning for Growth', context: 'Discipline (Metal) cuts away distractions (Wood) for better growth.', keyword: 'Discipline' },
+  // Synergistic Cycles (Formerly Creation)
+  { relation: 'Fueling Phase', traditional: '木生火', modern: 'Strategic Ignition', context: 'Visionary Force fuels Visibility Energy, accelerating transformation.', keyword: 'Ignition' },
+  { relation: 'Stabilizing Phase', traditional: '火生土', modern: 'Infrastructure Consolidation', context: 'Dynamic Energy consolidates into baseline stability.', keyword: 'Consolidation' },
+  { relation: 'Refining Phase', traditional: '土生金', modern: 'Operational Extraction', context: 'Infrastructure yields high-precision analytical structures.', keyword: 'Refinement' },
+  { relation: 'Clarifying Phase', traditional: '金生水', modern: 'Systemic Cohesion', context: 'Analytical logic clarifies systemic intelligence and flow.', keyword: 'Clarity' },
+  { relation: 'Regenerative Phase', traditional: '水生木', modern: 'Foundational Growth', context: 'Systemic intelligence nourishes new growth architecture.', keyword: 'Nurture' },
+  // Friction Cycles (Formerly Control)
+  { relation: 'External Friction', traditional: '木克土', modern: 'Systemic Disruption', context: 'Expansionary forces pressure the infrastructure, requiring recalibration.', keyword: 'Disruption' },
+  { relation: 'Regulatory Friction', traditional: '土克水', modern: 'Flow Containment', context: 'Baseline stability creates boundaries for systemic intelligence.', keyword: 'Regulation' },
+  { relation: 'Dynamic Friction', traditional: '水克火', modern: 'Signal Modulation', context: 'Systemic intelligence regulates impulsive energy output.', keyword: 'Modulation' },
+  { relation: 'Interventionist Friction', traditional: '火克金', modern: 'Structural Forging', context: 'High-intensity energy reshapes analytical structures.', keyword: 'Forging' },
+  { relation: 'Constraint Friction', traditional: '金克木', modern: 'Strategic Pruning', context: 'Analytical rigor defines the limits of expansionary growth.', keyword: 'Constraint' },
 ];

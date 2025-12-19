@@ -91,6 +91,7 @@ export const calculateBazi = (
 
 import { calculateDeity, getHiddenStemsForBranch, DEITY_FULL_NAMES } from '../utils/baziCalculator';
 import { calculateFiveElementScores } from '../utils/FiveElementScorer';
+import { calculateSystemMetrics } from '../utils/systemMetrics';
 
 // Helper to aggregate counts and return final chart structure
 const generateChartResult = (
@@ -143,6 +144,13 @@ const generateChartResult = (
     if (p.branch) elementCounts[p.branch.element]++;
   });
 
+  const scores = calculateFiveElementScores(
+    yearPillar.stem, yearPillar.branch,
+    monthPillar.stem, monthPillar.branch,
+    dayPillar.stem, dayPillar.branch,
+    hourPillar.stem, hourPillar.branch
+  );
+
   return {
     yearPillar,
     monthPillar,
@@ -152,11 +160,16 @@ const generateChartResult = (
     daYun,
 
     elementCounts,
-    elementScores: calculateFiveElementScores(
-      yearPillar.stem, yearPillar.branch,
-      monthPillar.stem, monthPillar.branch,
-      dayPillar.stem, dayPillar.branch,
-      hourPillar.stem, hourPillar.branch
-    )
+    elementScores: scores,
+    systemMetrics: calculateSystemMetrics({
+      yearPillar,
+      monthPillar,
+      dayPillar,
+      hourPillar,
+      dayMaster: dayPillar.stem,
+      daYun,
+      elementCounts,
+      elementScores: scores
+    })
   };
 };

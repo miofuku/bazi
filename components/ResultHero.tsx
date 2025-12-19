@@ -74,10 +74,10 @@ export const ResultHero: React.FC<ResultHeroProps> = ({ chart, structure }) => {
                     </div>
                 </div>
 
-                {/* Identity Text */}
+                {/* Genetic Codex */}
                 <div className="space-y-4 max-w-2xl">
                     <div className="flex flex-col items-center gap-2">
-                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-ink/40">Elemental ID: {chart.dayMaster.fullEnglishName || `${chart.dayMaster.polarity} ${chart.dayMaster.element}`}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-ink/40">Systemic Baseline: {chart.dayMaster.fullEnglishName || `${chart.dayMaster.polarity} ${chart.dayMaster.element}`}</span>
                         <h1 className="text-4xl md:text-6xl font-title font-bold text-ink leading-tight">
                             {archetype.name}
                         </h1>

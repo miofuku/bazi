@@ -6,6 +6,7 @@ import { ElementBalance } from './ElementBalance';
 import { ArchetypeCards } from './ArchetypeCards';
 import { LockedContent } from './LockedContent';
 import { BaziChartDisplay } from './BaziChartDisplay';
+import { SystemPerformance } from './SystemPerformance';
 
 interface ResultDashboardProps {
     chart: BaziChart;
@@ -19,7 +20,14 @@ export const ResultDashboard: React.FC<ResultDashboardProps> = ({ chart }) => {
             {/* 1. Hero Section (Identity) */}
             <ResultHero chart={chart} structure={structure} />
 
-            {/* 2. Energy DNA (Data) */}
+            {/* 2. Systemic Performance (Metrics) */}
+            {chart.systemMetrics && (
+                <section className="py-20 px-4 bg-stone-50/30 border-y border-ink/5">
+                    <SystemPerformance metrics={chart.systemMetrics} />
+                </section>
+            )}
+
+            {/* 3. Infrastructure Layer (DNA/Data) */}
             <section className="py-20 px-4 bg-white">
                 <ElementBalance counts={chart.elementCounts} scores={chart.elementScores} dayMaster={chart.dayMaster} />
             </section>

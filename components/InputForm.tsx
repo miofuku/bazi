@@ -179,8 +179,8 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
     <form onSubmit={handleSubmit} className="w-full max-w-lg bg-paper border-2 border-ink/10 p-8 relative shadow-2xl">
 
       <div className="text-center mb-8 border-b border-ink/10 pb-4">
-        <h3 className="font-title text-lg tracking-widest text-ink">Astrolabe Registration</h3>
-        <p className="text-[10px] font-sans text-ink/40 uppercase tracking-[0.3em] mt-2">Align Your Coordinates</p>
+        <h3 className="font-title text-lg tracking-widest text-ink">Systemic Parameterization</h3>
+        <p className="text-[10px] font-sans text-ink/40 uppercase tracking-[0.3em] mt-2">Calibrate Initial Conditions</p>
       </div>
 
       <div className="space-y-8 relative z-10">
@@ -203,7 +203,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
 
         {/* Gender Toggle */}
         <div>
-          <label className="block text-xs font-serif italic text-stone-500 mb-3 text-center">Polarity (Gender)</label>
+          <label className="block text-xs font-serif italic text-stone-500 mb-3 text-center">Baseline Polarity</label>
           <div className="flex justify-center gap-6">
             <button
               type="button"
@@ -226,7 +226,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
           type="submit"
           className="w-full mt-6 bg-ink hover:bg-stone-800 text-paper font-title font-bold py-4 border border-ink shadow-lg hover:shadow-xl transition-all duration-300 tracking-[0.2em] uppercase group relative overflow-hidden"
         >
-          <span className="relative z-10 group-hover:tracking-[0.4em] transition-all duration-500">Reveal My Archetype</span>
+          <span className="relative z-10 group-hover:tracking-[0.4em] transition-all duration-500">Generate System Audit</span>
           <div className="absolute inset-0 bg-seal/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
         </button>
       </div>

@@ -68,6 +68,12 @@ export interface DaYun {
   pillar: Pillar;
 }
 
+export interface SystemMetric {
+  label: string;
+  value: number; // 0-100
+  description: string;
+}
+
 export interface BaziChart {
   date?: Date;
   yearPillar: Pillar;
@@ -78,4 +84,5 @@ export interface BaziChart {
   daYun: DaYun[];
   elementCounts: Record<ElementType, number>;
   elementScores?: Record<ElementType, number>; // Detailed strength scores
+  systemMetrics?: Record<string, SystemMetric>;
 }

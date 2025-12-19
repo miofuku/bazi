@@ -45,16 +45,16 @@ const TEN_DEITIES_MAP: Record<string, Record<string, string>> = {
 };
 
 export const DEITY_FULL_NAMES: Record<string, string> = {
-    '比': '比肩',
-    '劫': '劫财',
-    '食': '食神',
-    '伤': '伤官',
-    '才': '偏财',
-    '财': '正财',
-    '杀': '七杀',
-    '官': '正官',
-    '枭': '偏印',
-    '印': '正印',
+    '比': 'Internal Equilibrium (比)',
+    '劫': 'Resonance Impact (劫)',
+    '食': 'Cognitive Fluidity (食)',
+    '伤': 'Systemic Innovation (伤)',
+    '才': 'Strategic Agility (才)',
+    '财': 'Resource Scaling (财)',
+    '杀': 'Asymmetric Conquering (杀)',
+    '官': 'Foundational Logic (官)',
+    '枭': 'Transcendental Insight (枭)',
+    '印': 'Hierarchical Mastery (印)',
 };
 
 /**

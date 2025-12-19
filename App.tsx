@@ -24,13 +24,13 @@ const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (
         onClick={onHome}
       >
         <div className="w-10 h-10 border border-ink/30 flex items-center justify-center relative overflow-hidden transition-all duration-500 bg-white/50 group-hover:bg-ink group-hover:border-ink">
-          <span className="font-title font-bold text-xl z-10 text-ink group-hover:text-white transition-colors duration-500">E</span>
+          <span className="font-title font-bold text-xl z-10 text-ink group-hover:text-white transition-colors duration-500">C</span>
         </div>
         <div className="flex flex-col">
           <h1 className="text-xl font-title tracking-[0.1em] text-ink transition-colors font-bold uppercase">
-            Elementa
+            CHRONOSOPHY <span className="text-sm normal-case font-sc">(时智)</span>
           </h1>
-          <span className="text-[10px] font-sans text-stone-500 tracking-[0.2em] uppercase">Ancient Wisdom. Future Clarity.</span>
+          <span className="text-[10px] font-sans text-stone-500 tracking-[0.2em] uppercase">The Wisdom of Temporal Synergy.</span>
         </div>
       </div>
       <nav className="hidden md:flex items-center gap-10">
@@ -77,32 +77,32 @@ const App: React.FC = () => {
           <div className="flex flex-col items-center justify-center min-h-[60vh] animate-fade-in">
             <div className="mb-16 text-center">
               <div className="w-20 h-20 mx-auto mb-6 bg-ink text-white flex items-center justify-center rounded-sm shadow-2xl">
-                <span className="font-title text-4xl">E</span>
+                <span className="font-title text-4xl">C</span>
               </div>
               <h2 className="text-5xl md:text-7xl font-title font-bold text-ink mb-4 tracking-tight">
-                Elementa
+                CHRONOSOPHY <span className="text-3xl md:text-4xl font-sc block mt-2">(时智)</span>
               </h2>
               <div className="w-px h-12 bg-gradient-to-b from-ink to-transparent mx-auto mb-6"></div>
               <p className="text-lg md:text-xl font-sans text-ink/60 uppercase tracking-[0.2em] mb-8">
-                Ancient Wisdom, Decoded for Modern Life.
+                The Wisdom of Temporal Synergy. <br /><span className="text-sm normal-case font-sc opacity-60">(关于时空协同的智慧。)</span>
               </p>
 
               <div className="bg-white/40 backdrop-blur-md border border-white/60 p-10 md:p-14 rounded-sm shadow-xl max-w-4xl mx-auto my-16 relative overflow-hidden group hover:shadow-2xl transition-all duration-500">
                 <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-wood via-earth to-water opacity-50"></div>
 
                 <h3 className="font-title text-2xl md:text-3xl text-ink mb-8 tracking-wide font-bold uppercase text-center relative z-10">
-                  The Ecosystem of You
+                  Eastern Personality Gene Code
                 </h3>
 
                 <blockquote className="font-serif text-xl md:text-2xl text-ink/80 leading-relaxed text-center mb-8 relative z-10">
-                  "Think of your life as a <span className="text-wood font-bold">garden</span>.
-                  Bazi analyzes the <span className="text-earth font-bold">soil</span> <span className="text-base text-ink/50 italic">(your base nature)</span>,
-                  the <span className="text-water font-bold">weather</span> <span className="text-base text-ink/50 italic">(the timing/luck cycles)</span>,
-                  and the <span className="text-wood font-bold">seeds</span> <span className="text-base text-ink/50 italic">(your talents)</span>."
+                  "Your birth time represents the <span className="text-metal font-bold">Initial Conditions</span>
+                  of your systemic evolution. We decode this <span className="text-wood font-bold">Base Architecture</span>
+                  to pre-calculate <span className="text-water font-bold">Temporal Synergy</span>
+                  and mitigate <span className="text-fire font-bold">Macro-Cycle Friction</span>."
                 </blockquote>
 
                 <p className="font-sans text-xs md:text-sm text-center tracking-[0.2em] text-ink/60 uppercase font-bold relative z-10">
-                  You cannot change the weather, but you can choose when to plant.
+                  Data-driven risk management and energy allocation for the modern builder.
                 </p>
 
                 {/* Decor elements */}
@@ -113,10 +113,10 @@ const App: React.FC = () => {
 
               <div className="max-w-4xl mx-auto mb-12 text-center space-y-4">
                 <p className="text-xl md:text-2xl font-serif text-seal/100 italic">
-                  "Your birth time isn't just a number. It's an energy coordinate."
+                  "Evolution is just a system of variables. Knowledge is the ultimate optimization."
                 </p>
                 <p className="text-base md:text-lg text-ink/80 font-sans max-w-2xl mx-auto">
-                  We translate the 2,000-year-old Bazi system into actionable strategies for your career and relationships.
+                  We translate the 2,000-year-old Recursive Systemic model into high-fidelity cognitive insights and systemic risk management.
                 </p>
               </div>
             </div>
@@ -134,12 +134,12 @@ const App: React.FC = () => {
                   onClick={() => setChart(null)}
                   className="text-ink/40 hover:text-seal text-xs font-bold uppercase tracking-widest transition-colors mb-2 flex items-center gap-2"
                 >
-                  <span>←</span> Return
+                  <span>←</span> Recalibrate
                 </button>
-                <h2 className="text-3xl font-title text-ink">My Blueprint</h2>
+                <h2 className="text-3xl font-title text-ink">System Audit</h2>
               </div>
               <div className="text-right hidden md:block">
-                {/* Day Master header removed */}
+                {/* Baseline header removed */}
               </div>
             </div>
 
@@ -152,9 +152,9 @@ const App: React.FC = () => {
 
       <footer className="border-t border-ink/5 py-12 text-center relative z-10 bg-paper">
         <div className="w-12 h-12 border border-ink/20 text-ink flex items-center justify-center mx-auto mb-4 hover:bg-ink hover:text-white transition-all duration-500 cursor-default group">
-          <span className="font-title text-xl">E</span>
+          <span className="font-title text-xl">C</span>
         </div>
-        <p className="text-ink/40 text-xs font-sans uppercase tracking-widest">&copy; {new Date().getFullYear()} Elementa.</p>
+        <p className="text-ink/40 text-xs font-sans uppercase tracking-widest">&copy; {new Date().getFullYear()} CHRONOSOPHY.</p>
       </footer>
 
 

@@ -6,7 +6,7 @@ export const LockedContent: React.FC = () => {
             {/* Section Header */}
             <div className="text-center mb-12">
                 <h2 className="text-3xl font-title text-ink mb-4">Deep Strategy Layer</h2>
-                <p className="text-ink/60 font-serif italic">Unlock your 10-Year Forecast and Wealth Strategy</p>
+                <p className="text-ink/60 font-serif italic">Unlock Macro-Temporal Cycles and Venture Aggression metrics</p>
             </div>
 
             {/* Locked Grid */}
@@ -18,9 +18,9 @@ export const LockedContent: React.FC = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                     </div>
-                    <h3 className="text-2xl font-bold font-title text-ink mb-2">Unlock Your Full Blueprint</h3>
+                    <h3 className="text-2xl font-bold font-title text-ink mb-2">Scale Your Infrastructure</h3>
                     <p className="text-ink/60 max-w-sm mb-8">
-                        You've seen the container. Now see what fills it. Get your 10-year forecast, wealth capacity analysis, and relationship patterns.
+                        You've mapped the baseline. Now optimize the output. Get detailed Macro-Cycle analysis, systemic wealth capacity, and high-fidelity synergy mapping.
                     </p>
                     <button className="bg-gradient-to-r from-ink to-seal text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest shadow-xl hover:shadow-2xl hover:scale-105 transition-all transform">
                         Unlock Full Report • $19.99
@@ -29,20 +29,20 @@ export const LockedContent: React.FC = () => {
 
                 {/* Blurred Mock Content Card 1 */}
                 <div className="bg-stone-100 p-8 rounded-xl h-64 flex flex-col items-center justify-center opacity-50 blur-[2px]">
-                    <div className="text-xs uppercase tracking-widest text-stone-400 mb-2">10-Year Luck Cycle</div>
+                    <div className="text-xs uppercase tracking-widest text-stone-400 mb-2">Macro-Temporal Cycles</div>
                     <div className="text-3xl font-serif text-stone-300">2026 - 2035</div>
                     <div className="w-12 h-1 bg-stone-200 mt-4"></div>
                 </div>
 
                 {/* Blurred Mock Content Card 2 */}
                 <div className="bg-stone-100 p-8 rounded-xl h-64 flex flex-col items-center justify-center opacity-50 blur-[2px]">
-                    <div className="text-xs uppercase tracking-widest text-stone-400 mb-2">Wealth Capacity</div>
+                    <div className="text-xs uppercase tracking-widest text-stone-400 mb-2">Resource Scaling Capacity</div>
                     <div className="text-3xl font-serif text-stone-300">Entrepreneurial</div>
                     <div className="w-12 h-1 bg-stone-200 mt-4"></div>
                 </div>
                 {/* Blurred Mock Content Card 3 */}
                 <div className="bg-stone-100 p-8 rounded-xl h-64 flex flex-col items-center justify-center opacity-50 blur-[2px]">
-                    <div className="text-xs uppercase tracking-widest text-stone-400 mb-2">Soulmate Profile</div>
+                    <div className="text-xs uppercase tracking-widest text-stone-400 mb-2">Relational Synergy Nodes</div>
                     <div className="text-3xl font-serif text-stone-300">Patterns</div>
                     <div className="w-12 h-1 bg-stone-200 mt-4"></div>
                 </div>

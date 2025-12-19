@@ -49,7 +49,7 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores, 
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <h3 className="text-center font-serif italic text-seal/60 text-lg mb-8">Your Elemental Composition</h3>
+      <h3 className="text-center font-serif italic text-seal/60 text-lg mb-8">Infrastructure Layer Assessment</h3>
 
       <div className="space-y-5">
         {(Object.values(ElementType) as ElementType[]).map((type) => {
@@ -94,7 +94,7 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores, 
 
       <div className="mt-12 text-center space-y-6">
         <div className="inline-block p-4 bg-paper/50 rounded-lg border border-ink/5 backdrop-blur-sm">
-          <div className="text-xs text-ink/40 uppercase tracking-widest mb-1">Your Superpower</div>
+          <div className="text-xs text-ink/40 uppercase tracking-widest mb-1">System Dominance</div>
           <div className={`font-serif text-xl ${ELEMENT_COLORS[dominant].split(' ')[0]}`}>
             {FIVE_ELEMENTS_INFO[dominant].english}
           </div>
@@ -105,7 +105,7 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores, 
 
         {strengthInfo && (
           <div className="p-4 border-t border-ink/5">
-            <div className="text-xs text-ink/40 uppercase tracking-widest mb-2">Life Strategy</div>
+            <div className="text-xs text-ink/40 uppercase tracking-widest mb-2">Operational Advisory</div>
             <div className="font-serif text-lg text-ink/80">
               {strengthInfo.isStrong ? "Strong Structure" : "Weak Structure"}
             </div>
