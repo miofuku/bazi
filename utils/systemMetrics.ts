@@ -32,34 +32,34 @@ export const calculateSystemMetrics = (chart: BaziChart): Record<string, SystemM
 
     const metrics: Record<string, SystemMetric> = {
         curiosity: {
-            label: 'Cognitive Exploration Index',
+            label: 'Cognitive Exploration',
             value: scale(countDeity('食') + countDeity('伤'), (getElementScore(ElementType.WOOD) + getElementScore(ElementType.WATER)) / 2),
-            description: 'Your system is wired for Intellectual Fluidity, constantly seeking to decode the unknown through creative output.'
+            description: 'Measures your drive for intellectual novelty and creative output. Are you a source of original light or a refiner of existing wisdom?'
         },
         vision: {
             label: 'Visionary Obsession',
             value: scale(countDeity('枭'), getElementScore(ElementType.FIRE)),
-            description: 'An innate capacity for Transcendental Insight, allowing you to fixate on future realities long before they manifest.'
+            description: "Your capacity for long-term anticipation. Defines the intensity of your focus and the clarity of your 'Inner Eye.'"
         },
         resilience: {
             label: 'Psychological Fortitude',
             value: scale(countDeity('比'), getElementScore(ElementType.EARTH)),
-            description: 'The structural integrity to maintain Internal Equilibrium amidst high-friction environments and external turbulence.'
+            description: 'The structural integrity of your system under pressure. Your ability to maintain equilibrium in high-entropy environments.'
         },
         logic: {
-            label: 'Systemic Analytical Rigor',
+            label: 'Systemic Logic',
             value: scale(countDeity('印') + countDeity('官'), getElementScore(ElementType.METAL)),
-            description: 'A deep-seated drive for Foundational Logic and the mastery of complex, hierarchical knowledge systems.'
+            description: 'The density of your analytical framework. It dictates how you categorize reality and build scalable structures.'
         },
         venture: {
-            label: 'Strategic Risk Agility',
+            label: 'Venture Drive',
             value: scale(countDeity('杀') + countDeity('才'), (getElementScore(ElementType.FIRE) + getElementScore(ElementType.METAL)) / 2),
-            description: 'A high-intensity drive to conquer Asymmetric Opportunities with a laser-focused allocation of personal energy.'
+            description: 'Your innate appetite for asymmetric stakes. It measures the alignment between your ambition and your execution energy.'
         },
         impact: {
-            label: 'Resonance & Interpersonal Impact',
+            label: 'Relational Resonance',
             value: scale(countDeity('劫'), getElementScore(ElementType.METAL)),
-            description: 'The power of your Relational Frequency—how your core intensity shapes the collective field of a team.'
+            description: 'How your core energy impacts the collective field. It defines whether you lead through sharp authority or harmonic influence.'
         }
     };
 

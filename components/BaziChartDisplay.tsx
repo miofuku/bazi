@@ -126,6 +126,90 @@ export const ElementIcon: React.FC<{ type: string } & React.SVGProps<SVGSVGEleme
   }
 };
 
+export const GeometricShape: React.FC<{ type: ElementType; className?: string }> = ({ type, className }) => {
+  switch (type) {
+    case ElementType.WOOD:
+      return (
+        <svg viewBox="0 0 100 100" className={className || "w-12 h-12 stroke-wood fill-none"}>
+          <line x1="50" y1="10" x2="50" y2="90" strokeWidth="4" />
+          <line x1="30" y1="30" x2="70" y2="30" strokeWidth="2" opacity="0.5" />
+          <line x1="20" y1="50" x2="80" y2="50" strokeWidth="2" opacity="0.3" />
+        </svg>
+      );
+    case ElementType.FIRE:
+      return (
+        <svg viewBox="0 0 100 100" className={className || "w-12 h-12 stroke-fire fill-none"}>
+          <path d="M50 10L90 90H10L50 10Z" strokeWidth="4" />
+          <circle cx="50" cy="55" r="15" strokeWidth="2" opacity="0.5" />
+        </svg>
+      );
+    case ElementType.EARTH:
+      return (
+        <svg viewBox="0 0 100 100" className={className || "w-12 h-12 stroke-earth fill-none"}>
+          <rect x="20" y="20" width="60" height="60" strokeWidth="4" />
+          <rect x="35" y="35" width="30" height="30" strokeWidth="2" opacity="0.5" />
+        </svg>
+      );
+    case ElementType.METAL:
+      return (
+        <svg viewBox="0 0 100 100" className={className || "w-12 h-12 stroke-metal fill-none"}>
+          <circle cx="50" cy="50" r="40" strokeWidth="4" />
+          <circle cx="50" cy="50" r="25" strokeWidth="2" opacity="0.6" />
+          <circle cx="50" cy="50" r="10" strokeWidth="1" opacity="0.3" />
+        </svg>
+      );
+    case ElementType.WATER:
+      return (
+        <svg viewBox="0 0 100 100" className={className || "w-12 h-12 stroke-water fill-none"}>
+          <path d="M10 50 Q30 20 50 50 T90 50" strokeWidth="4" />
+          <path d="M10 70 Q30 40 50 70 T90 70" strokeWidth="2" opacity="0.5" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
+
+const GeometricPillar: React.FC<{ pillar: Pillar; label: string }> = ({ pillar, label }) => (
+  <div className="flex flex-col items-center gap-6">
+    <div className="text-[10px] uppercase tracking-[0.4em] text-slate-500 font-bold">{label}</div>
+    <div className="relative group">
+      <div className="flex flex-col gap-8 opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+        <div className="relative">
+          <GeometricShape type={pillar.stem.element} className="w-16 h-16 drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]" />
+          <div className="absolute -top-2 -right-2 text-[8px] font-mono text-gold/40">{pillar.stem.chinese}</div>
+        </div>
+        <div className="relative">
+          <GeometricShape type={pillar.branch.element} className="w-16 h-16 drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]" />
+          <div className="absolute -bottom-2 -right-2 text-[8px] font-mono text-gold/40">{pillar.branch.chinese}</div>
+        </div>
+      </div>
+      {/* Visual connector */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-8 bg-gradient-to-b from-transparent via-white/10 to-transparent"></div>
+    </div>
+  </div>
+);
+
+export const GenesisCode: React.FC<{ chart: BaziChart }> = ({ chart }) => {
+  return (
+    <div className="w-full py-10">
+      <div className="grid grid-cols-4 gap-4 md:gap-12 max-w-4xl mx-auto">
+        <GeometricPillar pillar={chart.yearPillar} label="Year" />
+        <GeometricPillar pillar={chart.monthPillar} label="Month" />
+        <GeometricPillar pillar={chart.dayPillar} label="Day" />
+        <GeometricPillar pillar={chart.hourPillar} label="Hour" />
+      </div>
+      <div className="mt-16 text-center">
+        <div className="inline-block px-6 py-2 border border-white/5 bg-white/2 backdrop-blur-sm rounded-sm">
+          <p className="text-[9px] uppercase tracking-[0.5em] text-slate-500">
+            System Architecture Hash: <span className="text-gold/60">{chart.dayMaster.chinese}{chart.yearPillar.branch.chinese}{chart.monthPillar.branch.chinese}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
 const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = ({ pillar, label, delay }) => {
   return (

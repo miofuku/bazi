@@ -5,8 +5,10 @@ import { ResultHero } from './ResultHero';
 import { ElementBalance } from './ElementBalance';
 import { ArchetypeCards } from './ArchetypeCards';
 import { LockedContent } from './LockedContent';
-import { BaziChartDisplay } from './BaziChartDisplay';
+import { BaziChartDisplay, GenesisCode } from './BaziChartDisplay';
 import { SystemPerformance } from './SystemPerformance';
+import { TemporalSynergy } from './TemporalSynergy';
+import { TeamDynamics } from './TeamDynamics';
 
 interface ResultDashboardProps {
     chart: BaziChart;
@@ -20,29 +22,52 @@ export const ResultDashboard: React.FC<ResultDashboardProps> = ({ chart }) => {
             {/* 1. Hero Section (Identity) */}
             <ResultHero chart={chart} structure={structure} />
 
-            {/* 2. Systemic Performance (Metrics) */}
+            {/* 2. The Genesis Code (Geometry) */}
+            <section className="py-24 px-4 bg-midnight border-b border-white/5 overflow-hidden">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl font-serif text-slate-100 mb-3 tracking-tight">The Genesis Code</h2>
+                    <p className="text-gold/60 text-[10px] uppercase font-sans tracking-[0.4em]">创世代码</p>
+                </div>
+                <GenesisCode chart={chart} />
+            </section>
+
+            {/* 3. The 6 Dimensions of Inner Force (Systemic Metrics) */}
             {chart.systemMetrics && (
-                <section className="py-24 px-4 bg-midnight border-b border-white/5">
+                <section className="py-32 px-4 bg-white/2 backdrop-blur-sm border-b border-white/5">
+                    <div className="text-center mb-20">
+                        <h2 className="text-3xl font-serif text-slate-100 mb-3 tracking-tight">The 6 Dimensions of Inner Force</h2>
+                        <p className="text-gold/60 text-[10px] uppercase font-sans tracking-[0.4em]">核心系统参数</p>
+                    </div>
                     <SystemPerformance metrics={chart.systemMetrics} />
                 </section>
             )}
 
-            {/* 3. Infrastructure Layer (DNA/Data) */}
-            <section className="py-24 px-4 bg-white/2 backdrop-blur-sm border-b border-white/5">
+            {/* 4. Temporal Synergy (Navigation) */}
+            <section className="py-32 px-4 bg-midnight border-b border-white/5">
+                <TemporalSynergy chart={chart} />
+            </section>
+
+            {/* 5. Team Dynamics & Synergy (Collective) */}
+            <section className="py-32 px-4 bg-white/2 backdrop-blur-sm border-b border-white/5">
+                <TeamDynamics />
+            </section>
+
+            {/* 6. Infrastructure Layer (DNA/Data) */}
+            <section className="py-24 px-4 bg-midnight border-b border-white/5">
                 <ElementBalance counts={chart.elementCounts} scores={chart.elementScores} dayMaster={chart.dayMaster} />
             </section>
 
-            {/* 4. Personality Blueprint (Validation) */}
+            {/* 6. Personality Blueprint (Validation) */}
             <section className="py-24 border-b border-white/5">
                 <ArchetypeCards structure={structure} />
             </section>
 
-            {/* 5. The Cliffhanger (Paywall) */}
-            <section className="py-24 bg-gradient-to-b from-midnight to-midnight-light">
+            {/* 7. The Cliffhanger (Paywall) */}
+            <section className="py-32 bg-gradient-to-b from-midnight to-midnight-light">
                 <LockedContent />
             </section>
 
-            {/* 6. Technical Chart View (Optional/Legacy) */}
+            {/* 8. Technical Chart View (Optional/Legacy) */}
             <div className="border-t border-white/5 py-32 bg-midnight-light/50">
                 <div className="max-w-5xl mx-auto px-4 opacity-40 hover:opacity-100 transition-all duration-700">
                     <h4 className="text-center text-[10px] uppercase font-sans tracking-[0.5em] text-gold/60 mb-12">Technical Chart View</h4>

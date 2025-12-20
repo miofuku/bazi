@@ -4,6 +4,8 @@ import { BaziChartDisplay } from './components/BaziChartDisplay';
 import { ResultDashboard } from './components/ResultDashboard';
 import { calculateBazi } from './services/baziService';
 import { BaziChart, Gender } from './types';
+import { Methodology } from './components/Methodology';
+import { Footer } from './components/Footer';
 
 // Modern Energy Flow Background
 const EnergyFlow = () => (
@@ -114,6 +116,11 @@ const App: React.FC = () => {
               </div>
             </section>
 
+            {/* THE METHODOLOGY */}
+            <section className="mb-32">
+              <Methodology />
+            </section>
+
             {/* THE THREE PILLARS */}
             <section className="mb-32 grid md:grid-cols-3 gap-12">
               <div className="p-8 border border-white/5 hover:border-gold/20 transition-colors group">
@@ -168,14 +175,7 @@ const App: React.FC = () => {
         )}
       </main>
 
-      <footer className="border-t border-white/5 py-12 text-center relative z-10 bg-midnight">
-        <div className="w-12 h-12 border border-gold/20 text-gold flex items-center justify-center mx-auto mb-4 hover:bg-gold hover:text-midnight transition-all duration-500 cursor-default group">
-          <span className="font-serif text-xl">C</span>
-        </div>
-        <p className="text-slate-500 text-xs font-sans uppercase tracking-widest">&copy; {new Date().getFullYear()} CHRONOSOPHY.</p>
-      </footer>
-
-
+      <Footer />
     </div>
   );
 };
