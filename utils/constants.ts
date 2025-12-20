@@ -77,31 +77,32 @@ export const STEM_SYMBOLS: Record<string, string> = {
 };
 
 // Symbol type mappings for 地支 (Earthly Branches)
+// Symbol type mappings for 地支 (Earthly Branches)
 export const FIVE_ELEMENTS_INFO: Record<ElementType, ElementInfo> = {
   [ElementType.WOOD]: {
     chinese: '木',
-    english: 'Visionary Force',
-    keywords: 'Growth Architecture, Strategic Intent, Vertical Expansion'
+    english: 'The Growth Engine',
+    keywords: 'Expansion, Benevolence, Long-term Vision, Vitality'
   },
   [ElementType.FIRE]: {
     chinese: '火',
-    english: 'Visibility Energy',
-    keywords: 'Signal Intensity, Social Proof, Dynamic Transformation'
+    english: 'The Thermal Intensity',
+    keywords: 'Passion, Dissemination, Visibility, Spiritual Dedication'
   },
   [ElementType.EARTH]: {
     chinese: '土',
-    english: 'System Stability',
-    keywords: 'Infrastructure Reliability, Baseline Integrity, Equilibrium'
+    english: 'The Grounding Matrix',
+    keywords: 'Stability, Credit, Capacity, Resource Integration'
   },
   [ElementType.METAL]: {
     chinese: '金',
-    english: 'Analytical Rigor',
-    keywords: 'Precision Engineering, Rule Sets, Optimization'
+    english: 'The Structural Precision',
+    keywords: 'Decision, Order, Contraction, Logical Rigor'
   },
   [ElementType.WATER]: {
     chinese: '水',
-    english: 'Systemic Intelligence',
-    keywords: 'Adaptive Flow, Fluid Connectivity, Deep Insight'
+    english: 'The Fluid Intelligence',
+    keywords: 'Insight, Communication, Mobility, Deep Connection'
   }
 };
 
@@ -120,17 +121,36 @@ export const BRANCH_SYMBOLS: Record<string, string> = {
   '亥': 'rain',     // Pig - Water (River)
 };
 
+export interface TenGodInfo {
+  name: string;
+  chronosophyName: string;
+  description: string;
+}
+
+export const TEN_GODS_INFO: Record<string, TenGodInfo> = {
+  'Friend': { name: 'Friend', chronosophyName: 'The Peer Resonance', description: 'Self-awareness, Horizontal Synergy, Independence' },
+  'Rob Wealth': { name: 'Rob Wealth', chronosophyName: 'The Competitive Drive', description: 'Social Explosiveness, Resource Acquisition, Expansion Desire' },
+  'Eating God': { name: 'Eating God', chronosophyName: 'The Natural Alchemist', description: 'Primal Creativity, Life Aesthetics, Gentle Output' },
+  'Hurting Officer': { name: 'Hurting Officer', chronosophyName: 'The Disruptive Innovator', description: 'Rebellious Talent, Rule Breaking, Radical Expression' },
+  'Direct Wealth': { name: 'Direct Wealth', chronosophyName: 'The Systematic Accumulator', description: 'Stable Asset Management, Pragmatic Logic, Result-Oriented' },
+  'Indirect Wealth': { name: 'Indirect Wealth', chronosophyName: 'The Venture Opportunist', description: 'VC Acumen, Macro Financial Planning, Non-linear Growth' },
+  'Direct Officer': { name: 'Direct Officer', chronosophyName: 'The Integrity Guardian', description: 'Executive Power, Institutional Compliance, Social Responsibility' },
+  'Seven Killings': { name: 'Seven Killings', chronosophyName: 'The Strategic Aggressor', description: 'Crisis Decision-making, Deterrence, Reshaping Rules under Pressure' },
+  'Direct Resource': { name: 'Direct Resource', chronosophyName: 'The Foundational Mentor', description: 'Systematic Knowledge, Security, Traditional Protection' },
+  'Indirect Resource': { name: 'Indirect Resource', chronosophyName: 'The Transcendental Visionary', description: 'Supernatural Intuition, Niche Insight, Obsessive Deep-dive' },
+};
+
 export const INTERACTIONS: InteractionInfo[] = [
   // Synergistic Cycles (Formerly Creation)
-  { relation: 'Fueling Phase', traditional: '木生火', modern: 'Strategic Ignition', context: 'Visionary Force fuels Visibility Energy, accelerating transformation.', keyword: 'Ignition' },
-  { relation: 'Stabilizing Phase', traditional: '火生土', modern: 'Infrastructure Consolidation', context: 'Dynamic Energy consolidates into baseline stability.', keyword: 'Consolidation' },
-  { relation: 'Refining Phase', traditional: '土生金', modern: 'Operational Extraction', context: 'Infrastructure yields high-precision analytical structures.', keyword: 'Refinement' },
-  { relation: 'Clarifying Phase', traditional: '金生水', modern: 'Systemic Cohesion', context: 'Analytical logic clarifies systemic intelligence and flow.', keyword: 'Clarity' },
-  { relation: 'Regenerative Phase', traditional: '水生木', modern: 'Foundational Growth', context: 'Systemic intelligence nourishes new growth architecture.', keyword: 'Nurture' },
+  { relation: 'Fueling Phase', traditional: '木生火', modern: 'Amplification / Nourishing', context: 'One system empowers another.', keyword: 'Amplification' },
+  { relation: 'Stabilizing Phase', traditional: '火生土', modern: 'Amplification / Nourishing', context: 'Dynamic Energy consolidates into baseline stability.', keyword: 'Consolidation' },
+  { relation: 'Refining Phase', traditional: '土生金', modern: 'Amplification / Nourishing', context: 'Infrastructure yields high-precision analytical structures.', keyword: 'Refinement' },
+  { relation: 'Clarifying Phase', traditional: '金生水', modern: 'Amplification / Nourishing', context: 'Analytical logic clarifies systemic intelligence and flow.', keyword: 'Clarity' },
+  { relation: 'Regenerative Phase', traditional: '水生木', modern: 'Amplification / Nourishing', context: 'Systemic intelligence nourishes new growth architecture.', keyword: 'Nurture' },
   // Friction Cycles (Formerly Control)
-  { relation: 'External Friction', traditional: '木克土', modern: 'Systemic Disruption', context: 'Expansionary forces pressure the infrastructure, requiring recalibration.', keyword: 'Disruption' },
-  { relation: 'Regulatory Friction', traditional: '土克水', modern: 'Flow Containment', context: 'Baseline stability creates boundaries for systemic intelligence.', keyword: 'Regulation' },
-  { relation: 'Dynamic Friction', traditional: '水克火', modern: 'Signal Modulation', context: 'Systemic intelligence regulates impulsive energy output.', keyword: 'Modulation' },
-  { relation: 'Interventionist Friction', traditional: '火克金', modern: 'Structural Forging', context: 'High-intensity energy reshapes analytical structures.', keyword: 'Forging' },
-  { relation: 'Constraint Friction', traditional: '金克木', modern: 'Strategic Pruning', context: 'Analytical rigor defines the limits of expansionary growth.', keyword: 'Constraint' },
+  { relation: 'External Friction', traditional: '木克土', modern: 'Structural Constraint / Friction', context: 'Necessary constraints or systemic consumption.', keyword: 'Constraint' },
+  { relation: 'Regulatory Friction', traditional: '土克水', modern: 'Structural Constraint / Friction', context: 'Baseline stability creates boundaries for systemic intelligence.', keyword: 'Regulation' },
+  { relation: 'Dynamic Friction', traditional: '水克火', modern: 'Structural Constraint / Friction', context: 'Systemic intelligence regulates impulsive energy output.', keyword: 'Modulation' },
+  { relation: 'Interventionist Friction', traditional: '火克金', modern: 'Structural Constraint / Friction', context: 'High-intensity energy reshapes analytical structures.', keyword: 'Forging' },
+  { relation: 'Constraint Friction', traditional: '金克木', modern: 'Structural Constraint / Friction', context: 'Axiomatic rigor defines the limits of expansionary growth.', keyword: 'Constraint' },
 ];

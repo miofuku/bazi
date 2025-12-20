@@ -5,10 +5,11 @@ import { ResultHero } from './ResultHero';
 import { ElementBalance } from './ElementBalance';
 import { ArchetypeCards } from './ArchetypeCards';
 import { LockedContent } from './LockedContent';
-import { BaziChartDisplay, GenesisCode } from './BaziChartDisplay';
+import { GenesisCode } from './BaziChartDisplay';
 import { SystemPerformance } from './SystemPerformance';
 import { TemporalSynergy } from './TemporalSynergy';
 import { TeamDynamics } from './TeamDynamics';
+import { InteractionMap } from './InteractionMap';
 
 interface ResultDashboardProps {
     chart: BaziChart;
@@ -62,20 +63,17 @@ export const ResultDashboard: React.FC<ResultDashboardProps> = ({ chart }) => {
                 <ArchetypeCards structure={structure} />
             </section>
 
-            {/* 7. The Cliffhanger (Paywall) */}
+            {/* 7. Elemental Interaction Map (Network) */}
+            <section className="py-24 px-4 bg-midnight border-b border-white/5">
+                <InteractionMap chart={chart} />
+            </section>
+
+            {/* 8. The Cliffhanger (Paywall) */}
             <section className="py-32 bg-gradient-to-b from-midnight to-midnight-light">
                 <LockedContent />
             </section>
 
-            {/* 8. Technical Chart View (Optional/Legacy) */}
-            <div className="border-t border-white/5 py-32 bg-midnight-light/50">
-                <div className="max-w-5xl mx-auto px-4 opacity-40 hover:opacity-100 transition-all duration-700">
-                    <h4 className="text-center text-[10px] uppercase font-sans tracking-[0.5em] text-gold/60 mb-12">Technical Chart View</h4>
-                    <div className="bg-midnight/40 p-12 rounded-sm border border-white/5">
-                        <BaziChartDisplay chart={chart} />
-                    </div>
-                </div>
-            </div>
+
         </div>
     );
 };

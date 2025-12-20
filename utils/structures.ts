@@ -29,13 +29,13 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         category: 'Creators & Builders',
         name: {
             chinese: '食神生财格',
-            english: 'Eating God Generating Wealth',
+            english: 'The Natural Alchemist Generating Wealth',
         },
         archetype: {
             name: 'The Creative Alchemist',
             visual: '🌱➡️💎',
             headline: 'Turning pure talent into tangible value.',
-            profile: "You are not someone who chases money; you attract it through your skills. Your energy flows smoothly from your inner creativity (The Artist) to external rewards. You believe that if you do what you love with excellence, abundance will follow naturally.",
+            profile: "You are not someone who chases money; you attract it through your skills. Your energy flows smoothly from your inner creativity (The Natural Alchemist) to external rewards. You believe that if you do what you love with excellence, abundance will follow naturally.",
             superpower: 'Effortless flow, optimism, monetization of hobbies.',
             blindSpot: 'Lack of discipline; becoming too relaxed.'
         },
@@ -53,13 +53,13 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         category: 'Creators & Builders',
         name: {
             chinese: '伤官生财格',
-            english: 'Hurting Officer Generating Wealth',
+            english: 'The Disruptive Innovator Generating Wealth',
         },
         archetype: {
             name: 'The Disruptive Entrepreneur',
             visual: '⚡➡️💰',
             headline: 'Breaking rules to build empires.',
-            profile: "Standard paths bore you. You see market gaps that others miss. Your 'Innovator' energy pushes you to challenge the status quo, and your 'Entrepreneur' energy turns those disruptions into profit. You are the classic startup founder or risk-taker.",
+            profile: "Standard paths bore you. You see market gaps that others miss. Your 'Disruptive Innovator' energy pushes you to challenge the status quo, and your 'Entrepreneur' energy turns those disruptions into profit. You are the classic startup founder or risk-taker.",
             superpower: 'Speed, persuasion, high risk/high reward.',
             blindSpot: 'Burnout, offending authorities.'
         },
@@ -77,13 +77,13 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         category: 'Leaders & Strategists',
         name: {
             chinese: '官印相生格',
-            english: 'Officer Supported by Resource',
+            english: 'Integrity Guardian Supported by Resource',
         },
         archetype: {
             name: 'The Architect of Order',
             visual: '🏛️',
             headline: 'Climbing the ladder with grace and reputation.',
-            profile: "You are the backbone of any organization. Your 'Diplomat' energy seeks status, while your 'Guardian' energy ensures you get there through legitimate, respected means. You don't fight for power; you earn it through reliability and systemic thinking.",
+            profile: "You are the backbone of any organization. Your 'Integrity Guardian' energy seeks status, while your 'Foundational Mentor' energy ensures you get there through legitimate, respected means. You don't fight for power; you earn it through reliability and systemic thinking.",
             superpower: 'Management, legitimacy, long-term stability.',
             blindSpot: 'Too conservative; fear of change.'
         },
@@ -101,13 +101,13 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         category: 'Leaders & Strategists',
         name: {
             chinese: '杀印相生格',
-            english: 'Seven Killings Supported by Resource',
+            english: 'Strategic Aggressor Supported by Resource',
         },
         archetype: {
             name: 'The Iron Strategist',
             visual: '🛡️⚔️',
             headline: 'Transforming crisis into authority.',
-            profile: "Pressure implies potential to you. Where others see chaos (The Warrior energy), you see a chessboard. You have the unique ability to absorb stress, process it through wisdom (The Guardian/Philosopher), and output it as command. You thrive in difficult times.",
+            profile: "Pressure implies potential to you. Where others see chaos (The Strategic Aggressor energy), you see a chessboard. You have the unique ability to absorb stress, process it through wisdom (The Foundational Mentor), and output it as command. You thrive in difficult times.",
             superpower: 'Crisis management, intense focus, turning enemies into allies.',
             blindSpot: 'Emotional detachment, loneliness.'
         },
@@ -125,13 +125,13 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         category: 'Solvers & Intellects',
         name: {
             chinese: '食神制杀格',
-            english: 'Eating God Controlling Seven Killings',
+            english: 'The Natural Alchemist Controlling Strategic Aggressor',
         },
         archetype: {
             name: 'The Tactical Mastermind',
             visual: '♟️',
             headline: 'Soft power conquering hard obstacles.',
-            profile: "You don't fight fire with fire; you fight fire with water. You use your intelligence and specific skills (The Artist) to solve aggressive problems (The Warrior) with precision. You are the expert consultant, the surgeon, or the negotiator who disarms opponents with logic.",
+            profile: "You don't fight fire with fire; you fight fire with water. You use your intelligence and specific skills (The Natural Alchemist) to solve aggressive problems (The Strategic Aggressor) with precision. You are the expert consultant, the surgeon, or the negotiator who disarms opponents with logic.",
             superpower: 'Problem-solving, technical expertise, precision.',
             blindSpot: 'Over-thinking, perfectionism.'
         },
@@ -149,13 +149,13 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         category: 'Solvers & Intellects',
         name: {
             chinese: '伤官配印格',
-            english: 'Hurting Officer Paired with Resource',
+            english: 'Disruptive Innovator Paired with Visionary Resource',
         },
         archetype: {
             name: 'The Wise Disruptor',
             visual: '🦉💡',
             headline: 'Genius with a filter.',
-            profile: "This is a rare and powerful combination. You have the wild, rebellious creativity of 'The Innovator,' but it is kept in check by the deep knowledge of 'The Guardian/Philosopher.' You are the professor who revolutionizes the field, or the writer who changes culture.",
+            profile: "This is a rare and powerful combination. You have the wild, rebellious creativity of 'The Disruptive Innovator,' but it is kept in check by the deep knowledge of 'The Foundational Mentor.' You are the professor who revolutionizes the field, or the writer who changes culture.",
             superpower: 'Thought leadership, branding, high reputation.',
             blindSpot: 'Arrogance, feeling misunderstood.'
         },

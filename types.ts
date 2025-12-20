@@ -16,6 +16,9 @@ export enum Polarity {
   YIN = 'Yin',
 }
 
+export type ElementCounts = Record<ElementType, number>;
+export type ElementScore = Record<ElementType, number>;
+
 export interface ElementInfo {
   chinese: string;
   english: string;
@@ -82,7 +85,7 @@ export interface BaziChart {
   hourPillar: Pillar;
   dayMaster: Stem; // The Day Stem
   daYun: DaYun[];
-  elementCounts: Record<ElementType, number>;
-  elementScores?: Record<ElementType, number>; // Detailed strength scores
+  elementCounts: ElementCounts;
+  elementScores?: ElementScore; // Detailed strength scores
   systemMetrics?: Record<string, SystemMetric>;
 }

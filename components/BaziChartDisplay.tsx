@@ -175,17 +175,24 @@ const GeometricPillar: React.FC<{ pillar: Pillar; label: string }> = ({ pillar, 
     <div className="text-[10px] uppercase tracking-[0.4em] text-slate-500 font-bold">{label}</div>
     <div className="relative group">
       <div className="flex flex-col gap-8 opacity-80 group-hover:opacity-100 transition-opacity duration-500">
-        <div className="relative">
-          <GeometricShape type={pillar.stem.element} className="w-16 h-16 drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]" />
-          <div className="absolute -top-2 -right-2 text-[8px] font-mono text-gold/40">{pillar.stem.chinese}</div>
+        {/* Stem Symbol */}
+        <div className="relative flex justify-center items-center">
+          <span className={`${ELEMENT_COLORS[pillar.stem.element]} drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]`}>
+            <ElementIcon type={STEM_SYMBOLS[pillar.stem.chinese]} className="w-16 h-16 stroke-[1.5]" />
+          </span>
+          <div className="absolute -top-2 -right-4 text-[10px] font-mono text-gold/40 border border-gold/10 rounded-full w-6 h-6 flex items-center justify-center bg-midnight/80 backdrop-blur-sm">{pillar.stem.chinese}</div>
         </div>
-        <div className="relative">
-          <GeometricShape type={pillar.branch.element} className="w-16 h-16 drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]" />
-          <div className="absolute -bottom-2 -right-2 text-[8px] font-mono text-gold/40">{pillar.branch.chinese}</div>
+
+        {/* Branch Symbol */}
+        <div className="relative flex justify-center items-center">
+          <span className={`${ELEMENT_COLORS[pillar.branch.element]} drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]`}>
+            <ElementIcon type={BRANCH_SYMBOLS[pillar.branch.chinese]} className="w-16 h-16 stroke-[1.5]" />
+          </span>
+          <div className="absolute -bottom-2 -right-4 text-[10px] font-mono text-gold/40 border border-gold/10 rounded-full w-6 h-6 flex items-center justify-center bg-midnight/80 backdrop-blur-sm">{pillar.branch.chinese}</div>
         </div>
       </div>
       {/* Visual connector */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-8 bg-gradient-to-b from-transparent via-white/10 to-transparent"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-12 bg-gradient-to-b from-transparent via-white/10 to-transparent"></div>
     </div>
   </div>
 );
