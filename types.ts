@@ -75,6 +75,8 @@ export interface SystemMetric {
   label: string;
   value: number; // 0-100
   description: string;
+  founderInsight?: string;
+  status?: string;
 }
 
 export interface BaziChart {
