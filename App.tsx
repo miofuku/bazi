@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { InputForm } from './components/InputForm';
 import { BaziChartDisplay } from './components/BaziChartDisplay';
 import { ResultDashboard } from './components/ResultDashboard';
+import { PrismDashboard } from './components/PrismDashboard';
 import { calculateBazi } from './services/baziService';
 import { BaziChart, Gender } from './types';
 import { Methodology } from './components/Methodology';
@@ -169,7 +170,7 @@ const App: React.FC = () => {
             </div>
 
             {/* Main Dashboard Grid */}
-            <ResultDashboard chart={chart} />
+            <PrismDashboard chart={chart} />
 
           </div>
         )}

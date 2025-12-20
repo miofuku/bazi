@@ -154,3 +154,11 @@ export const INTERACTIONS: InteractionInfo[] = [
   { relation: 'Interventionist Friction', traditional: '火克金', modern: 'Structural Constraint / Friction', context: 'High-intensity energy reshapes analytical structures.', keyword: 'Forging' },
   { relation: 'Constraint Friction', traditional: '金克木', modern: 'Structural Constraint / Friction', context: 'Axiomatic rigor defines the limits of expansionary growth.', keyword: 'Constraint' },
 ];
+
+export const RELATIONSHIP_LEXICON: Record<string, { team: string; intimate: string }> = {
+  'produce': { team: 'Resource Support', intimate: 'Emotional Nourishment' },
+  'fuel': { team: 'Strategic Ignition', intimate: 'Passion Fueling' },
+  'control': { team: 'Management / Order', intimate: 'Dynamic Tension & Growth' },
+  'clash': { team: 'Structural Reconfiguration', intimate: 'Transformative Friction' },
+  'combine': { team: 'Strategic Alignment', intimate: 'Deep Soul Resonance' },
+};

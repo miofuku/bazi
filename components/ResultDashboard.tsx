@@ -72,7 +72,7 @@ export const ResultDashboard: React.FC<ResultDashboardProps> = ({ chart }) => {
 
             {/* 5. Team Dynamics & Synergy (Collective) */}
             <section className="py-32 px-4 bg-white/2 backdrop-blur-sm border-b border-white/5">
-                <TeamDynamics />
+                <TeamDynamics chart={chart} />
             </section>
 
             {/* 6. Infrastructure Layer (DNA/Data) */}
