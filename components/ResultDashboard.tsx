@@ -30,7 +30,6 @@ export const ResultDashboard: React.FC<ResultDashboardProps> = ({ chart }) => {
             <section className="py-24 px-4 bg-midnight border-b border-white/5 overflow-hidden">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl font-serif text-slate-100 mb-3 tracking-tight">The Genesis Code</h2>
-                    <p className="text-gold/60 text-[10px] uppercase font-sans tracking-[0.4em]">创世代码</p>
                 </div>
                 <GenesisCode chart={chart} />
             </section>

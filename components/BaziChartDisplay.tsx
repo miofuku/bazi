@@ -209,7 +209,7 @@ export const GenesisCode: React.FC<{ chart: BaziChart }> = ({ chart }) => {
       <div className="mt-16 text-center">
         <div className="inline-block px-6 py-2 border border-white/5 bg-white/2 backdrop-blur-sm rounded-sm">
           <p className="text-[9px] uppercase tracking-[0.5em] text-slate-500">
-            System Architecture Hash: <span className="text-gold/60">{chart.dayMaster.chinese}{chart.yearPillar.branch.chinese}{chart.monthPillar.branch.chinese}</span>
+            System Architecture Hash: <span className="text-gold/60">{chart.dayMaster.name}{chart.yearPillar.branch.name}{chart.monthPillar.branch.name}</span>
           </p>
         </div>
       </div>
@@ -354,7 +354,6 @@ export const DaYunDisplay: React.FC<{ chart: BaziChart }> = ({ chart }) => {
     <div className="relative pt-16 mt-12 border-t border-white/5 w-full">
       <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-midnight px-8 py-1.5 border border-gold/20 rounded-full shadow-gold/10 flex items-center gap-3">
         <span className="font-serif text-sm text-gold font-bold tracking-[0.2em] uppercase">Great Cycles</span>
-        <span className="font-sc text-sm text-gold/40">大运</span>
       </div>
 
       {/* Full width scrolling container with more padding for breathability */}

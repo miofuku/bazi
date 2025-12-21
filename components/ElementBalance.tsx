@@ -41,7 +41,6 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores, 
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-16">
         <h2 className="text-3xl font-serif text-slate-100 mb-3 tracking-tight">The Core Equilibrium</h2>
-        <p className="text-gold/60 text-[10px] uppercase font-sans tracking-[0.4em]">核心能量平衡</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-12 items-center">

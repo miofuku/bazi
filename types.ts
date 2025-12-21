@@ -20,7 +20,7 @@ export type ElementCounts = Record<ElementType, number>;
 export type ElementScore = Record<ElementType, number>;
 
 export interface ElementInfo {
-  chinese: string;
+  chinese?: string;
   english: string;
   keywords: string;
 }
@@ -52,7 +52,7 @@ export interface Branch {
 
 export interface InteractionInfo {
   relation: string;
-  traditional: string;
+  traditional?: string;
   modern: string;
   context: string;
   keyword?: string;

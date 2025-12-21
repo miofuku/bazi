@@ -31,33 +31,6 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
 
     return (
         <div className="w-full max-w-6xl mx-auto px-4">
-            <div className="text-center mb-16">
-                <div className="inline-flex items-center gap-4 bg-midnight border border-gold/20 rounded-full px-2 py-2 mb-8 relative z-10 transition-all duration-300 hover:shadow-[0_0_15px_rgba(218,165,32,0.2)]">
-                    <button
-                        onClick={() => setMode('team')}
-                        className={`px-6 py-2 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold transition-all duration-300 ${mode === 'team' ? 'bg-gold text-midnight shadow-gold/20 shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
-                    >
-                        Team Dynamics
-                    </button>
-                    <button
-                        onClick={() => setMode('intimate')}
-                        className={`px-6 py-2 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold transition-all duration-300 ${mode === 'intimate' ? 'bg-pink-500 text-white shadow-pink-500/20 shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
-                    >
-                        Intimate Resonance
-                    </button>
-                </div>
-
-                <h2 className="text-4xl font-serif text-slate-100 mb-4 tracking-tight">
-                    {mode === 'team' ? 'Collective Resonance' : 'The Alchemy of Two Systems'}
-                </h2>
-                <div className={`w-24 h-px mx-auto ${mode === 'team' ? 'bg-gold/30' : 'bg-pink-500/30'}`}></div>
-                <p className="mt-8 text-slate-400 text-sm max-w-2xl mx-auto leading-relaxed uppercase tracking-[0.2em]">
-                    {mode === 'team'
-                        ? 'Build teams based on energy architecture, not just resumes.'
-                        : 'Decipher the hidden operating language of your relationship.'}
-                </p>
-            </div>
-
             {/* 1. Core Genome & Perspectives Section */}
             <div className="mb-24 grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Genetic Blueprint */}
@@ -133,7 +106,6 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
                             </div>
                             <div>
                                 <h4 className="text-3xl font-serif text-slate-100 mb-1">{genome.teamRole.title}</h4>
-                                <span className="text-[10px] uppercase tracking-widest text-gold/60 block mb-4">{genome.teamRole.chinese}</span>
                                 <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
                                     {genome.teamRole.description}
                                 </p>

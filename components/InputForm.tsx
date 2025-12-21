@@ -226,6 +226,12 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
           <span className="relative z-10 group-hover:tracking-[0.4em] transition-all duration-500">Generate System Audit</span>
         </button>
       </div>
+      <div className="absolute top-0 right-0 p-4 opacity-5">
+        <svg viewBox="0 0 100 100" className="w-16 h-16 fill-gold">
+          <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="1" fill="none" />
+          <path d="M50 10 L50 90 M10 50 L90 50" stroke="currentColor" strokeWidth="1" />
+        </svg>
+      </div>
     </form>
   );
 };

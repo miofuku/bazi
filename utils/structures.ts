@@ -2,9 +2,7 @@ export interface StructureResult {
     id: string;
     category: 'Creators & Builders' | 'Leaders & Strategists' | 'Solvers & Intellects' | 'Intensity & Flow';
     name: {
-        chinese: string;
         english: string; // e.g., Eating God Generating Wealth
-        pinyin?: string;
     };
     archetype: {
         name: string; // e.g., The Creative Alchemist
@@ -28,7 +26,6 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         id: 'ShiShenShengCai',
         category: 'Creators & Builders',
         name: {
-            chinese: '食神生财格',
             english: 'The Natural Alchemist Generating Wealth',
         },
         archetype: {
@@ -52,7 +49,6 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         id: 'ShangGuanShengCai',
         category: 'Creators & Builders',
         name: {
-            chinese: '伤官生财格',
             english: 'The Disruptive Innovator Generating Wealth',
         },
         archetype: {
@@ -76,7 +72,6 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         id: 'GuanYinXiangSheng',
         category: 'Leaders & Strategists',
         name: {
-            chinese: '官印相生格',
             english: 'Integrity Guardian Supported by Resource',
         },
         archetype: {
@@ -100,7 +95,6 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         id: 'ShaYinXiangSheng',
         category: 'Leaders & Strategists',
         name: {
-            chinese: '杀印相生格',
             english: 'Strategic Aggressor Supported by Resource',
         },
         archetype: {
@@ -124,7 +118,6 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         id: 'ShiShenZhiSha',
         category: 'Solvers & Intellects',
         name: {
-            chinese: '食神制杀格',
             english: 'The Natural Alchemist Controlling Strategic Aggressor',
         },
         archetype: {
@@ -148,7 +141,6 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         id: 'ShangGuanPeiYin',
         category: 'Solvers & Intellects',
         name: {
-            chinese: '伤官配印格',
             english: 'Disruptive Innovator Paired with Visionary Resource',
         },
         archetype: {
@@ -172,7 +164,6 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         id: 'ZhuanWang',
         category: 'Intensity & Flow',
         name: {
-            chinese: '专旺格',
             english: 'Dominant Element / Super Vibrant',
         },
         archetype: {
@@ -196,7 +187,6 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         id: 'CongGe',
         category: 'Intensity & Flow',
         name: {
-            chinese: '从格',
             english: 'Follow the Flow',
         },
         archetype: {

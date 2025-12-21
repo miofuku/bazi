@@ -20,7 +20,6 @@ export interface CoreGenome {
     };
     teamRole: {
         title: string;
-        chinese: string;
         description: string;
         icon: string;
     };
@@ -59,7 +58,6 @@ export const calculateCoreGenome = (chart: BaziChart, metrics: Record<string, Sy
     let funcNodeDesc = "Balanced distribution of functional modules.";
     let role = {
         title: 'System Buffer',
-        chinese: '系统缓冲器',
         description: 'Absorbs system stress and maintains morale.',
         icon: 'M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' // Default placeholder icon (Smile/Face)
     };
@@ -79,41 +77,41 @@ export const calculateCoreGenome = (chart: BaziChart, metrics: Record<string, Sy
         funcNodeName = "The Natural Alchemist";
         funcNodeDesc = "System internal module: Gentle and high-quality output stream.";
         role = {
-            title: 'The Refiner', chinese: '战略精炼者', description: 'Guardian of quality and user experience through continuous alchemy.', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10'
+            title: 'The Refiner', description: 'Guardian of quality and user experience through continuous alchemy.', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10'
         };
         workTitle = egNarrative.lensContent.synergy.title;
-        workDesc = `${egNarrative.lensContent.synergy.english}\n\n${egNarrative.lensContent.synergy.chinese}`;
+        workDesc = egNarrative.lensContent.synergy.english;
         loveTitle = egNarrative.lensContent.resonance.title;
-        loveDesc = `${egNarrative.lensContent.resonance.english}\n\n${egNarrative.lensContent.resonance.chinese}`;
+        loveDesc = egNarrative.lensContent.resonance.english;
 
         // Hurting Officer (Standard disruptor logic refined)
         const hoNarrative = ARCHETYPE_NARRATIVES['Hurting Officer'];
         funcNodeName = "The Disruptive Innovator";
         funcNodeDesc = "System external module: High-entropy structural defiance.";
         role = {
-            title: 'The Provocateur', chinese: '首席挑衅者', description: 'Expert in Paradigm Shifts and zero-to-one transformations.', icon: 'M13 10V3L4 14h7v7l9-11h-7z'
+            title: 'The Provocateur', description: 'Expert in Paradigm Shifts and zero-to-one transformations.', icon: 'M13 10V3L4 14h7v7l9-11h-7z'
         };
         workTitle = hoNarrative.lensContent.synergy.title;
-        workDesc = `${hoNarrative.lensContent.synergy.english}\n\n${hoNarrative.lensContent.synergy.chinese}`;
+        workDesc = hoNarrative.lensContent.synergy.english;
         loveTitle = hoNarrative.lensContent.resonance.title;
-        loveDesc = `${hoNarrative.lensContent.resonance.english}\n\n${hoNarrative.lensContent.resonance.chinese}`;
+        loveDesc = hoNarrative.lensContent.resonance.english;
 
     } else if (topMetric.label === 'Visionary Obsession') {
         const irNarrative = ARCHETYPE_NARRATIVES['Indirect Resource'];
         funcNodeName = "The Transcendental Visionary";
         funcNodeDesc = "Deep-Scan module: Deciphering hidden patterns beyond the visible spectrum.";
         role = {
-            title: 'The Seer', chinese: '系统远见者', description: 'High conceptual density; decodes patterns others overlook.', icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'
+            title: 'The Seer', description: 'High conceptual density; decodes patterns others overlook.', icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'
         };
         workTitle = irNarrative.lensContent.synergy.title;
-        workDesc = `${irNarrative.lensContent.synergy.english}\n\n${irNarrative.lensContent.synergy.chinese}`;
+        workDesc = irNarrative.lensContent.synergy.english;
         loveTitle = irNarrative.lensContent.resonance.title;
-        loveDesc = `${irNarrative.lensContent.resonance.english}\n\n${irNarrative.lensContent.resonance.chinese}`;
+        loveDesc = irNarrative.lensContent.resonance.english;
     } else if (topMetric.label === 'Psychological Fortitude') {
         funcNodeName = "Stability Module";
         funcNodeDesc = "High structural integrity and pressure resistance.";
         role = {
-            title: 'The Operator', chinese: '系统执行者', description: 'High structural discipline; ensures systemic stability and output.', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
+            title: 'The Operator', description: 'High structural discipline; ensures systemic stability and output.', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
         };
         workTitle = "Chief Resilience Officer";
         workDesc = "You are the bedrock. When the market shakes, you stabilize the team's psychological architecture.";
@@ -123,7 +121,7 @@ export const calculateCoreGenome = (chart: BaziChart, metrics: Record<string, Sy
         funcNodeName = "Logic Core Module";
         funcNodeDesc = "Axiomatic processing and structural optimization.";
         role = {
-            title: 'The Operator', chinese: '系统执行者', description: 'High structural discipline; ensures systemic stability and output.', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
+            title: 'The Operator', description: 'High structural discipline; ensures systemic stability and output.', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
         };
         workTitle = "Chief Logic Officer";
         workDesc = "You provide the infrastructure for innovation. Without you, vision is just hallucination.";
@@ -134,17 +132,17 @@ export const calculateCoreGenome = (chart: BaziChart, metrics: Record<string, Sy
         funcNodeName = "The Strategic Aggressor";
         funcNodeDesc = "Execution module: High-pressure engine built for survival and conquest.";
         role = {
-            title: 'The Catalyst', chinese: '战略攻坚者', description: 'Wartime leader; performs surgical decisions under extreme duress.', icon: 'M13 10V3L4 14h7v7l9-11h-7z'
+            title: 'The Catalyst', description: 'Wartime leader; performs surgical decisions under extreme duress.', icon: 'M13 10V3L4 14h7v7l9-11h-7z'
         };
         workTitle = k7Narrative.lensContent.synergy.title;
-        workDesc = `${k7Narrative.lensContent.synergy.english}\n\n${k7Narrative.lensContent.synergy.chinese}`;
+        workDesc = k7Narrative.lensContent.synergy.english;
         loveTitle = k7Narrative.lensContent.resonance.title;
-        loveDesc = `${k7Narrative.lensContent.resonance.english}\n\n${k7Narrative.lensContent.resonance.chinese}`;
+        loveDesc = k7Narrative.lensContent.resonance.english;
     } else if (topMetric.label === 'Relational Resonance') {
         funcNodeName = "Network Node";
         funcNodeDesc = "High-bandwidth social connection and influence propagation.";
         role = {
-            title: 'The Catalyst', chinese: '系统催化剂', description: 'High kinetic energy; drives the team through friction and competition.', icon: 'M13 10V3L4 14h7v7l9-11h-7z'
+            title: 'The Catalyst', description: 'High kinetic energy; drives the team through friction and competition.', icon: 'M13 10V3L4 14h7v7l9-11h-7z'
         };
         workTitle = "Chief People Officer";
         workDesc = "You bind the nodes. You convert a group of individuals into a coherent 'Super-Organism'.";

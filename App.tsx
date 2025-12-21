@@ -39,7 +39,7 @@ const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (
         </div>
         <div className="flex flex-col">
           <h1 className="text-xl font-serif tracking-[0.1em] text-slate-200 transition-colors font-bold uppercase">
-            CHRONOSOPHY <span className="text-sm normal-case opacity-50 font-sans italic">(时智)</span>
+            CHRONOSOPHY
           </h1>
           <span className="text-[10px] font-sans text-gold/60 tracking-[0.2em] uppercase">The Wisdom of Temporal Synergy.</span>
         </div>
@@ -126,21 +126,21 @@ const App: React.FC = () => {
             <section className="mb-32 grid md:grid-cols-3 gap-12">
               <div className="p-8 border border-white/5 hover:border-gold/20 transition-colors group">
                 <div className="text-gold mb-6 font-serif italic text-3xl">01</div>
-                <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Origin (本源)</h4>
+                <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Origin</h4>
                 <p className="text-slate-400 text-sm leading-relaxed">
                   Your static blueprint—the "Personality Gene Code." Understanding the core variables that define your baseline state.
                 </p>
               </div>
               <div className="p-8 border border-white/5 hover:border-gold/20 transition-colors group">
                 <div className="text-gold mb-6 font-serif italic text-3xl">02</div>
-                <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Flow (流转)</h4>
+                <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Flow</h4>
                 <p className="text-slate-400 text-sm leading-relaxed">
                   The dynamic friction and synergy between your system and the environment. Navigating the waves of temporal seasonality.
                 </p>
               </div>
               <div className="p-8 border border-white/5 hover:border-gold/20 transition-colors group">
                 <div className="text-gold mb-6 font-serif italic text-3xl">03</div>
-                <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Alchemy (炼金)</h4>
+                <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Alchemy</h4>
                 <p className="text-slate-400 text-sm leading-relaxed">
                   The practical application of self-knowledge. Mastering your internal state to achieve optimal resonance with external cycles.
                 </p>

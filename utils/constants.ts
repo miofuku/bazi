@@ -80,27 +80,22 @@ export const STEM_SYMBOLS: Record<string, string> = {
 // Symbol type mappings for 地支 (Earthly Branches)
 export const FIVE_ELEMENTS_INFO: Record<ElementType, ElementInfo> = {
   [ElementType.WOOD]: {
-    chinese: '木',
     english: 'The Growth Engine',
     keywords: 'Expansion, Benevolence, Long-term Vision, Vitality'
   },
   [ElementType.FIRE]: {
-    chinese: '火',
     english: 'The Thermal Intensity',
     keywords: 'Passion, Dissemination, Visibility, Spiritual Dedication'
   },
   [ElementType.EARTH]: {
-    chinese: '土',
     english: 'The Grounding Matrix',
     keywords: 'Stability, Credit, Capacity, Resource Integration'
   },
   [ElementType.METAL]: {
-    chinese: '金',
     english: 'The Structural Precision',
     keywords: 'Decision, Order, Contraction, Logical Rigor'
   },
   [ElementType.WATER]: {
-    chinese: '水',
     english: 'The Fluid Intelligence',
     keywords: 'Insight, Communication, Mobility, Deep Connection'
   }
@@ -142,17 +137,17 @@ export const TEN_GODS_INFO: Record<string, TenGodInfo> = {
 
 export const INTERACTIONS: InteractionInfo[] = [
   // Synergistic Cycles (Formerly Creation)
-  { relation: 'Fueling Phase', traditional: '木生火', modern: 'Amplification / Nourishing', context: 'One system empowers another.', keyword: 'Amplification' },
-  { relation: 'Stabilizing Phase', traditional: '火生土', modern: 'Amplification / Nourishing', context: 'Dynamic Energy consolidates into baseline stability.', keyword: 'Consolidation' },
-  { relation: 'Refining Phase', traditional: '土生金', modern: 'Amplification / Nourishing', context: 'Infrastructure yields high-precision analytical structures.', keyword: 'Refinement' },
-  { relation: 'Clarifying Phase', traditional: '金生水', modern: 'Amplification / Nourishing', context: 'Analytical logic clarifies systemic intelligence and flow.', keyword: 'Clarity' },
-  { relation: 'Regenerative Phase', traditional: '水生木', modern: 'Amplification / Nourishing', context: 'Systemic intelligence nourishes new growth architecture.', keyword: 'Nurture' },
+  { relation: 'Fueling Phase', modern: 'Amplification / Nourishing', context: 'One system empowers another.', keyword: 'Amplification' },
+  { relation: 'Stabilizing Phase', modern: 'Amplification / Nourishing', context: 'Dynamic Energy consolidates into baseline stability.', keyword: 'Consolidation' },
+  { relation: 'Refining Phase', modern: 'Amplification / Nourishing', context: 'Infrastructure yields high-precision analytical structures.', keyword: 'Refinement' },
+  { relation: 'Clarifying Phase', modern: 'Amplification / Nourishing', context: 'Analytical logic clarifies systemic intelligence and flow.', keyword: 'Clarity' },
+  { relation: 'Regenerative Phase', modern: 'Amplification / Nourishing', context: 'Systemic intelligence nourishes new growth architecture.', keyword: 'Nurture' },
   // Friction Cycles (Formerly Control)
-  { relation: 'External Friction', traditional: '木克土', modern: 'Structural Constraint / Friction', context: 'Necessary constraints or systemic consumption.', keyword: 'Constraint' },
-  { relation: 'Regulatory Friction', traditional: '土克水', modern: 'Structural Constraint / Friction', context: 'Baseline stability creates boundaries for systemic intelligence.', keyword: 'Regulation' },
-  { relation: 'Dynamic Friction', traditional: '水克火', modern: 'Structural Constraint / Friction', context: 'Systemic intelligence regulates impulsive energy output.', keyword: 'Modulation' },
-  { relation: 'Interventionist Friction', traditional: '火克金', modern: 'Structural Constraint / Friction', context: 'High-intensity energy reshapes analytical structures.', keyword: 'Forging' },
-  { relation: 'Constraint Friction', traditional: '金克木', modern: 'Structural Constraint / Friction', context: 'Axiomatic rigor defines the limits of expansionary growth.', keyword: 'Constraint' },
+  { relation: 'External Friction', modern: 'Structural Constraint / Friction', context: 'Necessary constraints or systemic consumption.', keyword: 'Constraint' },
+  { relation: 'Regulatory Friction', modern: 'Structural Constraint / Friction', context: 'Baseline stability creates boundaries for systemic intelligence.', keyword: 'Regulation' },
+  { relation: 'Dynamic Friction', modern: 'Structural Constraint / Friction', context: 'Systemic intelligence regulates impulsive energy output.', keyword: 'Modulation' },
+  { relation: 'Interventionist Friction', modern: 'Structural Constraint / Friction', context: 'High-intensity energy reshapes analytical structures.', keyword: 'Forging' },
+  { relation: 'Constraint Friction', modern: 'Structural Constraint / Friction', context: 'Axiomatic rigor defines the limits of expansionary growth.', keyword: 'Constraint' },
 ];
 
 export const RELATIONSHIP_LEXICON: Record<string, { team: string; intimate: string }> = {

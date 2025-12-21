@@ -37,11 +37,11 @@ export const SoulSymbolReveal: React.FC<SoulSymbolRevealProps> = ({ chart, onCom
 
     // Helper for 5 Elements
     const elements = [
-        { char: '木', color: 'bg-wood', icon: 'tree' },
-        { char: '火', color: 'bg-fire', icon: 'lantern' },
-        { char: '土', color: 'bg-earth', icon: 'rock' },
-        { char: '金', color: 'bg-metal', icon: 'sword' },
-        { char: '水', color: 'bg-water', icon: 'river' },
+        { char: 'W', color: 'bg-wood', icon: 'tree' },
+        { char: 'F', color: 'bg-fire', icon: 'lantern' },
+        { char: 'E', color: 'bg-earth', icon: 'rock' },
+        { char: 'M', color: 'bg-metal', icon: 'sword' },
+        { char: 'W', color: 'bg-water', icon: 'river' },
     ];
 
     if (stage === 'reveal') {

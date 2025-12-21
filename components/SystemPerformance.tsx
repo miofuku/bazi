@@ -12,7 +12,6 @@ export const SystemPerformance: React.FC<SystemPerformanceProps> = ({ metrics })
         <div className="w-full max-w-6xl mx-auto">
             <div className="text-center mb-20 animate-fade-in-up">
                 <h3 className="text-4xl font-serif text-slate-100 mb-4 tracking-tight">The 6 Dimensions of Inner Force</h3>
-                <p className="text-gold/60 text-[10px] uppercase font-sans tracking-[0.4em]">由六大维度构成的系统架构</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 px-4">
