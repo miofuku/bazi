@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BaziChart } from '../types';
 import { calculateCoreGenome } from '../utils/roleMapping';
 import { calculateIdealPartner } from '../utils/compatibility';
+import { analyzeSystemicFriction, FrictionProtocol } from '../utils/conflictProtocols';
 import { RELATIONSHIP_LEXICON } from '../utils/constants';
 
 interface TeamDynamicsProps {
@@ -18,6 +19,14 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
 
     const genome = calculateCoreGenome(chart, chart.systemMetrics);
     const idealPartner = calculateIdealPartner(chart);
+    const frictions = analyzeSystemicFriction(chart, chart.systemMetrics);
+
+    const teamFriction = frictions.find(f => f.type === 'team') || {
+        title: 'Nominal State', diagnosis: 'System balanced.', actionProtocol: 'Maintain flow.', severity: 'Low'
+    };
+    const intimateFriction = frictions.find(f => f.type === 'intimate') || {
+        title: 'Nominal State', diagnosis: 'System balanced.', actionProtocol: 'Maintain flow.', severity: 'Low'
+    };
 
     return (
         <div className="w-full max-w-6xl mx-auto px-4">
@@ -108,7 +117,7 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
 
             {/* 2. Scenario Specific Content */}
             {mode === 'team' ? (
-                // TEAM SCENARIO
+                // TEAM SCENARIO (Updated with Conflict Protocols)
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-32">
                     {/* Role Card */}
                     <div className="glass-midnight border-gold/10 p-12 rounded-sm relative group overflow-hidden">
@@ -131,31 +140,32 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
                         </div>
                     </div>
 
-                    {/* Synergy Logic */}
+                    {/* Synergy Logic - Dynamic Procotols */}
                     <div className="flex flex-col justify-center p-6 space-y-8">
                         <div>
                             <div className="flex justify-between items-end mb-2">
-                                <span className="text-slate-200 font-bold text-sm uppercase tracking-widest">Synergetic Loop</span>
-                                <span className="text-gold/60 text-[10px] uppercase">Condition: Compatible</span>
+                                <span className="text-slate-200 font-bold text-sm uppercase tracking-widest">Protocol Identified</span>
+                                <span className={`text-[10px] uppercase font-bold text-${teamFriction.severity === 'Critical' ? 'red-500' : 'gold'}`}>
+                                    Severity: {teamFriction.severity}
+                                </span>
                             </div>
-                            <div className="p-4 bg-green-500/5 border border-green-500/20 rounded-sm text-xs text-green-100/70 leading-relaxed font-mono">
-                                "Your systems form a Positive Feedback Loop. Your Functional Node's output is perfectly captured and scaled by a compatible Structural Anchor."
-                            </div>
-                        </div>
-
-                        <div>
-                            <div className="flex justify-between items-end mb-2">
-                                <span className="text-slate-200 font-bold text-sm uppercase tracking-widest">Logic Collision</span>
-                                <span className="text-red-500/60 text-[10px] uppercase">Condition: Friction</span>
-                            </div>
-                            <div className="p-4 bg-red-500/5 border border-red-500/20 rounded-sm text-xs text-red-100/70 leading-relaxed font-mono">
-                                "Warning: A Logic Collision is detected. Your Aggressive Drive may overwhelm a stability-focused partner. Suggestion: Assign clear autonomous zones."
+                            <div className="p-6 bg-white/2 border border-white/10 rounded-sm relative overflow-hidden">
+                                {teamFriction.severity === 'High' || teamFriction.severity === 'Critical' ? (
+                                    <div className="absolute top-0 left-0 w-1 h-full bg-red-500"></div>
+                                ) : null}
+                                <h4 className="text-slate-100 font-serif mb-2">{teamFriction.title}</h4>
+                                <p className="text-xs text-slate-400 font-mono mb-4 border-b border-white/5 pb-4">
+                                    {teamFriction.diagnosis}
+                                </p>
+                                <p className="text-sm text-gold/80 italic">
+                                    {teamFriction.actionProtocol}
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             ) : (
-                // INTIMATE SCENARIO (Updated with Resonance Matrix)
+                // INTIMATE SCENARIO (Updated with Protocols)
                 <div>
                     {/* Resonance Matrix / Ideal Partner Profiler */}
                     <div className="glass-midnight border-pink-500/20 p-8 md:p-12 rounded-sm relative overflow-hidden mb-16">
@@ -202,26 +212,21 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
                         </div>
                     </div>
 
-                    <h3 className="text-center text-[10px] uppercase tracking-[0.6em] text-pink-500/40 mb-12 font-bold">The Synergy Protocol</h3>
+                    <h3 className="text-center text-[10px] uppercase tracking-[0.6em] text-pink-500/40 mb-12 font-bold">The Alchemy of Friction</h3>
 
-                    {/* Synergy Protocol Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-                        <div className="bg-white/2 border border-white/5 p-8 rounded-sm hover:border-pink-500/20 transition-colors group">
+                    {/* Synergy Protocol Cards - Dynamic */}
+                    <div className="grid grid-cols-1 mb-16">
+                        <div className="bg-white/2 border border-white/5 p-8 rounded-sm hover:border-pink-500/20 transition-colors group relative overflow-hidden">
+                            {intimateFriction.severity === 'High' && <div className="absolute top-0 right-0 p-2 bg-red-500/20 text-red-300 text-[10px] font-bold uppercase">High Friction Alert</div>}
                             <div className="flex justify-between items-start mb-4">
-                                <h4 className="text-slate-100 font-serif">Note to Self</h4>
+                                <h4 className="text-slate-100 font-serif">{intimateFriction.title}</h4>
                                 <span className="text-pink-400 text-xs">▲</span>
                             </div>
-                            <p className="text-slate-400 text-sm leading-relaxed italic">
-                                "When interacting with a 'High-Intensity' partner, remember to activate your <span className="text-slate-200 not-italic">Fluidity Module (Water)</span> to avoid rigid conflicts. Do not compete for the same resource space."
+                            <p className="text-slate-400 text-sm leading-relaxed font-mono mb-4">
+                                {intimateFriction.diagnosis}
                             </p>
-                        </div>
-                        <div className="bg-white/2 border border-white/5 p-8 rounded-sm hover:border-pink-500/20 transition-colors group">
-                            <div className="flex justify-between items-start mb-4">
-                                <h4 className="text-slate-100 font-serif">Note to Partner</h4>
-                                <span className="text-pink-400 text-xs">▼</span>
-                            </div>
-                            <p className="text-slate-400 text-sm leading-relaxed italic">
-                                "Do not mistake their '<span className="text-slate-200 not-italic">Static Silence</span>' for indifference; they are processing the system's stability for you. They ground your chaos."
+                            <p className="text-pink-200 text-sm leading-relaxed italic border-l-2 border-pink-500/50 pl-4">
+                                {intimateFriction.actionProtocol}
                             </p>
                         </div>
                     </div>

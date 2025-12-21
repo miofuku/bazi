@@ -64,106 +64,111 @@ const getDynamicContent = (score: number, dimension: string) => {
     return { status, description, insight };
 };
 
+const countDeity = (chart: BaziChart, deity: string): number => {
+    let count = 0;
+    // Check Stems (Year, Month, Hour) - exclude Day Master as it is the reference
+    [chart.yearPillar, chart.monthPillar, chart.hourPillar].forEach(pillar => {
+        if (pillar.stem.deity === deity) count += 1;
+    });
+    // Check Branches
+    [chart.yearPillar, chart.monthPillar, chart.dayPillar, chart.hourPillar].forEach(pillar => {
+        if (pillar.branch.deity === deity) count += 1;
+    });
+    return count;
+};
+
+const getElementScore = (chart: BaziChart, element: ElementType): number => {
+    return (chart.elementScores?.[element] || 0);
+};
+
 export const calculateSystemMetrics = (chart: BaziChart): Record<string, SystemMetric> => {
-    const { yearPillar, monthPillar, dayPillar, hourPillar, elementScores, dayMaster } = chart;
-    const dmChar = dayMaster.chinese;
-    const pillars = [yearPillar, monthPillar, dayPillar, hourPillar];
-
-    // Helper to count occurrences of short deity names in the 8 characters
-    const countDeity = (deityShort: string): number => {
-        let count = 0;
-        pillars.forEach(p => {
-            if (calculateDeity(dmChar, p.stem.chinese) === deityShort) count++;
-            if (p.branch.hiddenStems && p.branch.hiddenStems.length > 0) {
-                if (calculateDeity(dmChar, p.branch.hiddenStems[0].chinese) === deityShort) count++;
-            }
-        });
-        return count;
-    };
-
-    const getElementScore = (type: ElementType): number => {
-        return elementScores?.[type] || 0;
-    };
-
-    // Base scaling
-    const scale = (deityCount: number, elementScore: number, weightDeity = 0.7, weightElement = 0.3): number => {
-        const deityPoints = Math.min(deityCount * 25, 100);
-        const score = (deityPoints * weightDeity) + (elementScore * weightElement);
-        // Normalize slightly high to ensure 'Tech Founders' feel capable
-        return Math.round(Math.min(score * 1.2, 98));
-    };
-
-    // Calculate raw values first
-    const rawValues = {
-        curiosity: scale(countDeity('食') + countDeity('伤'), (getElementScore(ElementType.WOOD) + getElementScore(ElementType.WATER)) / 2),
-        vision: scale(countDeity('枭'), getElementScore(ElementType.FIRE)),
-        resilience: scale(countDeity('比') + countDeity('劫'), getElementScore(ElementType.EARTH)), // Fixed: Combined Friend/Rob Wealth
-        logic: scale(countDeity('印') + countDeity('官'), getElementScore(ElementType.METAL)),
-        venture: scale(countDeity('杀') + countDeity('才'), (getElementScore(ElementType.FIRE) + getElementScore(ElementType.METAL)) / 2),
-        impact: scale(countDeity('劫'), getElementScore(ElementType.METAL))
-    };
-
-    // Construct metrics with dynamic content
     const metrics: Record<string, SystemMetric> = {};
 
     // 1. Cognitive Exploration Index (Curiosity)
-    const curiosityContent = getDynamicContent(rawValues.curiosity, 'Cognitive Exploration Index');
-    metrics.curiosity = {
+    // Formula: (Eating God * 0.6 + Hurting Officer * 0.4) 
+    // Scale: Deity count typically 0-5. Max ~5. Let's scale to 0-100. Multiply raw by ~20.
+    const eg = countDeity(chart, 'Eating God');
+    const ho = countDeity(chart, 'Hurting Officer');
+    const rawCognitive = (eg * 0.6) + (ho * 0.4);
+    const cognitiveVal = Math.min(100, Math.round(rawCognitive * 25)); // Scaling factor 25
+    const cognitiveContent = getDynamicContent(cognitiveVal, 'Cognitive Exploration Index');
+    metrics['Cognitive Exploration Index'] = {
         label: 'Cognitive Exploration Index',
-        value: rawValues.curiosity,
-        description: curiosityContent.description,
-        founderInsight: curiosityContent.insight,
-        status: curiosityContent.status
+        value: cognitiveVal,
+        ...cognitiveContent
     };
 
-    // 2. Visionary Obsession (Vision)
-    const visionContent = getDynamicContent(rawValues.vision, 'Visionary Obsession');
-    metrics.vision = {
+    // 2. Visionary Obsession (Insight)
+    // Formula: (Indirect Resource * 0.7 + Hurting Officer * 0.3)
+    const ir = countDeity(chart, 'Indirect Resource');
+    const rawVision = (ir * 0.7) + (ho * 0.3);
+    const visionVal = Math.min(100, Math.round(rawVision * 25));
+    const visionContent = getDynamicContent(visionVal, 'Visionary Obsession');
+    metrics['Visionary Obsession'] = {
         label: 'Visionary Obsession',
-        value: rawValues.vision,
-        description: visionContent.description,
-        founderInsight: visionContent.insight,
-        status: visionContent.status
+        value: visionVal,
+        ...visionContent
     };
 
     // 3. Psychological Fortitude (Resilience)
-    const resilienceContent = getDynamicContent(rawValues.resilience, 'Psychological Fortitude');
-    metrics.resilience = {
+    // Formula: (Day Master * 0.5 + Friend * 0.3 + Earth * 0.2)
+    // DM Strength is complex, usually element score. Let's use ElementScore of DM / 2.
+    // Friend count. 
+    // Earth Element Score (normalized 0-100).
+    const dmElemScore = getElementScore(chart, chart.dayMaster.element);
+    const friend = countDeity(chart, 'Friend');
+    const earthScore = getElementScore(chart, ElementType.EARTH);
+
+    // Weighted Sum: (DM_Score * 0.5) + (Friend_Count * 15 * 0.3) + (Earth_Score * 0.2)
+    // Friend count * 15 to approximate score scale.
+    const rawFortitude = (dmElemScore * 0.5) + (friend * 15 * 0.3) + (earthScore * 0.2);
+    const fortitudeVal = Math.min(100, Math.round(rawFortitude));
+    const fortitudeContent = getDynamicContent(fortitudeVal, 'Psychological Fortitude');
+    metrics['Psychological Fortitude'] = {
         label: 'Psychological Fortitude',
-        value: rawValues.resilience,
-        description: resilienceContent.description,
-        founderInsight: resilienceContent.insight,
-        status: resilienceContent.status
+        value: fortitudeVal,
+        ...fortitudeContent
     };
 
     // 4. Systemic Analytical Rigor (Logic)
-    const logicContent = getDynamicContent(rawValues.logic, 'Systemic Analytical Rigor');
-    metrics.logic = {
+    // Formula: (Direct Resource * 0.6 + Direct Officer * 0.4)
+    const dr = countDeity(chart, 'Direct Resource');
+    const do_ = countDeity(chart, 'Direct Officer');
+    const rawRigor = (dr * 0.6) + (do_ * 0.4);
+    const rigorVal = Math.min(100, Math.round(rawRigor * 25));
+    const rigorContent = getDynamicContent(rigorVal, 'Systemic Analytical Rigor');
+    metrics['Systemic Analytical Rigor'] = {
         label: 'Systemic Analytical Rigor',
-        value: rawValues.logic,
-        description: logicContent.description,
-        founderInsight: logicContent.insight,
-        status: logicContent.status
+        value: rigorVal,
+        ...rigorContent
     };
 
-    // 5. Strategic Risk Agility (Venture)
-    const ventureContent = getDynamicContent(rawValues.venture, 'Strategic Risk Agility');
-    metrics.venture = {
+    // 5. Strategic Risk Agility (Risk)
+    // Formula: (Seven Killings * 0.5 + Indirect Wealth * 0.5)
+    const k7 = countDeity(chart, 'Seven Killings');
+    const iw = countDeity(chart, 'Indirect Wealth');
+    const rawRisk = (k7 * 0.5) + (iw * 0.5);
+    const riskVal = Math.min(100, Math.round(rawRisk * 25));
+    const riskContent = getDynamicContent(riskVal, 'Strategic Risk Agility');
+    metrics['Strategic Risk Agility'] = {
         label: 'Strategic Risk Agility',
-        value: rawValues.venture,
-        description: ventureContent.description,
-        founderInsight: ventureContent.insight,
-        status: ventureContent.status
+        value: riskVal,
+        ...riskContent
     };
 
-    // 6. Relational Resonance (Impact)
-    const impactContent = getDynamicContent(rawValues.impact, 'Relational Resonance');
-    metrics.impact = {
+    // 6. Relational Resonance (Communication)
+    // Formula: (Peer * 0.6 + Metal * 0.4)
+    // Peer = Friend + Rob Wealth
+    const rw = countDeity(chart, 'Rob Wealth');
+    const peers = friend + rw;
+    const metalScore = getElementScore(chart, ElementType.METAL);
+    const rawRelation = (peers * 15 * 0.6) + (metalScore * 0.4);
+    const relationVal = Math.min(100, Math.round(rawRelation));
+    const relationContent = getDynamicContent(relationVal, 'Relational Resonance');
+    metrics['Relational Resonance'] = {
         label: 'Relational Resonance',
-        value: rawValues.impact,
-        description: impactContent.description,
-        founderInsight: impactContent.insight,
-        status: impactContent.status
+        value: relationVal,
+        ...relationContent
     };
 
     return metrics;
