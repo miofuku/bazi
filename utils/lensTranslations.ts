@@ -11,11 +11,11 @@ interface TranslationEntry {
 export const LENS_TRANSLATIONS: Record<string, TranslationEntry> = {
     // Aggressive Archetypes
     'Seven Killings': {
-        keyword: 'High Intensity',
-        genesis: 'The Disruptor / High-Stakes Operator',
-        synergy: 'Wartime Leadership / Crisis Management',
-        resonance: 'Protective Passion / Intense Devotion',
-        temporal: 'Conquest Phase / Break-Point'
+        keyword: 'Crisis Mastery',
+        genesis: 'The Strategic Aggressor / Kinetic Force',
+        synergy: 'The Wartime CEO / Surgical Execution',
+        resonance: 'The Protective Alliance / Absolute Loyalty',
+        temporal: 'Conquest Phase / Strategic Pivot'
     },
     'Direct Officer': {
         keyword: 'Order & Discipline',
@@ -27,11 +27,11 @@ export const LENS_TRANSLATIONS: Record<string, TranslationEntry> = {
 
     // Intellectual Archetypes
     'Indirect Resource': {
-        keyword: 'Abstract Insight',
-        genesis: 'The Mystic / Pattern Decoder',
-        synergy: 'Visionary Strategist / R&D Lead',
-        resonance: 'Soul Connection / Intuitive Empathy',
-        temporal: 'Hibernation Phase / Deep Research'
+        keyword: 'Non-linear Insight',
+        genesis: 'The Transcendental Visionary / Decoding Matrix',
+        synergy: 'Guardian of the Secret Moat / R&D Seclusion',
+        resonance: 'Soul-Level Sync / Intellectual Solitude',
+        temporal: 'Deep-Link Phase / Pattern Synthesis'
     },
     'Direct Resource': {
         keyword: 'Systemic Support',
@@ -43,18 +43,18 @@ export const LENS_TRANSLATIONS: Record<string, TranslationEntry> = {
 
     // Expression Archetypes
     'Hurting Officer': {
-        keyword: 'Performative Brilliance',
-        genesis: 'The Performer / Brand Icon',
-        synergy: 'Chief Marketing Officer / Publicist',
-        resonance: 'Romantic Idealist / Dramatic Expression',
-        temporal: 'Spotlight Phase / Virality'
+        keyword: 'Paradigm Shift',
+        genesis: 'The Disruptive Innovator / Structural Defiance',
+        synergy: 'Visionary Provocateur / Branding Engine',
+        resonance: 'Intellectual Adventure / Evolutionary Lab',
+        temporal: 'Spotlight Phase / Paradigm Shift'
     },
     'Eating God': {
-        keyword: 'Creative Genius',
-        genesis: 'The Artist / Product Designer',
-        synergy: 'Innovation Lead / Creator',
-        resonance: 'Sensual Connoisseur / Gentle Romance',
-        temporal: 'Creation Phase / Iteration'
+        keyword: 'Intellectual Fluidity',
+        genesis: 'The Natural Alchemist / Creative Flow',
+        synergy: 'Strategic Refiner / Innovation Engine',
+        resonance: 'Harmonic Nourisher / Emotional Generosity',
+        temporal: 'Refinement Phase / Quality Control'
     },
 
     // Wealth Archetypes

@@ -170,6 +170,8 @@ const generateChartResult = (
       daYun,
       elementCounts,
       elementScores: scores
-    })
+    }),
+    geneticId: `CHRONO-${Math.floor(Math.random() * 9000) + 1000}-X`,
+    solarTimeCorrection: "+0min (UTC Adjusted)"
   };
 };

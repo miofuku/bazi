@@ -58,16 +58,16 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         archetype: {
             name: 'The Disruptive Entrepreneur',
             visual: '⚡➡️💰',
-            headline: 'Breaking rules to build empires.',
-            profile: "Standard paths bore you. You see market gaps that others miss. Your 'Disruptive Innovator' energy pushes you to challenge the status quo, and your 'Entrepreneur' energy turns those disruptions into profit. You are the classic startup founder or risk-taker.",
-            superpower: 'Speed, persuasion, high risk/high reward.',
-            blindSpot: 'Burnout, offending authorities.'
+            headline: 'Structural defiance turned into market dominant momentum.',
+            profile: "Standard paths bore you. Your system thrives on Structural Defiance, identifying cracks in existing hierarchies. You are naturally wired to challenge the status quo and impose a new logic upon the market, turning high-entropy disruption into scalable profit.",
+            superpower: 'Paradigm shifts, speed, high-frequency disruption.',
+            blindSpot: 'Burnout, systemic friction with established order.'
         },
         heroCard: {
             rarity: 'Epic',
             coreDrive: 'Disruption (Monetizing Innovation)',
             careerMatch: ['Startup Founder', 'Venture Capitalist', 'Sales Director', 'Trendsetter'],
-            motto: 'Rules are suggestions.'
+            motto: 'Rules are suggestions for the unimaginative.'
         }
     },
 
@@ -130,16 +130,16 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         archetype: {
             name: 'The Tactical Mastermind',
             visual: '♟️',
-            headline: 'Soft power conquering hard obstacles.',
-            profile: "You don't fight fire with fire; you fight fire with water. You use your intelligence and specific skills (The Natural Alchemist) to solve aggressive problems (The Strategic Aggressor) with precision. You are the expert consultant, the surgeon, or the negotiator who disarms opponents with logic.",
-            superpower: 'Problem-solving, technical expertise, precision.',
+            headline: 'Surgical precision neutralizing high-stakes resistance.',
+            profile: "You don't fight fire with fire; you fight fire with water. You use the Intellectual Fluidity of 'The Natural Alchemist' to disarm 'The Strategic Aggressor' with precision. You are the expert negotiator or strategist who secures victory through the mastery of craft and hidden logic.",
+            superpower: 'Problem-solving, technical expertise, surgical precision.',
             blindSpot: 'Over-thinking, perfectionism.'
         },
         heroCard: {
             rarity: 'Epic',
             coreDrive: 'Precision Solution (Skill over Force)',
             careerMatch: ['Surgeon', 'Specialist Consultant', 'Negotiator', 'Engineer'],
-            motto: 'Precision beats power.'
+            motto: 'Precision beats power every time.'
         }
     },
 
@@ -154,16 +154,16 @@ export const BAZI_STRUCTURES: Record<string, StructureResult> = {
         archetype: {
             name: 'The Wise Disruptor',
             visual: '🦉💡',
-            headline: 'Genius with a filter.',
-            profile: "This is a rare and powerful combination. You have the wild, rebellious creativity of 'The Disruptive Innovator,' but it is kept in check by the deep knowledge of 'The Foundational Mentor.' You are the professor who revolutionizes the field, or the writer who changes culture.",
-            superpower: 'Thought leadership, branding, high reputation.',
-            blindSpot: 'Arrogance, feeling misunderstood.'
+            headline: 'Disruptive genius filter through transcendental insight.',
+            profile: "This is a rare and powerful combination. You possess the explosive, non-linear creativity of 'The Disruptive Innovator,' refined by the deciphering matrix of 'The Transcendental Visionary.' You generate paradigm shifts while maintaining a deep-link to secret moats and long-wave patterns.",
+            superpower: 'Thought leadership, branding, invisible trend detection.',
+            blindSpot: 'Arrogance, profound intellectual isolation.'
         },
         heroCard: {
             rarity: 'Legendary',
             coreDrive: 'Influential Wisdom (Restrained Genius)',
             careerMatch: ['Professor', 'Author', 'Thought Leader', 'Policy Maker'],
-            motto: 'Change the mind, change the world.'
+            motto: 'Change the mind architecture, and you change the world.'
         }
     },
 

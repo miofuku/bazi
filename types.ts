@@ -90,4 +90,6 @@ export interface BaziChart {
   elementCounts: ElementCounts;
   elementScores?: ElementScore; // Detailed strength scores
   systemMetrics?: Record<string, SystemMetric>;
+  geneticId?: string; // e.g. "CHRONO-8829-X"
+  solarTimeCorrection?: string; // e.g. "+12min"
 }

@@ -18,12 +18,12 @@ export const LockedContent: React.FC = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                     </div>
-                    <h3 className="text-3xl font-serif font-bold text-slate-100 mb-4">Scale Your Infrastructure</h3>
+                    <h3 className="text-3xl font-serif font-bold text-slate-100 mb-4">Initialize Full System</h3>
                     <p className="text-slate-400 max-w-sm mb-10 text-sm leading-relaxed">
-                        You've mapped the baseline. Now optimize the output. Get detailed Macro-Cycle analysis, systemic wealth capacity, and high-fidelity synergy mapping.
+                        Data encryption active. Decrypt the full Genesis Code, including 10-Year Temporal Maps and Deep-Layer Synergy Protocols.
                     </p>
                     <button className="bg-gold hover:bg-gold-light text-midnight px-12 py-5 rounded-sm font-bold uppercase tracking-[0.2em] shadow-xl hover:shadow-gold/20 hover:scale-105 transition-all duration-500">
-                        Unlock Full Report • $19.99
+                        Synchronize Deep Systems • $19.99
                     </button>
                 </div>
 

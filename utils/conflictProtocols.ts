@@ -8,6 +8,27 @@ export interface FrictionProtocol {
     severity: 'Low' | 'Medium' | 'High' | 'Critical';
 }
 
+const BRANCH_CLASHES: Record<string, string[]> = {
+    'Rat': ['Horse'], 'Horse': ['Rat'],
+    'Ox': ['Goat'], 'Goat': ['Ox'],
+    'Tiger': ['Monkey'], 'Monkey': ['Tiger'],
+    'Rabbit': ['Rooster'], 'Rooster': ['Rabbit'],
+    'Dragon': ['Dog'], 'Dog': ['Dragon'],
+    'Snake': ['Pig'], 'Pig': ['Snake']
+};
+
+export const checkBranchClash = (branchA: string, branchB: string): boolean => {
+    return BRANCH_CLASHES[branchA]?.includes(branchB) || false;
+};
+
+// Check if Element A overpowers Element B (e.g., Metal >> Wood)
+export const checkElementalOverpower = (chart: BaziChart, elementA: ElementType, elementB: ElementType): boolean => {
+    const scoreA = chart.elementScores?.[elementA] || 0;
+    const scoreB = chart.elementScores?.[elementB] || 0;
+    return scoreA > 50 && scoreB < 15; // Thresholds for "Overpower"
+};
+
+
 export const analyzeSystemicFriction = (chart: BaziChart, metrics?: Record<string, SystemMetric>): FrictionProtocol[] => {
     // In a real multi-user app, this would compare TWO charts.
     // For single user view, we will generate "Potential Friction Points" based on their dominant excessively high traits
@@ -23,6 +44,31 @@ export const analyzeSystemicFriction = (chart: BaziChart, metrics?: Record<strin
     const rigor = getVal('Systemic Analytical Rigor');
     const risk = getVal('Strategic Risk Agility');
     const fortitude = getVal('Psychological Fortitude');
+
+    // --- LOGIC GATES (From Dev Docs) ---
+
+    // 1. Internal Systemic Reconfiguration (Self-Clash Detection)
+    // Check if Day Branch clashes with Month Branch (Core Structure Conflict)
+    const dayBranch = chart.dayPillar.branch.chinese; // Assuming chinese char or english logic? 
+    // The chart object likely uses English names for checkBranchClash if mapped, or Chinese. 
+    // Let's assume standard English names 'Rat', 'Ox' etc. derived or mapped.
+    // Actually our types usually store 'Rat' (English) in 'name' or 'chinese' char.
+    // Checking types.ts or runtime. The earlier roleMapping used English names.
+    // We'll try to match whatever is in chart.dayPillar.branch.name
+
+    // We'll implement a safe check if name exists.
+    const dayB = chart.dayPillar.branch.name || '';
+    const monthB = chart.monthPillar.branch.name || '';
+
+    if (checkBranchClash(dayB, monthB)) {
+        protocols.push({
+            type: 'team',
+            title: 'Internal Systemic Clash',
+            severity: 'Medium',
+            diagnosis: 'Clash Detection: Your Core (Day) clashes with your Environment (Month). You often feel the need to dismantle existing structures.',
+            actionProtocol: 'Guidance: Avoid micro-management; allow autonomous operational zones for yourself to prevent self-sabotage.'
+        });
+    }
 
     // --- TEAM PROTOCOLS ---
 
@@ -51,16 +97,16 @@ export const analyzeSystemicFriction = (chart: BaziChart, metrics?: Record<strin
 
     // --- INTIMATE PROTOCOLS ---
 
-    // Scenario A: Control Conflict (Metal/Wood clashes or High Rigor vs Low Rigor)
-    // Simulated based on Elements or Metrics.
-    // Use Rigor > 75 (Controller) vs hypothetical Partner. 
+    // Scenario A: Structural Pressure (Over-control) -> Dev Doc "Structural_Pressure"
+    // Using checkElementalOverpower simulation or metric proxy
     if (rigor > 75) {
         protocols.push({
             type: 'intimate',
-            title: 'Systemic Oppression Warning',
+            title: 'Structural Pressure',
             severity: 'Medium',
-            diagnosis: 'Analysis: Your high "Structural Rigor" tends to format a partner\'s "Free Expansion". You perceive their flow as chaos.',
-            actionProtocol: 'Alchemy: "The Missing Element". If you are Metal(Rules) and they are Wood(Growth), introduce Water(Wisdom/Travel) to bridge the gap. Turn "Control" into "Nourishment".'
+            // diagnosis: 'Analysis: Your high "Structural Rigor" tends to format a partner\'s "Free Expansion".', // Old copy
+            diagnosis: 'Systemic Oppression: Your high "Structural Rigor" tends to format a partner\'s "Free Expansion". You perceive their flow as chaos.', // Blended
+            actionProtocol: 'Guidance: Introduce a "Fluidity Element" (Water) to lubricate interaction. Turn "Control" into "Nourishment".'
         });
     }
 
@@ -76,7 +122,7 @@ export const analyzeSystemicFriction = (chart: BaziChart, metrics?: Record<strin
         });
     }
 
-    // Default low-friction protocol if none matched
+    // Default
     if (protocols.length === 0) {
         protocols.push({
             type: 'team',

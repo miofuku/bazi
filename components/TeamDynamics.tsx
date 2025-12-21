@@ -4,6 +4,7 @@ import { calculateCoreGenome } from '../utils/roleMapping';
 import { calculateIdealPartner } from '../utils/compatibility';
 import { analyzeSystemicFriction, FrictionProtocol } from '../utils/conflictProtocols';
 import { RELATIONSHIP_LEXICON } from '../utils/constants';
+import { ContextualLock } from './ContextualLock';
 
 interface TeamDynamicsProps {
     chart: BaziChart;
@@ -140,96 +141,115 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
                         </div>
                     </div>
 
-                    {/* Synergy Logic - Dynamic Procotols */}
+                    {/* Synergy Logic - Dynamic Procotols (LOCKED TIER 3) */}
                     <div className="flex flex-col justify-center p-6 space-y-8">
-                        <div>
-                            <div className="flex justify-between items-end mb-2">
-                                <span className="text-slate-200 font-bold text-sm uppercase tracking-widest">Protocol Identified</span>
-                                <span className={`text-[10px] uppercase font-bold text-${teamFriction.severity === 'Critical' ? 'red-500' : 'gold'}`}>
-                                    Severity: {teamFriction.severity}
-                                </span>
+                        <ContextualLock
+                            message="High-Entropy Collision Detected. This system has identified critical friction points."
+                            buttonText="Decrypt Mitigation Strategy"
+                            isBlurred={true} // Hardcoded for demo
+                        >
+                            <div>
+                                <div className="flex justify-between items-end mb-2">
+                                    <span className="text-slate-200 font-bold text-sm uppercase tracking-widest">Protocol Identified</span>
+                                    <span className={`text-[10px] uppercase font-bold text-${teamFriction.severity === 'Critical' ? 'red-500' : 'gold'}`}>
+                                        Severity: {teamFriction.severity}
+                                    </span>
+                                </div>
+                                <div className="p-6 bg-white/2 border border-white/10 rounded-sm relative overflow-hidden">
+                                    {teamFriction.severity === 'High' || teamFriction.severity === 'Critical' ? (
+                                        <div className="absolute top-0 left-0 w-1 h-full bg-red-500"></div>
+                                    ) : null}
+                                    <h4 className="text-slate-100 font-serif mb-2">{teamFriction.title}</h4>
+                                    <p className="text-xs text-slate-400 font-mono mb-4 border-b border-white/5 pb-4">
+                                        {teamFriction.diagnosis}
+                                    </p>
+                                    <p className="text-sm text-gold/80 italic">
+                                        {teamFriction.actionProtocol}
+                                    </p>
+                                </div>
                             </div>
-                            <div className="p-6 bg-white/2 border border-white/10 rounded-sm relative overflow-hidden">
-                                {teamFriction.severity === 'High' || teamFriction.severity === 'Critical' ? (
-                                    <div className="absolute top-0 left-0 w-1 h-full bg-red-500"></div>
-                                ) : null}
-                                <h4 className="text-slate-100 font-serif mb-2">{teamFriction.title}</h4>
-                                <p className="text-xs text-slate-400 font-mono mb-4 border-b border-white/5 pb-4">
-                                    {teamFriction.diagnosis}
-                                </p>
-                                <p className="text-sm text-gold/80 italic">
-                                    {teamFriction.actionProtocol}
-                                </p>
-                            </div>
-                        </div>
+                        </ContextualLock>
                     </div>
                 </div>
             ) : (
                 // INTIMATE SCENARIO (Updated with Protocols)
                 <div>
-                    {/* Resonance Matrix / Ideal Partner Profiler */}
-                    <div className="glass-midnight border-pink-500/20 p-8 md:p-12 rounded-sm relative overflow-hidden mb-16">
-                        <div className="absolute -left-10 -bottom-10 w-96 h-96 bg-pink-500/10 blur-[120px] rounded-full"></div>
-                        <div className="relative z-10">
-                            <div className="flex justify-between items-end mb-12">
-                                <div>
-                                    <h3 className="text-[10px] uppercase tracking-[0.5em] text-pink-400 mb-2 font-bold">Resonance Scoring Matrix</h3>
-                                    <h4 className="text-2xl font-serif text-slate-100">The Alchemical Union Target</h4>
+                    {/* Resonance Matrix / Ideal Partner Profiler (LOCKED TIER 3) */}
+                    <ContextualLock
+                        message="Resonance Core Encrypted. Decode the hidden operating language of this union."
+                        buttonText="Unlock Alchemical Analysis"
+                        title="Resonance Matrix"
+                        isBlurred={true}
+                    >
+                        <div className="glass-midnight border-pink-500/20 p-8 md:p-12 rounded-sm relative overflow-hidden mb-16">
+                            <div className="absolute -left-10 -bottom-10 w-96 h-96 bg-pink-500/10 blur-[120px] rounded-full"></div>
+                            <div className="relative z-10">
+                                <div className="flex justify-between items-end mb-12">
+                                    <div>
+                                        <h3 className="text-[10px] uppercase tracking-[0.5em] text-pink-400 mb-2 font-bold">Resonance Scoring Matrix</h3>
+                                        <h4 className="text-2xl font-serif text-slate-100">The Alchemical Union Target</h4>
+                                    </div>
+                                    <div className="hidden md:block text-right">
+                                        <div className="text-4xl font-mono text-pink-500/80">{idealPartner.totalScore}%</div>
+                                        <div className="text-[9px] uppercase tracking-widest text-slate-500">Match Potential</div>
+                                    </div>
                                 </div>
-                                <div className="hidden md:block text-right">
-                                    <div className="text-4xl font-mono text-pink-500/80">{idealPartner.totalScore}%</div>
-                                    <div className="text-[9px] uppercase tracking-widest text-slate-500">Match Potential</div>
-                                </div>
-                            </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                                {/* 1. Core Resonance */}
-                                <div className="border-l border-pink-500/20 pl-6">
-                                    <div className="text-[9px] uppercase tracking-widest text-slate-500 mb-2">01 Core Resonance</div>
-                                    <div className="text-lg font-serif text-pink-200 mb-1">{idealPartner.coreResonance.targetDayMaster}</div>
-                                    <div className="text-[10px] bg-pink-500/10 text-pink-300 inline-block px-2 py-0.5 rounded mb-3">{idealPartner.coreResonance.relationType}</div>
-                                    <p className="text-xs text-slate-400 leading-relaxed">{idealPartner.coreResonance.description}</p>
-                                </div>
-                                {/* 2. Functional Comp */}
-                                <div className="border-l border-pink-500/20 pl-6">
-                                    <div className="text-[9px] uppercase tracking-widest text-slate-500 mb-2">02 Complementarity</div>
-                                    <div className="text-lg font-serif text-pink-200 mb-1">{idealPartner.functionalComplementarity.missingArchetype}</div>
-                                    <p className="text-xs text-slate-400 leading-relaxed mt-2">{idealPartner.functionalComplementarity.why}</p>
-                                </div>
-                                {/* 3. Elemental Healing */}
-                                <div className="border-l border-pink-500/20 pl-6">
-                                    <div className="text-[9px] uppercase tracking-widest text-slate-500 mb-2">03 Systemic Healing</div>
-                                    <div className="text-lg font-serif text-pink-200 mb-1">High {idealPartner.elementalRebalancing.targetElement}</div>
-                                    <p className="text-xs text-slate-400 leading-relaxed mt-2">{idealPartner.elementalRebalancing.benefit}</p>
-                                </div>
-                                {/* 4. Temporal Sync */}
-                                <div className="border-l border-pink-500/20 pl-6">
-                                    <div className="text-[9px] uppercase tracking-widest text-slate-500 mb-2">04 Temporal Sync</div>
-                                    <div className="text-lg font-serif text-pink-200 mb-1">{idealPartner.temporalSync.currentPhase}</div>
-                                    <p className="text-xs text-slate-400 leading-relaxed mt-2">{idealPartner.temporalSync.description}</p>
+                                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                                    {/* 1. Core Resonance */}
+                                    <div className="border-l border-pink-500/20 pl-6">
+                                        <div className="text-[9px] uppercase tracking-widest text-slate-500 mb-2">01 Core Resonance</div>
+                                        <div className="text-lg font-serif text-pink-200 mb-1">{idealPartner.coreResonance.targetDayMaster}</div>
+                                        <div className="text-[10px] bg-pink-500/10 text-pink-300 inline-block px-2 py-0.5 rounded mb-3">{idealPartner.coreResonance.relationType}</div>
+                                        <p className="text-xs text-slate-400 leading-relaxed">{idealPartner.coreResonance.description}</p>
+                                    </div>
+                                    {/* 2. Functional Comp */}
+                                    <div className="border-l border-pink-500/20 pl-6">
+                                        <div className="text-[9px] uppercase tracking-widest text-slate-500 mb-2">02 Complementarity</div>
+                                        <div className="text-lg font-serif text-pink-200 mb-1">{idealPartner.functionalComplementarity.missingArchetype}</div>
+                                        <p className="text-xs text-slate-400 leading-relaxed mt-2">{idealPartner.functionalComplementarity.why}</p>
+                                    </div>
+                                    {/* 3. Elemental Healing */}
+                                    <div className="border-l border-pink-500/20 pl-6">
+                                        <div className="text-[9px] uppercase tracking-widest text-slate-500 mb-2">03 Systemic Healing</div>
+                                        <div className="text-lg font-serif text-pink-200 mb-1">High {idealPartner.elementalRebalancing.targetElement}</div>
+                                        <p className="text-xs text-slate-400 leading-relaxed mt-2">{idealPartner.elementalRebalancing.benefit}</p>
+                                    </div>
+                                    {/* 4. Temporal Sync */}
+                                    <div className="border-l border-pink-500/20 pl-6">
+                                        <div className="text-[9px] uppercase tracking-widest text-slate-500 mb-2">04 Temporal Sync</div>
+                                        <div className="text-lg font-serif text-pink-200 mb-1">{idealPartner.temporalSync.currentPhase}</div>
+                                        <p className="text-xs text-slate-400 leading-relaxed mt-2">{idealPartner.temporalSync.description}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </ContextualLock>
 
                     <h3 className="text-center text-[10px] uppercase tracking-[0.6em] text-pink-500/40 mb-12 font-bold">The Alchemy of Friction</h3>
 
-                    {/* Synergy Protocol Cards - Dynamic */}
-                    <div className="grid grid-cols-1 mb-16">
-                        <div className="bg-white/2 border border-white/5 p-8 rounded-sm hover:border-pink-500/20 transition-colors group relative overflow-hidden">
-                            {intimateFriction.severity === 'High' && <div className="absolute top-0 right-0 p-2 bg-red-500/20 text-red-300 text-[10px] font-bold uppercase">High Friction Alert</div>}
-                            <div className="flex justify-between items-start mb-4">
-                                <h4 className="text-slate-100 font-serif">{intimateFriction.title}</h4>
-                                <span className="text-pink-400 text-xs">▲</span>
+                    {/* Synergy Protocol Cards - Dynamic (LOCKED TIER 3) */}
+                    <ContextualLock
+                        message="Systemic Friction Analysis Encrypted."
+                        buttonText="Decrypt Friction Protocols"
+                        isBlurred={true}
+                    >
+                        <div className="grid grid-cols-1 mb-16">
+                            <div className="bg-white/2 border border-white/5 p-8 rounded-sm hover:border-pink-500/20 transition-colors group relative overflow-hidden">
+                                {intimateFriction.severity === 'High' && <div className="absolute top-0 right-0 p-2 bg-red-500/20 text-red-300 text-[10px] font-bold uppercase">High Friction Alert</div>}
+                                <div className="flex justify-between items-start mb-4">
+                                    <h4 className="text-slate-100 font-serif">{intimateFriction.title}</h4>
+                                    <span className="text-pink-400 text-xs">▲</span>
+                                </div>
+                                <p className="text-slate-400 text-sm leading-relaxed font-mono mb-4">
+                                    {intimateFriction.diagnosis}
+                                </p>
+                                <p className="text-pink-200 text-sm leading-relaxed italic border-l-2 border-pink-500/50 pl-4">
+                                    {intimateFriction.actionProtocol}
+                                </p>
                             </div>
-                            <p className="text-slate-400 text-sm leading-relaxed font-mono mb-4">
-                                {intimateFriction.diagnosis}
-                            </p>
-                            <p className="text-pink-200 text-sm leading-relaxed italic border-l-2 border-pink-500/50 pl-4">
-                                {intimateFriction.actionProtocol}
-                            </p>
                         </div>
-                    </div>
+                    </ContextualLock>
                 </div>
             )}
         </div>
