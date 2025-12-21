@@ -103,7 +103,7 @@ const WheelColumn: React.FC<WheelColumnProps> = ({ items, value, onChange, label
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 15l-6-6-6 6" /></svg>
       </button>
 
-      <div className="relative h-36 w-20 md:w-24 overflow-hidden border-y border-white/10 bg-midnight/20 rounded-sm">
+      <div className="relative h-36 w-14 md:w-16 overflow-hidden border-y border-white/10 bg-midnight/20 rounded-sm">
         {/* Selection Lens */}
         <div className="absolute top-1/2 left-0 w-full h-10 -translate-y-1/2 border-y border-gold/40 bg-gold/5 pointer-events-none z-10 box-border"></div>
 
@@ -153,11 +153,11 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
   const minutes = Array.from({ length: 60 }, (_, i) => i); // Usually just every 15 mins is enough? User might want precise. Let's do all.
 
   const [dateValue, setDateValue] = useState({
-    year: 1990,
+    year: 2000,
     month: 6,
     day: 15
   });
-  const [timeValue, setTimeValue] = useState({ hour: 12, minute: 0 });
+  const [timeValue, setTimeValue] = useState({ hour: 12, minute: 30 });
   const [gender, setGender] = useState<Gender>(Gender.MALE);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -182,39 +182,35 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
 
       <div className="space-y-10 relative z-10">
 
-        {/* Date Wheels */}
-        <div className="flex justify-center gap-4">
+        {/* Unified Parameters (Date & Time) */}
+        <div className="flex justify-center gap-2 items-center">
           <WheelColumn items={years} value={dateValue.year} onChange={(v) => setDateValue({ ...dateValue, year: Number(v) })} label="Year" />
-          <div className="h-40 flex items-center text-white/5 pb-4 text-2xl font-light">/</div>
+          <div className="h-40 flex items-center text-white/5 pb-4 text-xl font-light">/</div>
           <WheelColumn items={months} value={dateValue.month} onChange={(v) => setDateValue({ ...dateValue, month: Number(v) })} label="Month" />
-          <div className="h-40 flex items-center text-white/5 pb-4 text-2xl font-light">/</div>
+          <div className="h-40 flex items-center text-white/5 pb-4 text-xl font-light">/</div>
           <WheelColumn items={days} value={dateValue.day} onChange={(v) => setDateValue({ ...dateValue, day: Number(v) })} label="Day" />
-        </div>
-
-        {/* Time Wheels */}
-        <div className="flex justify-center gap-4">
+          <div className="w-1 md:w-4"></div>
           <WheelColumn items={hours} value={timeValue.hour} onChange={(v) => setTimeValue({ ...timeValue, hour: Number(v) })} label="Hour" />
-          <div className="h-40 flex items-center text-white/5 pb-4 text-2xl font-light">:</div>
-          <WheelColumn items={minutes} value={timeValue.minute} onChange={(v) => setTimeValue({ ...timeValue, minute: Number(v) })} label="Minute" />
+          <div className="h-40 flex items-center text-white/5 pb-4 text-xl font-light">:</div>
+          <WheelColumn items={minutes} value={timeValue.minute} onChange={(v) => setTimeValue({ ...timeValue, minute: Number(v) })} label="Min" />
         </div>
 
         {/* Polarity Toggle */}
         <div className="bg-white/2 p-6 border border-white/5">
-          <label className="block text-[10px] font-sans uppercase tracking-[0.2em] text-slate-500 mb-6 text-center">Baseline Polarity</label>
           <div className="flex justify-center gap-8">
             <button
               type="button"
               onClick={() => setGender(Gender.MALE)}
-              className={`w-28 py-3 border font-bold text-xs uppercase tracking-widest transition-all duration-500 ${gender === Gender.MALE ? 'border-gold bg-gold text-midnight shadow-lg shadow-gold/20' : 'border-white/10 text-slate-500 hover:border-gold hover:text-gold'}`}
+              className={`w-32 py-3 border font-bold text-xs uppercase tracking-widest transition-all duration-500 ${gender === Gender.MALE ? 'border-gold bg-gold text-midnight shadow-lg shadow-gold/20' : 'border-white/10 text-slate-500 hover:border-gold hover:text-gold'}`}
             >
-              Plus (+)
+              Yang <strong className="ml-1 text-sm font-bold">(♂)</strong>
             </button>
             <button
               type="button"
               onClick={() => setGender(Gender.FEMALE)}
-              className={`w-28 py-3 border font-bold text-xs uppercase tracking-widest transition-all duration-500 ${gender === Gender.FEMALE ? 'border-slate-400 bg-slate-400 text-midnight shadow-lg' : 'border-white/10 text-slate-500 hover:border-slate-400 hover:text-slate-400'}`}
+              className={`w-32 py-3 border font-bold text-xs uppercase tracking-widest transition-all duration-500 ${gender === Gender.FEMALE ? 'border-slate-400 bg-slate-400 text-midnight shadow-lg' : 'border-white/10 text-slate-500 hover:border-slate-400 hover:text-slate-400'}`}
             >
-              Minus (-)
+              Yin <strong className="ml-1 text-sm font-bold">(♀)</strong>
             </button>
           </div>
         </div>

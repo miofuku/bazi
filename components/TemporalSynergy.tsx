@@ -79,11 +79,6 @@ export const TemporalSynergy: React.FC<TemporalSynergyProps> = ({ chart }) => {
 
     return (
         <div className="w-full max-w-5xl mx-auto px-4">
-            <div className="text-center mb-16">
-                <h2 className="text-4xl font-serif text-slate-100 mb-4 tracking-tight">Temporal Synergy Waveform</h2>
-                <div className="w-24 h-px bg-gold/30 mx-auto mb-4"></div>
-                <p className="text-gold/60 text-[10px] uppercase font-sans tracking-[0.4em]">Future Timeline Projection</p>
-            </div>
 
             <div className="relative bg-midnight/50 border border-white/5 rounded-sm p-4 overflow-hidden group">
                 <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto drop-shadow-2xl">

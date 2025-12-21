@@ -3,10 +3,10 @@ import React from 'react';
 export const Methodology: React.FC = () => {
     return (
         <div className="w-full max-w-5xl mx-auto px-4">
-            <div className="text-center mb-24">
-                <h2 className="text-[10px] uppercase tracking-[0.6em] text-gold mb-8 font-bold">The Chronosophy Method</h2>
-                <h3 className="text-4xl md:text-5xl font-serif text-slate-100 mb-6 tracking-tight">Where Metaphysics Meets Systems Theory</h3>
-                <div className="w-24 h-px bg-gold/30 mx-auto"></div>
+            <div className="text-center mb-20">
+                <span className="inline-block px-3 py-1 bg-gold text-midnight text-[11px] uppercase tracking-[0.3em] font-bold mb-8">The Chronosophy Method</span>
+                <h3 className="text-4xl md:text-5xl font-serif text-slate-100 mb-8 tracking-tight">Where Metaphysics Meets Systems Theory</h3>
+                <div className="w-24 h-px bg-gold/20 mx-auto"></div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -33,7 +33,7 @@ export const Methodology: React.FC = () => {
                     </div>
                     <h4 className="text-xl font-serif text-slate-100 mb-6">Infrastructure Logic</h4>
                     <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                        The 5 Elements are mapped to modern **Feedback Loops** and **Entropy Management**. We decode how your energy source interacts with external environmental variables.
+                        The 5 Elements are mapped to modern Feedback Loops and Entropy Management. We decode how your energy source interacts with external environmental variables.
                     </p>
                     <div className="h-px w-8 bg-gold/30"></div>
                 </div>
@@ -47,16 +47,16 @@ export const Methodology: React.FC = () => {
                     </div>
                     <h4 className="text-xl font-serif text-slate-100 mb-6">Strategic Equilibrium</h4>
                     <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                        Knowing your "destiny" is about achieving higher-order freedom. Through systemic clarity, you manifest **Free Will within a Structured Universe**.
+                        Knowing your "destiny" is about achieving higher-order freedom. Through systemic clarity, you manifest Free Will within a Structured Universe.
                     </p>
                     <div className="h-px w-8 bg-gold/30"></div>
                 </div>
             </div>
 
             <div className="mt-24 text-center">
-                <div className="inline-flex items-center gap-6 px-10 py-5 glass-midnight border border-gold/20 rounded-sm">
-                    <span className="text-[10px] uppercase tracking-[0.4em] text-gold font-bold">The Goal:</span>
-                    <span className="text-slate-300 font-serif italic">"Achieve resonance by understanding the architecture of existence."</span>
+                <div className="inline-flex items-center gap-6 px-10 py-6 glass-midnight border border-gold/20 rounded-sm">
+                    <span className="inline-block px-4 py-1.5 bg-gold text-midnight text-[11px] uppercase tracking-[0.3em] font-bold">The Goal</span>
+                    <span className="text-slate-100 font-sans italic text-lg">"Achieve resonance by understanding the architecture of existence."</span>
                 </div>
             </div>
         </div>

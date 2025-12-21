@@ -1,6 +1,7 @@
 import React from 'react';
 import { BaziChart, Pillar, ElementType, Polarity } from '../types';
 import { ELEMENT_COLORS, ELEMENT_BG_COLORS, STEM_SYMBOLS, BRANCH_SYMBOLS } from '../utils/constants';
+import { getLensTranslation } from '../utils/lensTranslations';
 
 interface BaziChartDisplayProps {
   chart: BaziChart;
@@ -170,34 +171,45 @@ export const GeometricShape: React.FC<{ type: ElementType; className?: string }>
   }
 };
 
-const GeometricPillar: React.FC<{ pillar: Pillar; label: string }> = ({ pillar, label }) => (
-  <div className="flex flex-col items-center gap-6">
-    <div className="text-[10px] uppercase tracking-[0.4em] text-slate-500 font-bold">{label}</div>
-    <div className="relative group">
-      <div className="flex flex-col gap-8 opacity-80 group-hover:opacity-100 transition-opacity duration-500">
-        {/* Stem Symbol */}
-        <div className="relative flex justify-center items-center">
-          <span className={`${ELEMENT_COLORS[pillar.stem.element]} drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]`}>
-            <ElementIcon type={STEM_SYMBOLS[pillar.stem.chinese]} className="w-16 h-16 stroke-[1.5]" />
-          </span>
-          <div className="absolute -top-2 -right-4 text-[10px] font-mono text-gold/40 border border-gold/10 rounded-full w-6 h-6 flex items-center justify-center bg-midnight/80 backdrop-blur-sm">{pillar.stem.chinese}</div>
-        </div>
-
-        {/* Branch Symbol */}
-        <div className="relative flex justify-center items-center">
-          <span className={`${ELEMENT_COLORS[pillar.branch.element]} drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]`}>
-            <ElementIcon type={BRANCH_SYMBOLS[pillar.branch.chinese]} className="w-16 h-16 stroke-[1.5]" />
-          </span>
-          <div className="absolute -bottom-2 -right-4 text-[10px] font-mono text-gold/40 border border-gold/10 rounded-full w-6 h-6 flex items-center justify-center bg-midnight/80 backdrop-blur-sm">{pillar.branch.chinese}</div>
-        </div>
+const GeometricPillar: React.FC<{ pillar: Pillar; label: string }> = ({ pillar, label }) => {
+  const isDay = label === 'Day';
+  return (
+    <div className={`flex flex-col items-center gap-6 p-4 rounded-xl transition-all duration-700 ${isDay ? 'bg-white/5 ring-1 ring-gold/30 shadow-[0_0_40px_rgba(197,160,89,0.1)] scale-105 relative z-10' : ''}`}>
+      <div className="px-3 py-1 bg-gold text-midnight text-[10px] uppercase tracking-[0.3em] font-bold rounded-sm mb-4 shadow-lg shadow-black/20">
+        {label}
       </div>
-      {/* Visual connector */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-12 bg-gradient-to-b from-transparent via-white/10 to-transparent"></div>
+      <div className="relative group">
+        <div className="flex flex-col gap-10 transition-opacity duration-500">
+          {/* Stem Symbol */}
+          <div className="relative flex justify-center items-center">
+            <span className={`${ELEMENT_COLORS[pillar.stem.element]} drop-shadow-[0_0_15px_rgba(255,255,255,0.05)]`}>
+              <ElementIcon type={STEM_SYMBOLS[pillar.stem.chinese]} className="w-16 h-16 stroke-[1.2]" />
+            </span>
+            <div className={`absolute -top-2 -right-4 text-[13px] font-bold ${ELEMENT_COLORS[pillar.stem.element]} border border-white/10 rounded-full w-7 h-7 flex items-center justify-center bg-midnight shadow-lg shadow-black/80 z-10`}>
+              {pillar.stem.chinese}
+            </div>
+          </div>
+
+          {/* Branch Symbol */}
+          <div className="relative flex justify-center items-center">
+            <span className={`${ELEMENT_COLORS[pillar.branch.element]} drop-shadow-[0_0_15px_rgba(255,255,255,0.05)]`}>
+              <ElementIcon type={BRANCH_SYMBOLS[pillar.branch.chinese]} className="w-16 h-16 stroke-[1.2]" />
+            </span>
+            <div className={`absolute -bottom-2 -right-4 text-[13px] font-bold ${ELEMENT_COLORS[pillar.branch.element]} border border-white/10 rounded-full w-7 h-7 flex items-center justify-center bg-midnight shadow-lg shadow-black/80 z-10`}>
+              {pillar.branch.chinese}
+            </div>
+          </div>
+        </div>
+        {/* Visual connector */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-16 bg-gradient-to-b from-transparent via-white/10 to-transparent"></div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export const GenesisCode: React.FC<{ chart: BaziChart }> = ({ chart }) => {
+  const hash = `${chart.yearPillar.stem.chinese}${chart.yearPillar.branch.chinese}${chart.monthPillar.stem.chinese}${chart.monthPillar.branch.chinese}${chart.dayPillar.stem.chinese}${chart.dayPillar.branch.chinese}${chart.hourPillar.stem.chinese}${chart.hourPillar.branch.chinese}`;
+
   return (
     <div className="w-full py-10">
       <div className="grid grid-cols-4 gap-4 md:gap-12 max-w-4xl mx-auto">
@@ -207,9 +219,9 @@ export const GenesisCode: React.FC<{ chart: BaziChart }> = ({ chart }) => {
         <GeometricPillar pillar={chart.hourPillar} label="Hour" />
       </div>
       <div className="mt-16 text-center">
-        <div className="inline-block px-6 py-2 border border-white/5 bg-white/2 backdrop-blur-sm rounded-sm">
-          <p className="text-[9px] uppercase tracking-[0.5em] text-slate-500">
-            System Architecture Hash: <span className="text-gold/60">{chart.dayMaster.name}{chart.yearPillar.branch.name}{chart.monthPillar.branch.name}</span>
+        <div className="inline-block px-8 py-3 border border-white/5 bg-white/2 backdrop-blur-sm rounded-sm">
+          <p className="text-[10px] uppercase tracking-[0.5em] text-slate-400">
+            System Architecture Hash: <span className="text-gold font-bold ml-2 tracking-widest">{hash}</span>
           </p>
         </div>
       </div>
@@ -217,11 +229,11 @@ export const GenesisCode: React.FC<{ chart: BaziChart }> = ({ chart }) => {
   );
 };
 
-
 const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = ({ pillar, label, delay }) => {
+  const isDay = label === 'Day';
   return (
     <div
-      className="group relative flex flex-col items-center"
+      className={`group relative flex flex-col items-center p-4 rounded-xl transition-all duration-700 ${isDay ? 'bg-gold/5 ring-1 ring-gold/20 shadow-[0_0_30px_rgba(197,160,89,0.05)] scale-105 z-10' : ''}`}
       style={{ animationDelay: `${delay}ms` }}
     >
       {/* Pillar Title */}
@@ -245,8 +257,8 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
         <div className="flex-1 flex flex-col items-center justify-center gap-1 py-4 border-b border-white/10 relative">
           {/* Stem Deity Label */}
           {pillar.stem.deity && (
-            <span className="absolute top-1 text-[9px] font-sans font-bold uppercase tracking-wider text-gold/60 bg-midnight/80 px-2 py-0.5 rounded-sm border border-gold/20 backdrop-blur-sm">
-              {pillar.stem.deity}
+            <span className="absolute top-1 text-[9px] font-sans font-bold uppercase tracking-wider text-gold/60 bg-midnight/80 px-2 py-0.5 rounded-sm border border-gold/20 backdrop-blur-sm whitespace-nowrap">
+              {getLensTranslation(pillar.stem.deity).keyword}
             </span>
           )}
 
@@ -272,8 +284,8 @@ const PillarCard: React.FC<{ pillar: Pillar; label: string; delay: number }> = (
 
           {/* Branch Main Deity Label */}
           {pillar.branch.deity && (
-            <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-gold/60 bg-midnight/80 px-2 py-0.5 rounded-sm border border-gold/20 backdrop-blur-sm mb-1">
-              {pillar.branch.deity}
+            <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-gold/60 bg-midnight/80 px-2 py-0.5 rounded-sm border border-gold/20 backdrop-blur-sm mb-1 whitespace-nowrap">
+              {getLensTranslation(pillar.branch.deity).keyword}
             </span>
           )}
 

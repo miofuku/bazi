@@ -1,4 +1,4 @@
-export type PrismLens = 'genesis' | 'synergy' | 'resonance' | 'temporal';
+export type PrismLens = 'genesis' | 'resonance' | 'temporal';
 
 interface TranslationEntry {
     keyword: string;

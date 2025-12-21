@@ -51,18 +51,37 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
                 {/* Perspective Switch */}
                 <div className="bg-white/2 border border-white/5 p-8 rounded-sm lg:col-span-2 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-slate-800/20 blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
-                    <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-8">The Perspectives // 02</div>
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                        <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">The Perspectives // 02</div>
+                        <div className="flex bg-midnight/40 p-1 rounded-full border border-white/5 backdrop-blur-sm">
+                            <button
+                                onClick={() => setMode('team')}
+                                className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${mode === 'team' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30 shadow-lg shadow-blue-500/10' : 'text-slate-500 hover:text-slate-300'}`}
+                            >
+                                Work Mode
+                            </button>
+                            <button
+                                onClick={() => setMode('intimate')}
+                                className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${mode === 'intimate' ? 'bg-pink-500/20 text-pink-300 border border-pink-500/30 shadow-lg shadow-pink-500/10' : 'text-slate-500 hover:text-slate-300'}`}
+                            >
+                                Love Mode
+                            </button>
+                        </div>
+                    </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                         {/* Job Perspective */}
-                        <div className={`transition-opacity duration-500 ${mode === 'team' ? 'opacity-100' : 'opacity-40 blur-[1px]'}`}>
+                        <div
+                            onClick={() => setMode('team')}
+                            className={`cursor-pointer transition-all duration-500 p-6 rounded-xl border border-transparent ${mode === 'team' ? 'bg-blue-500/5 border-blue-500/20 opacity-100 scale-100' : 'opacity-40 blur-[1px] grayscale hover:grayscale-0 hover:opacity-60 scale-95'}`}
+                        >
                             <div className="flex items-center gap-3 mb-4">
-                                <div className="p-2 bg-blue-500/10 rounded-full text-blue-400">
+                                <div className={`p-2 rounded-full transition-colors ${mode === 'team' ? 'bg-blue-500/20 text-blue-400' : 'bg-slate-500/10 text-slate-500'}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                     </svg>
                                 </div>
-                                <span className="text-[10px] uppercase tracking-widest text-slate-400">Work Mode</span>
+                                <span className={`text-[10px] uppercase tracking-widest ${mode === 'team' ? 'text-blue-400 font-bold' : 'text-slate-500'}`}>Work Mode</span>
                             </div>
                             <h3 className="text-2xl font-serif text-slate-100 mb-2">{genome.workPerspective.title}</h3>
                             <p className="text-slate-400 text-sm leading-relaxed border-l-2 border-blue-500/30 pl-4">
@@ -71,14 +90,17 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
                         </div>
 
                         {/* Love Perspective */}
-                        <div className={`transition-opacity duration-500 ${mode === 'intimate' ? 'opacity-100' : 'opacity-40 blur-[1px]'}`}>
+                        <div
+                            onClick={() => setMode('intimate')}
+                            className={`cursor-pointer transition-all duration-500 p-6 rounded-xl border border-transparent ${mode === 'intimate' ? 'bg-pink-500/5 border-pink-500/20 opacity-100 scale-100' : 'opacity-40 blur-[1px] grayscale hover:grayscale-0 hover:opacity-60 scale-95'}`}
+                        >
                             <div className="flex items-center gap-3 mb-4">
-                                <div className="p-2 bg-pink-500/10 rounded-full text-pink-400">
+                                <div className={`p-2 rounded-full transition-colors ${mode === 'intimate' ? 'bg-pink-500/20 text-pink-400' : 'bg-slate-500/10 text-slate-500'}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                     </svg>
                                 </div>
-                                <span className="text-[10px] uppercase tracking-widest text-slate-400">Love Mode</span>
+                                <span className={`text-[10px] uppercase tracking-widest ${mode === 'intimate' ? 'text-pink-400 font-bold' : 'text-slate-500'}`}>Love Mode</span>
                             </div>
                             <h3 className="text-2xl font-serif text-slate-100 mb-2">{genome.lovePerspective.title}</h3>
                             <p className="text-slate-400 text-sm leading-relaxed border-l-2 border-pink-500/30 pl-4">

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { InputForm } from './components/InputForm';
 import { BaziChartDisplay } from './components/BaziChartDisplay';
-import { ResultDashboard } from './components/ResultDashboard';
 import { PrismDashboard } from './components/PrismDashboard';
 import { calculateBazi } from './services/baziService';
 import { BaziChart, Gender } from './types';
@@ -83,74 +82,96 @@ const App: React.FC = () => {
       <Header onHome={resetApp} />
       <EnergyFlow />
 
-      <main className="pt-32 pb-24 px-4 md:px-6 max-w-6xl mx-auto relative z-10">
+      <main className={`relative z-10 ${chart ? 'pt-32 pb-24 px-4 md:px-6 max-w-6xl mx-auto' : 'h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth'}`}>
         {!chart ? (
-          <div className="animate-fade-in">
+          <>
             {/* HERO SECTION */}
-            <div className="text-center mb-24 pt-12">
-              <div className="w-16 h-16 mx-auto mb-10 border border-gold/40 flex items-center justify-center rotate-45 group">
-                <span className="font-serif text-3xl text-gold -rotate-45 group-hover:scale-110 transition-transform">C</span>
+            <section className="h-screen w-full snap-start flex flex-col items-center justify-center px-6 pt-24">
+              <div className="max-w-6xl mx-auto text-center">
+                <div className="w-16 h-16 mx-auto mb-10 border border-gold/40 flex items-center justify-center rotate-45 group">
+                  <span className="font-serif text-3xl text-gold -rotate-45 group-hover:scale-110 transition-transform">C</span>
+                </div>
+                <h2 className="text-6xl md:text-8xl font-serif font-bold text-slate-100 mb-8 tracking-tight">
+                  Decode Your <span className="text-gold italic">Primal</span> Architecture.
+                </h2>
+                <p className="text-lg md:text-xl font-sans text-slate-400 max-w-3xl mx-auto leading-relaxed mb-12">
+                  CHRONOSOPHY bridges ancient Eastern metaphysics with systemic logic to reveal the hidden resonance between your inner nature and the cycles of time.
+                </p>
+                <div className="flex justify-center gap-6">
+                  <button
+                    onClick={() => document.getElementById('registration')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="bg-gold hover:bg-gold-light text-midnight px-8 md:px-10 py-4 font-bold uppercase tracking-widest transition-all rounded-sm shadow-xl hover:shadow-gold/20 text-xs md:text-sm"
+                  >
+                    Generate Genesis Code
+                  </button>
+                  <button
+                    onClick={() => document.getElementById('philosophy')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="border border-white/20 hover:border-gold/50 text-slate-100 px-8 md:px-10 py-4 font-bold uppercase tracking-widest transition-all rounded-sm hover:bg-white/5 text-xs md:text-sm"
+                  >
+                    System Philosophy
+                  </button>
+                </div>
               </div>
-              <h2 className="text-6xl md:text-8xl font-serif font-bold text-slate-100 mb-8 tracking-tight">
-                Decode Your <span className="text-gold italic">Primal</span> Architecture.
-              </h2>
-              <p className="text-lg md:text-xl font-sans text-slate-400 max-w-3xl mx-auto leading-relaxed mb-12">
-                CHRONOSOPHY bridges ancient Eastern metaphysics with systemic logic to reveal the hidden resonance between your inner nature and the cycles of time.
-              </p>
-              <div className="flex justify-center gap-6">
-                <button
-                  onClick={() => document.getElementById('registration')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="bg-gold hover:bg-gold-light text-midnight px-10 py-4 font-bold uppercase tracking-widest transition-all rounded-sm shadow-xl hover:shadow-gold/20"
-                >
-                  Explore Your Genesis Code
-                </button>
-              </div>
-            </div>
+            </section>
 
             {/* THE CONCEPT */}
-            <section className="mb-32 py-24 border-y border-white/5 bg-white/2 backdrop-blur-sm px-8">
+            <section id="philosophy" className="h-screen w-full snap-start flex flex-col items-center justify-center px-8 border-y border-white/5 bg-white/5 backdrop-blur-md">
               <div className="max-w-4xl mx-auto text-center">
-                <h3 className="text-xs uppercase tracking-[0.5em] text-gold/60 mb-8">The Philosophy</h3>
-                <p className="text-2xl md:text-4xl font-serif text-slate-200 leading-snug">
+                <span className="inline-block px-3 py-1 bg-gold text-midnight text-[11px] uppercase tracking-[0.3em] font-bold mb-8">The Philosophy</span>
+                <h3 className="text-5xl md:text-6xl font-serif text-slate-100 mb-10 tracking-tight">Systemic Initiation & Source Code</h3>
+                <p className="text-2xl md:text-3xl font-serif text-slate-100 leading-snug italic">
                   "Your birth is not a random event, but the initiation of a complex system. We translate the ancient 'Bazi' into a modern framework of <span className="text-gold">Cognitive Genetics</span> and <span className="text-gold">Temporal Dynamics</span>."
                 </p>
               </div>
             </section>
 
             {/* THE METHODOLOGY */}
-            <section className="mb-32">
-              <Methodology />
+            <section className="h-screen w-full snap-start flex flex-col items-center justify-center px-6">
+              <div className="max-w-6xl mx-auto w-full">
+                <Methodology />
+              </div>
             </section>
 
             {/* THE THREE PILLARS */}
-            <section className="mb-32 grid md:grid-cols-3 gap-12">
-              <div className="p-8 border border-white/5 hover:border-gold/20 transition-colors group">
-                <div className="text-gold mb-6 font-serif italic text-3xl">01</div>
-                <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Origin</h4>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                  Your static blueprint—the "Personality Gene Code." Understanding the core variables that define your baseline state.
-                </p>
+            <section className="h-screen w-full snap-start flex flex-col items-center justify-center px-6">
+              <div className="max-w-6xl mx-auto w-full text-center mb-16">
+                <span className="inline-block px-3 py-1 bg-gold text-midnight text-[11px] uppercase tracking-[0.3em] font-bold mb-8">System Architecture</span>
+                <h3 className="text-4xl md:text-5xl font-serif text-slate-100 mb-8 tracking-tight">The Three Dimensions of Essence</h3>
               </div>
-              <div className="p-8 border border-white/5 hover:border-gold/20 transition-colors group">
-                <div className="text-gold mb-6 font-serif italic text-3xl">02</div>
-                <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Flow</h4>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                  The dynamic friction and synergy between your system and the environment. Navigating the waves of temporal seasonality.
-                </p>
-              </div>
-              <div className="p-8 border border-white/5 hover:border-gold/20 transition-colors group">
-                <div className="text-gold mb-6 font-serif italic text-3xl">03</div>
-                <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Alchemy</h4>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                  The practical application of self-knowledge. Mastering your internal state to achieve optimal resonance with external cycles.
-                </p>
+              <div className="max-w-6xl mx-auto w-full grid md:grid-cols-3 gap-12">
+                <div className="p-8 border border-white/5 hover:border-gold/20 transition-colors group">
+                  <div className="text-gold mb-6 font-serif italic text-3xl">01</div>
+                  <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Origin</h4>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    Your static blueprint—the "Personality Gene Code." Understanding the core variables that define your baseline state.
+                  </p>
+                </div>
+                <div className="p-8 border border-white/5 hover:border-gold/20 transition-colors group">
+                  <div className="text-gold mb-6 font-serif italic text-3xl">02</div>
+                  <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Flow</h4>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    The dynamic friction and synergy between your system and the environment. Navigating the waves of temporal seasonality.
+                  </p>
+                </div>
+                <div className="p-8 border border-white/5 hover:border-gold/20 transition-colors group">
+                  <div className="text-gold mb-6 font-serif italic text-3xl">03</div>
+                  <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Alchemy</h4>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    The practical application of self-knowledge. Mastering your internal state to achieve optimal resonance with external cycles.
+                  </p>
+                </div>
               </div>
             </section>
 
-            <div id="registration" className="animate-slide-up w-full flex justify-center pt-12">
-              <InputForm onCalculate={handleCalculate} />
-            </div>
-          </div>
+            {/* INPUT FORM */}
+            <section id="registration" className="h-screen w-full snap-start flex flex-col items-center justify-center px-6">
+              <div className="animate-slide-up w-full max-w-4xl mx-auto flex flex-col items-center text-center">
+                <span className="inline-block px-3 py-1 bg-gold text-midnight text-[11px] uppercase tracking-[0.3em] font-bold mb-8">System Calibration</span>
+                <h3 className="text-4xl md:text-5xl font-serif text-slate-100 mb-12 tracking-tight">Decode Your Initial Conditions</h3>
+                <InputForm onCalculate={handleCalculate} />
+              </div>
+            </section>
+          </>
         ) : (
           <div className="animate-fade-in space-y-16">
             {/* Top Bar: Back & Title */}

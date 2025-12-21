@@ -2,6 +2,7 @@ import React from 'react';
 import { BaziChart } from '../types';
 import { StructureResult } from '../utils/structures';
 import { STEM_SYMBOLS } from '../utils/constants';
+import { ElementIcon } from './BaziChartDisplay';
 
 interface ResultHeroProps {
     chart: BaziChart;
@@ -39,7 +40,7 @@ export const ResultHero: React.FC<ResultHeroProps> = ({ chart, structure }) => {
     };
 
     return (
-        <div className={`relative w-full min-h-[600px] flex flex-col items-center justify-center overflow-hidden bg-midnight border-b border-white/5`}>
+        <div className={`relative w-full h-screen flex flex-col items-center justify-start pt-12 overflow-hidden bg-midnight border-b border-white/5`}>
             {/* Background Decorative Elements */}
             <div className={`absolute top-0 w-full h-full opacity-20 pointer-events-none`}>
                 <div className={`absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-gold/10 blur-[120px]`}></div>
@@ -47,7 +48,7 @@ export const ResultHero: React.FC<ResultHeroProps> = ({ chart, structure }) => {
                 <div className="absolute inset-0 generative-bg opacity-30"></div>
             </div>
 
-            <div className="relative z-10 flex flex-col items-center text-center px-6 animate-fade-in group">
+            <div className="relative z-10 flex flex-col items-center text-center px-6 pt-0 pb-20 animate-fade-in group">
 
                 {/* Soul Symbol */}
                 <div className="relative w-56 h-56 mb-12 transition-transform duration-1000 hover:scale-105">
@@ -68,10 +69,8 @@ export const ResultHero: React.FC<ResultHeroProps> = ({ chart, structure }) => {
                     </div>
 
                     {/* Element Badge */}
-                    <div className={`absolute -bottom-2 -right-2 bg-midnight-light px-4 py-1 rounded-full border border-gold/40 shadow-xl`}>
-                        <span className={`text-[10px] uppercase font-bold tracking-[0.3em] text-gold`}>
-                            {dmElement}
-                        </span>
+                    <div className={`absolute -bottom-2 -right-2 bg-midnight border border-white/10 p-2 rounded-full shadow-lg shadow-black/80 z-20 flex items-center justify-center`}>
+                        <ElementIcon type={STEM_SYMBOLS[dmChar]} className="w-5 h-5 text-gold" />
                     </div>
                 </div>
 
@@ -93,8 +92,9 @@ export const ResultHero: React.FC<ResultHeroProps> = ({ chart, structure }) => {
 
             </div>
 
-            <div className="absolute bottom-10 animate-pulse">
-                <svg className="w-6 h-6 text-gold/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="absolute bottom-[35%] animate-bounce cursor-pointer opacity-100 transition-all duration-700"
+                onClick={() => document.getElementById('dashboard-main')?.scrollIntoView({ behavior: 'smooth' })}>
+                <svg className="w-10 h-10 text-gold/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                 </svg>
             </div>
