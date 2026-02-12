@@ -31,7 +31,7 @@ export const PrismDashboard: React.FC<PrismDashboardProps> = ({ chart }) => {
     );
 
     return (
-        <div className="h-screen overflow-y-auto snap-y snap-mandatory bg-midnight text-slate-200 selection:bg-gold/30 selection:text-white no-scrollbar">
+        <div className="h-screen overflow-y-auto snap-y snap-mandatory bg-parchment text-ink selection:bg-gold/20 selection:text-ink no-scrollbar">
 
             {/* 1. Global Context (Top Header) - FULL PAGE SECTION */}
             <section className="h-screen w-full snap-start shrink-0">
@@ -45,7 +45,7 @@ export const PrismDashboard: React.FC<PrismDashboardProps> = ({ chart }) => {
                 <LensToggle activeLens={activeLens} onLensChange={setActiveLens} />
 
                 {/* The Living Graph Visualization Area */}
-                <div className="max-w-7xl mx-auto bg-midnight/80 backdrop-blur-xl border border-white/5 rounded-2xl shadow-2xl p-8 lg:p-12 min-h-[600px] relative overflow-hidden transition-all duration-700">
+                <div className="max-w-7xl mx-auto bg-white/60 backdrop-blur-xl border border-black/5 rounded-2xl shadow-xl p-8 lg:p-12 min-h-[600px] relative overflow-hidden transition-all duration-700">
 
                     {/* Background Ambience based on Lens */}
                     <div className={`absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br rounded-full opacity-10 blur-[100px] transition-colors duration-1000 ease-in-out
@@ -59,8 +59,8 @@ export const PrismDashboard: React.FC<PrismDashboardProps> = ({ chart }) => {
                     {activeLens === 'genesis' && (
                         <LensContainer>
                             <div className="text-center mb-12">
-                                <h2 className="text-3xl font-serif text-slate-100">Genesis Mode</h2>
-                                <p className="text-slate-500 text-sm uppercase tracking-widest mt-2">{LENSES.find(l => l.id === 'genesis')?.desc}</p>
+                                <h2 className="text-3xl font-serif text-ink">Genesis Mode</h2>
+                                <p className="text-seal text-sm uppercase tracking-widest mt-2">{LENSES.find(l => l.id === 'genesis')?.desc}</p>
                             </div>
 
                             {/* Core Blueprint Visualization */}
@@ -72,7 +72,7 @@ export const PrismDashboard: React.FC<PrismDashboardProps> = ({ chart }) => {
                             {chart.systemMetrics && <SystemPerformance metrics={chart.systemMetrics} />}
 
                             {/* Infrastructure (Elements) */}
-                            <div className="mt-16 border-t border-white/5 pt-16">
+                            <div className="mt-16 border-t border-black/5 pt-16">
                                 <ElementBalance counts={chart.elementCounts} scores={chart.elementScores} dayMaster={chart.dayMaster} />
                             </div>
                         </LensContainer>
@@ -83,8 +83,8 @@ export const PrismDashboard: React.FC<PrismDashboardProps> = ({ chart }) => {
                     {activeLens === 'resonance' && (
                         <LensContainer>
                             <div className="text-center mb-12">
-                                <h2 className="text-3xl font-serif text-slate-100">Resonance Mode</h2>
-                                <p className="text-slate-500 text-sm uppercase tracking-widest mt-2">{LENSES.find(l => l.id === 'resonance')?.desc}</p>
+                                <h2 className="text-3xl font-serif text-ink">Resonance Mode</h2>
+                                <p className="text-seal text-sm uppercase tracking-widest mt-2">{LENSES.find(l => l.id === 'resonance')?.desc}</p>
                             </div>
 
                             <TeamDynamics chart={chart} />
@@ -95,8 +95,8 @@ export const PrismDashboard: React.FC<PrismDashboardProps> = ({ chart }) => {
                     {activeLens === 'temporal' && (
                         <LensContainer>
                             <div className="text-center mb-12">
-                                <h2 className="text-3xl font-serif text-slate-100">Temporal Mode</h2>
-                                <p className="text-slate-500 text-sm uppercase tracking-widest mt-2">{LENSES.find(l => l.id === 'temporal')?.desc}</p>
+                                <h2 className="text-3xl font-serif text-ink">Temporal Mode</h2>
+                                <p className="text-seal text-sm uppercase tracking-widest mt-2">{LENSES.find(l => l.id === 'temporal')?.desc}</p>
                             </div>
                             <TemporalSynergy chart={chart} />
                         </LensContainer>
@@ -106,9 +106,9 @@ export const PrismDashboard: React.FC<PrismDashboardProps> = ({ chart }) => {
             </section>
 
             {/* 3. Footer / Paywall (Exit State) - THIRD PAGE SECTION */}
-            <section className="h-screen w-full snap-start flex flex-col justify-center items-center bg-midnight border-t border-white/5 px-4">
+            <section className="h-screen w-full snap-start flex flex-col justify-center items-center bg-silk border-t border-black/5 px-4">
                 <div className="text-center mb-12">
-                    <p className="text-[10px] text-slate-600 font-mono tracking-widest uppercase">
+                    <p className="text-[10px] text-seal font-mono tracking-widest uppercase">
                         Protocol: Genesis Code Decryption Active
                     </p>
                 </div>
@@ -116,7 +116,7 @@ export const PrismDashboard: React.FC<PrismDashboardProps> = ({ chart }) => {
                     <LockedContent />
                 </div>
                 <div className="mt-16 text-center">
-                    <p className="text-[9px] text-slate-700 font-mono italic">
+                    <p className="text-[9px] text-seal/60 font-mono italic">
                         Algorithm derived from 2,000-year-old Temporal Geometry and Modern Systemic Psychology.
                     </p>
                 </div>

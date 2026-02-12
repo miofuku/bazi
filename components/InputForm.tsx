@@ -98,17 +98,17 @@ const WheelColumn: React.FC<WheelColumnProps> = ({ items, value, onChange, label
       <button
         type="button"
         onClick={() => shift(-1)}
-        className="w-full h-8 flex items-center justify-center text-slate-600 hover:text-gold hover:bg-gold/5 transition-colors mb-1"
+        className="w-full h-8 flex items-center justify-center text-seal/50 hover:text-gold hover:bg-gold/5 transition-colors mb-1"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 15l-6-6-6 6" /></svg>
       </button>
 
-      <div className="relative h-36 w-14 md:w-16 overflow-hidden border-y border-white/10 bg-midnight/20 rounded-sm">
+      <div className="relative h-36 w-14 md:w-16 overflow-hidden border-y border-black/10 bg-silk/30 rounded-sm">
         {/* Selection Lens */}
         <div className="absolute top-1/2 left-0 w-full h-10 -translate-y-1/2 border-y border-gold/40 bg-gold/5 pointer-events-none z-10 box-border"></div>
 
-        {/* Helper gradient for depth - updated for midnight background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-midnight via-transparent to-midnight pointer-events-none z-20 opacity-80"></div>
+        {/* Helper gradient for depth - updated for light background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-parchment via-transparent to-parchment pointer-events-none z-20 opacity-80"></div>
 
         <div
           ref={containerRef}
@@ -120,7 +120,7 @@ const WheelColumn: React.FC<WheelColumnProps> = ({ items, value, onChange, label
             <div
               key={item}
               onClick={() => onChange(item)}
-              className={`h-10 flex items-center justify-center snap-center cursor-pointer transition-all duration-300 select-none ${item === value ? 'text-slate-100 font-bold text-xl scale-110 text-glow-gold' : 'text-slate-600 text-sm'
+              className={`h-10 flex items-center justify-center snap-center cursor-pointer transition-all duration-300 select-none ${item === value ? 'text-ink font-bold text-xl scale-110 text-glow-gold' : 'text-seal/60 text-sm'
                 }`}
             >
               {item}
@@ -133,7 +133,7 @@ const WheelColumn: React.FC<WheelColumnProps> = ({ items, value, onChange, label
       <button
         type="button"
         onClick={() => shift(1)}
-        className="w-full h-8 flex items-center justify-center text-slate-600 hover:text-gold hover:bg-gold/5 transition-colors mt-1"
+        className="w-full h-8 flex items-center justify-center text-seal/50 hover:text-gold hover:bg-gold/5 transition-colors mt-1"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M6 9l6 6 6-6" /></svg>
       </button>
@@ -173,11 +173,11 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-lg glass-midnight p-10 relative shadow-2xl border-white/10">
+    <form onSubmit={handleSubmit} className="w-full max-w-lg glass-light p-10 relative shadow-2xl border-black/5">
 
-      <div className="text-center mb-10 border-b border-white/5 pb-6">
-        <h3 className="font-serif text-2xl tracking-widest text-slate-100">Systemic Parameterization</h3>
-        <p className="text-[10px] font-sans text-gold/60 uppercase tracking-[0.3em] mt-3">Calibrate Initial Conditions</p>
+      <div className="text-center mb-10 border-b border-black/5 pb-6">
+        <h3 className="font-serif text-2xl tracking-widest text-ink">Systemic Parameterization</h3>
+        <p className="text-[10px] font-sans text-gold uppercase tracking-[0.3em] mt-3">Calibrate Initial Conditions</p>
       </div>
 
       <div className="space-y-10 relative z-10">
@@ -185,30 +185,30 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
         {/* Unified Parameters (Date & Time) */}
         <div className="flex justify-center gap-2 items-center">
           <WheelColumn items={years} value={dateValue.year} onChange={(v) => setDateValue({ ...dateValue, year: Number(v) })} label="Year" />
-          <div className="h-40 flex items-center text-white/5 pb-4 text-xl font-light">/</div>
+          <div className="h-40 flex items-center text-black/5 pb-4 text-xl font-light">/</div>
           <WheelColumn items={months} value={dateValue.month} onChange={(v) => setDateValue({ ...dateValue, month: Number(v) })} label="Month" />
-          <div className="h-40 flex items-center text-white/5 pb-4 text-xl font-light">/</div>
+          <div className="h-40 flex items-center text-black/5 pb-4 text-xl font-light">/</div>
           <WheelColumn items={days} value={dateValue.day} onChange={(v) => setDateValue({ ...dateValue, day: Number(v) })} label="Day" />
           <div className="w-1 md:w-4"></div>
           <WheelColumn items={hours} value={timeValue.hour} onChange={(v) => setTimeValue({ ...timeValue, hour: Number(v) })} label="Hour" />
-          <div className="h-40 flex items-center text-white/5 pb-4 text-xl font-light">:</div>
+          <div className="h-40 flex items-center text-black/5 pb-4 text-xl font-light">:</div>
           <WheelColumn items={minutes} value={timeValue.minute} onChange={(v) => setTimeValue({ ...timeValue, minute: Number(v) })} label="Min" />
         </div>
 
         {/* Polarity Toggle */}
-        <div className="bg-white/2 p-6 border border-white/5">
+        <div className="bg-black/[0.02] p-6 border border-black/5">
           <div className="flex justify-center gap-8">
             <button
               type="button"
               onClick={() => setGender(Gender.MALE)}
-              className={`w-32 py-3 border font-bold text-xs uppercase tracking-widest transition-all duration-500 ${gender === Gender.MALE ? 'border-gold bg-gold text-midnight shadow-lg shadow-gold/20' : 'border-white/10 text-slate-500 hover:border-gold hover:text-gold'}`}
+              className={`w-32 py-3 border font-bold text-xs uppercase tracking-widest transition-all duration-500 ${gender === Gender.MALE ? 'border-gold bg-gold text-white shadow-lg shadow-gold/20' : 'border-black/5 text-seal hover:border-gold hover:text-gold'}`}
             >
               Yang <strong className="ml-1 text-sm font-bold">(♂)</strong>
             </button>
             <button
               type="button"
               onClick={() => setGender(Gender.FEMALE)}
-              className={`w-32 py-3 border font-bold text-xs uppercase tracking-widest transition-all duration-500 ${gender === Gender.FEMALE ? 'border-slate-400 bg-slate-400 text-midnight shadow-lg' : 'border-white/10 text-slate-500 hover:border-slate-400 hover:text-slate-400'}`}
+              className={`w-32 py-3 border font-bold text-xs uppercase tracking-widest transition-all duration-500 ${gender === Gender.FEMALE ? 'border-seal bg-seal text-white shadow-lg' : 'border-black/5 text-seal hover:border-seal hover:text-seal'}`}
             >
               Yin <strong className="ml-1 text-sm font-bold">(♀)</strong>
             </button>
@@ -217,7 +217,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
 
         <button
           type="submit"
-          className="w-full mt-6 bg-gold hover:bg-gold-light text-midnight font-serif font-bold py-5 border border-gold shadow-xl hover:shadow-gold/20 transition-all duration-500 tracking-[0.2em] uppercase group relative overflow-hidden"
+          className="w-full mt-6 bg-gold hover:bg-gold-light text-white font-serif font-bold py-5 border border-gold shadow-xl hover:shadow-gold/20 transition-all duration-500 tracking-[0.2em] uppercase group relative overflow-hidden"
         >
           <span className="relative z-10 group-hover:tracking-[0.4em] transition-all duration-500">Generate System Audit</span>
         </button>

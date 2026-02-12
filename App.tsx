@@ -9,43 +9,43 @@ import { Footer } from './components/Footer';
 
 // Modern Energy Flow Background
 const EnergyFlow = () => (
-  <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden opacity-20">
+  <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden opacity-30">
     <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
       <defs>
         <linearGradient id="flow-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#C5A059" stopOpacity="0.2" />
-          <stop offset="50%" stopColor="#0B1221" stopOpacity="0" />
-          <stop offset="100%" stopColor="#C5A059" stopOpacity="0.1" />
+          <stop offset="0%" stopColor="#B8860B" stopOpacity="0.15" />
+          <stop offset="50%" stopColor="#FBFAF8" stopOpacity="0" />
+          <stop offset="100%" stopColor="#B8860B" stopOpacity="0.1" />
         </linearGradient>
       </defs>
-      <path d="M-100,400 C200,300 400,600 700,400 C1000,200 1300,500 1500,400" stroke="url(#flow-grad)" strokeWidth="2" fill="none" className="animate-flow" />
-      <path d="M-100,500 C200,400 500,700 800,500 C1100,300 1400,600 1600,500" stroke="url(#flow-grad)" strokeWidth="1" fill="none" className="animate-flow [animation-delay:-3s]" />
-      <path d="M-100,300 C300,200 600,500 900,300 C1200,100 1400,400 1600,300" stroke="url(#flow-grad)" strokeWidth="1" fill="none" className="animate-flow [animation-delay:-7s]" />
+      <path d="M-100,400 C200,300 400,600 700,400 C1000,200 1300,500 1500,400" stroke="url(#flow-grad)" strokeWidth="1.5" fill="none" className="animate-flow" />
+      <path d="M-100,500 C200,400 500,700 800,500 C1100,300 1400,600 1600,500" stroke="url(#flow-grad)" strokeWidth="0.8" fill="none" className="animate-flow [animation-delay:-3s]" />
+      <path d="M-100,300 C300,200 600,500 900,300 C1200,100 1400,400 1600,300" stroke="url(#flow-grad)" strokeWidth="0.8" fill="none" className="animate-flow [animation-delay:-7s]" />
     </svg>
   </div>
 );
 
 // Minimalist Header
 const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (
-  <header className="fixed top-0 left-0 w-full z-50 bg-midnight/80 backdrop-blur-md border-b border-white/5 transition-all duration-300">
+  <header className="fixed top-0 left-0 w-full z-50 bg-parchment/80 backdrop-blur-md border-b border-black/5 transition-all duration-300">
     <div className="max-w-6xl mx-auto px-6 h-24 flex justify-between items-center">
       <div
         className="flex items-center gap-4 group cursor-pointer"
         onClick={onHome}
       >
-        <div className="w-10 h-10 border border-gold/30 flex items-center justify-center relative overflow-hidden transition-all duration-500 bg-white/5 group-hover:bg-gold group-hover:border-gold">
-          <span className="font-serif font-bold text-xl z-10 text-gold group-hover:text-midnight transition-colors duration-500">C</span>
+        <div className="w-10 h-10 border border-gold/30 flex items-center justify-center relative overflow-hidden transition-all duration-500 bg-black/5 group-hover:bg-gold group-hover:border-gold">
+          <span className="font-serif font-bold text-xl z-10 text-gold group-hover:text-parchment transition-colors duration-500">C</span>
         </div>
         <div className="flex flex-col">
-          <h1 className="text-xl font-serif tracking-[0.1em] text-slate-200 transition-colors font-bold uppercase">
+          <h1 className="text-xl font-serif tracking-[0.1em] text-ink transition-colors font-bold uppercase">
             CHRONOSOPHY
           </h1>
-          <span className="text-[10px] font-sans text-gold/60 tracking-[0.2em] uppercase">The Wisdom of Temporal Synergy.</span>
+          <span className="text-[10px] font-sans text-gold/80 tracking-[0.2em] uppercase">The Wisdom of Temporal Synergy.</span>
         </div>
       </div>
       <nav className="hidden md:flex items-center gap-10">
         {['System', 'Philosophy', 'About'].map((item) => (
-          <span key={item} className="text-xs font-sans font-medium uppercase tracking-widest text-slate-400 hover:text-gold cursor-pointer transition-colors">
+          <span key={item} className="text-xs font-sans font-medium uppercase tracking-widest text-seal hover:text-gold cursor-pointer transition-colors">
             {item}
           </span>
         ))}
@@ -78,7 +78,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen text-slate-200 font-sans generative-bg">
+    <div className="relative min-h-screen text-ink font-sans generative-bg">
       <Header onHome={resetApp} />
       <EnergyFlow />
 
@@ -91,22 +91,22 @@ const App: React.FC = () => {
                 <div className="w-16 h-16 mx-auto mb-10 border border-gold/40 flex items-center justify-center rotate-45 group">
                   <span className="font-serif text-3xl text-gold -rotate-45 group-hover:scale-110 transition-transform">C</span>
                 </div>
-                <h2 className="text-6xl md:text-8xl font-serif font-bold text-slate-100 mb-8 tracking-tight">
+                <h2 className="text-6xl md:text-8xl font-serif font-bold text-ink mb-8 tracking-tight">
                   Decode Your <span className="text-gold italic">Primal</span> Architecture.
                 </h2>
-                <p className="text-lg md:text-xl font-sans text-slate-400 max-w-3xl mx-auto leading-relaxed mb-12">
+                <p className="text-lg md:text-xl font-sans text-seal max-w-3xl mx-auto leading-relaxed mb-12">
                   CHRONOSOPHY bridges ancient Eastern metaphysics with systemic logic to reveal the hidden resonance between your inner nature and the cycles of time.
                 </p>
                 <div className="flex justify-center gap-6">
                   <button
                     onClick={() => document.getElementById('registration')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="bg-gold hover:bg-gold-light text-midnight px-8 md:px-10 py-4 font-bold uppercase tracking-widest transition-all rounded-sm shadow-xl hover:shadow-gold/20 text-xs md:text-sm"
+                    className="bg-gold hover:bg-gold-light text-white px-8 md:px-10 py-4 font-bold uppercase tracking-widest transition-all rounded-sm shadow-xl hover:shadow-gold/20 text-xs md:text-sm"
                   >
                     Generate Genesis Code
                   </button>
                   <button
                     onClick={() => document.getElementById('philosophy')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="border border-white/20 hover:border-gold/50 text-slate-100 px-8 md:px-10 py-4 font-bold uppercase tracking-widest transition-all rounded-sm hover:bg-white/5 text-xs md:text-sm"
+                    className="border border-black/10 hover:border-gold/50 text-ink px-8 md:px-10 py-4 font-bold uppercase tracking-widest transition-all rounded-sm hover:bg-black/5 text-xs md:text-sm"
                   >
                     System Philosophy
                   </button>
@@ -115,11 +115,11 @@ const App: React.FC = () => {
             </section>
 
             {/* THE CONCEPT */}
-            <section id="philosophy" className="h-screen w-full snap-start flex flex-col items-center justify-center px-8 border-y border-white/5 bg-white/5 backdrop-blur-md">
+            <section id="philosophy" className="h-screen w-full snap-start flex flex-col items-center justify-center px-8 border-y border-black/5 bg-silk/30 backdrop-blur-md">
               <div className="max-w-4xl mx-auto text-center">
-                <span className="inline-block px-3 py-1 bg-gold text-midnight text-[11px] uppercase tracking-[0.3em] font-bold mb-8">The Philosophy</span>
-                <h3 className="text-5xl md:text-6xl font-serif text-slate-100 mb-10 tracking-tight">Systemic Initiation & Source Code</h3>
-                <p className="text-2xl md:text-3xl font-serif text-slate-100 leading-snug italic">
+                <span className="inline-block px-3 py-1 bg-gold text-white text-[11px] uppercase tracking-[0.3em] font-bold mb-8">The Philosophy</span>
+                <h3 className="text-5xl md:text-6xl font-serif text-ink mb-10 tracking-tight">Systemic Initiation & Source Code</h3>
+                <p className="text-2xl md:text-3xl font-serif text-ink leading-snug italic">
                   "Your birth is not a random event, but the initiation of a complex system. We translate the ancient 'Bazi' into a modern framework of <span className="text-gold">Cognitive Genetics</span> and <span className="text-gold">Temporal Dynamics</span>."
                 </p>
               </div>
@@ -135,28 +135,28 @@ const App: React.FC = () => {
             {/* THE THREE PILLARS */}
             <section className="h-screen w-full snap-start flex flex-col items-center justify-center px-6">
               <div className="max-w-6xl mx-auto w-full text-center mb-16">
-                <span className="inline-block px-3 py-1 bg-gold text-midnight text-[11px] uppercase tracking-[0.3em] font-bold mb-8">System Architecture</span>
-                <h3 className="text-4xl md:text-5xl font-serif text-slate-100 mb-8 tracking-tight">The Three Dimensions of Essence</h3>
+                <span className="inline-block px-3 py-1 bg-gold text-white text-[11px] uppercase tracking-[0.3em] font-bold mb-8">System Architecture</span>
+                <h3 className="text-4xl md:text-5xl font-serif text-ink mb-8 tracking-tight">The Three Dimensions of Essence</h3>
               </div>
               <div className="max-w-6xl mx-auto w-full grid md:grid-cols-3 gap-12">
-                <div className="p-8 border border-white/5 hover:border-gold/20 transition-colors group">
+                <div className="p-8 border border-black/5 hover:border-gold/20 transition-colors group">
                   <div className="text-gold mb-6 font-serif italic text-3xl">01</div>
-                  <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Origin</h4>
-                  <p className="text-slate-400 text-sm leading-relaxed">
+                  <h4 className="text-xl font-serif font-bold text-ink mb-4 uppercase tracking-widest">Origin</h4>
+                  <p className="text-seal text-sm leading-relaxed">
                     Your static blueprint—the "Personality Gene Code." Understanding the core variables that define your baseline state.
                   </p>
                 </div>
-                <div className="p-8 border border-white/5 hover:border-gold/20 transition-colors group">
+                <div className="p-8 border border-black/5 hover:border-gold/20 transition-colors group">
                   <div className="text-gold mb-6 font-serif italic text-3xl">02</div>
-                  <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Flow</h4>
-                  <p className="text-slate-400 text-sm leading-relaxed">
+                  <h4 className="text-xl font-serif font-bold text-ink mb-4 uppercase tracking-widest">Flow</h4>
+                  <p className="text-seal text-sm leading-relaxed">
                     The dynamic friction and synergy between your system and the environment. Navigating the waves of temporal seasonality.
                   </p>
                 </div>
-                <div className="p-8 border border-white/5 hover:border-gold/20 transition-colors group">
+                <div className="p-8 border border-black/5 hover:border-gold/20 transition-colors group">
                   <div className="text-gold mb-6 font-serif italic text-3xl">03</div>
-                  <h4 className="text-xl font-serif font-bold text-slate-100 mb-4 uppercase tracking-widest">Alchemy</h4>
-                  <p className="text-slate-400 text-sm leading-relaxed">
+                  <h4 className="text-xl font-serif font-bold text-ink mb-4 uppercase tracking-widest">Alchemy</h4>
+                  <p className="text-seal text-sm leading-relaxed">
                     The practical application of self-knowledge. Mastering your internal state to achieve optimal resonance with external cycles.
                   </p>
                 </div>
@@ -166,8 +166,8 @@ const App: React.FC = () => {
             {/* INPUT FORM */}
             <section id="registration" className="h-screen w-full snap-start flex flex-col items-center justify-center px-6">
               <div className="animate-slide-up w-full max-w-4xl mx-auto flex flex-col items-center text-center">
-                <span className="inline-block px-3 py-1 bg-gold text-midnight text-[11px] uppercase tracking-[0.3em] font-bold mb-8">System Calibration</span>
-                <h3 className="text-4xl md:text-5xl font-serif text-slate-100 mb-12 tracking-tight">Decode Your Initial Conditions</h3>
+                <span className="inline-block px-3 py-1 bg-gold text-white text-[11px] uppercase tracking-[0.3em] font-bold mb-8">System Calibration</span>
+                <h3 className="text-4xl md:text-5xl font-serif text-ink mb-12 tracking-tight">Decode Your Initial Conditions</h3>
                 <InputForm onCalculate={handleCalculate} />
               </div>
             </section>

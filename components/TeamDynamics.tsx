@@ -34,35 +34,35 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
             {/* 1. Core Genome & Perspectives Section */}
             <div className="mb-24 grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Genetic Blueprint */}
-                <div className="bg-white/2 border border-white/5 p-8 rounded-sm lg:col-span-1">
-                    <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-4">Genetic Blueprint // 01</div>
+                <div className="bg-silk/40 border border-black/5 p-8 rounded-sm lg:col-span-1">
+                    <div className="text-[10px] uppercase tracking-[0.2em] text-seal mb-4">Genetic Blueprint // 01</div>
                     <div className="mb-6">
-                        <div className="text-gold/60 text-[10px] uppercase mb-1">Primary Nature</div>
-                        <h3 className="text-xl font-serif text-slate-200 mb-2">{genome.primaryNature.name}</h3>
-                        <p className="text-slate-400 text-xs leading-relaxed">{genome.primaryNature.description}</p>
+                        <div className="text-gold text-[10px] uppercase mb-1 font-bold">Primary Nature</div>
+                        <h3 className="text-xl font-serif text-ink mb-2">{genome.primaryNature.name}</h3>
+                        <p className="text-seal text-xs leading-relaxed">{genome.primaryNature.description}</p>
                     </div>
                     <div>
-                        <div className="text-gold/60 text-[10px] uppercase mb-1">Functional Node</div>
-                        <h3 className="text-xl font-serif text-slate-200 mb-2">{genome.functionalNode.name}</h3>
-                        <p className="text-slate-400 text-xs leading-relaxed">{genome.functionalNode.description}</p>
+                        <div className="text-gold text-[10px] uppercase mb-1 font-bold">Functional Node</div>
+                        <h3 className="text-xl font-serif text-ink mb-2">{genome.functionalNode.name}</h3>
+                        <p className="text-seal text-xs leading-relaxed">{genome.functionalNode.description}</p>
                     </div>
                 </div>
 
                 {/* Perspective Switch */}
-                <div className="bg-white/2 border border-white/5 p-8 rounded-sm lg:col-span-2 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-slate-800/20 blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+                <div className="bg-silk/40 border border-black/5 p-8 rounded-sm lg:col-span-2 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-                        <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">The Perspectives // 02</div>
-                        <div className="flex bg-midnight/40 p-1 rounded-full border border-white/5 backdrop-blur-sm">
+                        <div className="text-[10px] uppercase tracking-[0.2em] text-seal">The Perspectives // 02</div>
+                        <div className="flex bg-silk/80 p-1 rounded-full border border-black/5 backdrop-blur-sm">
                             <button
                                 onClick={() => setMode('team')}
-                                className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${mode === 'team' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30 shadow-lg shadow-blue-500/10' : 'text-slate-500 hover:text-slate-300'}`}
+                                className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${mode === 'team' ? 'bg-blue-600/10 text-blue-700 border border-blue-600/20 shadow-sm' : 'text-seal hover:text-ink'}`}
                             >
                                 Work Mode
                             </button>
                             <button
                                 onClick={() => setMode('intimate')}
-                                className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${mode === 'intimate' ? 'bg-pink-500/20 text-pink-300 border border-pink-500/30 shadow-lg shadow-pink-500/10' : 'text-slate-500 hover:text-slate-300'}`}
+                                className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${mode === 'intimate' ? 'bg-pink-600/10 text-pink-700 border border-pink-600/20 shadow-sm' : 'text-seal hover:text-ink'}`}
                             >
                                 Love Mode
                             </button>
@@ -76,15 +76,15 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
                             className={`cursor-pointer transition-all duration-500 p-6 rounded-xl border border-transparent ${mode === 'team' ? 'bg-blue-500/5 border-blue-500/20 opacity-100 scale-100' : 'opacity-40 blur-[1px] grayscale hover:grayscale-0 hover:opacity-60 scale-95'}`}
                         >
                             <div className="flex items-center gap-3 mb-4">
-                                <div className={`p-2 rounded-full transition-colors ${mode === 'team' ? 'bg-blue-500/20 text-blue-400' : 'bg-slate-500/10 text-slate-500'}`}>
+                                <div className={`p-2 rounded-full transition-colors ${mode === 'team' ? 'bg-blue-600/10 text-blue-600' : 'bg-black/5 text-seal'}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                     </svg>
                                 </div>
-                                <span className={`text-[10px] uppercase tracking-widest ${mode === 'team' ? 'text-blue-400 font-bold' : 'text-slate-500'}`}>Work Mode</span>
+                                <span className={`text-[10px] uppercase tracking-widest ${mode === 'team' ? 'text-blue-600 font-bold' : 'text-seal'}`}>Work Mode</span>
                             </div>
-                            <h3 className="text-2xl font-serif text-slate-100 mb-2">{genome.workPerspective.title}</h3>
-                            <p className="text-slate-400 text-sm leading-relaxed border-l-2 border-blue-500/30 pl-4">
+                            <h3 className="text-2xl font-serif text-ink mb-2">{genome.workPerspective.title}</h3>
+                            <p className="text-seal text-sm leading-relaxed border-l-2 border-blue-600/30 pl-4">
                                 {genome.workPerspective.description}
                             </p>
                         </div>
@@ -95,15 +95,15 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
                             className={`cursor-pointer transition-all duration-500 p-6 rounded-xl border border-transparent ${mode === 'intimate' ? 'bg-pink-500/5 border-pink-500/20 opacity-100 scale-100' : 'opacity-40 blur-[1px] grayscale hover:grayscale-0 hover:opacity-60 scale-95'}`}
                         >
                             <div className="flex items-center gap-3 mb-4">
-                                <div className={`p-2 rounded-full transition-colors ${mode === 'intimate' ? 'bg-pink-500/20 text-pink-400' : 'bg-slate-500/10 text-slate-500'}`}>
+                                <div className={`p-2 rounded-full transition-colors ${mode === 'intimate' ? 'bg-pink-600/10 text-pink-600' : 'bg-black/5 text-seal'}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                     </svg>
                                 </div>
-                                <span className={`text-[10px] uppercase tracking-widest ${mode === 'intimate' ? 'text-pink-400 font-bold' : 'text-slate-500'}`}>Love Mode</span>
+                                <span className={`text-[10px] uppercase tracking-widest ${mode === 'intimate' ? 'text-pink-600 font-bold' : 'text-seal'}`}>Love Mode</span>
                             </div>
-                            <h3 className="text-2xl font-serif text-slate-100 mb-2">{genome.lovePerspective.title}</h3>
-                            <p className="text-slate-400 text-sm leading-relaxed border-l-2 border-pink-500/30 pl-4">
+                            <h3 className="text-2xl font-serif text-ink mb-2">{genome.lovePerspective.title}</h3>
+                            <p className="text-seal text-sm leading-relaxed border-l-2 border-pink-600/30 pl-4">
                                 {genome.lovePerspective.description}
                             </p>
                         </div>
@@ -127,8 +127,8 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
                                 </svg>
                             </div>
                             <div>
-                                <h4 className="text-3xl font-serif text-slate-100 mb-1">{genome.teamRole.title}</h4>
-                                <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
+                                <h4 className="text-3xl font-serif text-ink mb-1">{genome.teamRole.title}</h4>
+                                <p className="text-seal text-sm leading-relaxed max-w-sm">
                                     {genome.teamRole.description}
                                 </p>
                             </div>
@@ -144,20 +144,20 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
                         >
                             <div>
                                 <div className="flex justify-between items-end mb-2">
-                                    <span className="text-slate-200 font-bold text-sm uppercase tracking-widest">Protocol Identified</span>
-                                    <span className={`text-[10px] uppercase font-bold text-${teamFriction.severity === 'Critical' ? 'red-500' : 'gold'}`}>
+                                    <span className="text-ink font-bold text-sm uppercase tracking-widest">Protocol Identified</span>
+                                    <span className={`text-[10px] uppercase font-bold text-${teamFriction.severity === 'Critical' ? 'red-600' : 'gold'}`}>
                                         Severity: {teamFriction.severity}
                                     </span>
                                 </div>
-                                <div className="p-6 bg-white/2 border border-white/10 rounded-sm relative overflow-hidden">
+                                <div className="p-6 bg-silk/40 border border-black/5 rounded-sm relative overflow-hidden">
                                     {teamFriction.severity === 'High' || teamFriction.severity === 'Critical' ? (
                                         <div className="absolute top-0 left-0 w-1 h-full bg-red-500"></div>
                                     ) : null}
-                                    <h4 className="text-slate-100 font-serif mb-2">{teamFriction.title}</h4>
-                                    <p className="text-xs text-slate-400 font-mono mb-4 border-b border-white/5 pb-4">
+                                    <h4 className="text-ink font-serif mb-2">{teamFriction.title}</h4>
+                                    <p className="text-xs text-seal font-mono mb-4 border-b border-black/5 pb-4">
                                         {teamFriction.diagnosis}
                                     </p>
-                                    <p className="text-sm text-gold/80 italic">
+                                    <p className="text-sm text-gold italic font-bold">
                                         {teamFriction.actionProtocol}
                                     </p>
                                 </div>
@@ -175,45 +175,45 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
                         title="Resonance Matrix"
                         isBlurred={true}
                     >
-                        <div className="glass-midnight border-pink-500/20 p-8 md:p-12 rounded-sm relative overflow-hidden mb-16">
+                        <div className="glass-light border-pink-600/20 p-8 md:p-12 rounded-sm relative overflow-hidden mb-16 shadow-sm">
                             <div className="absolute -left-10 -bottom-10 w-96 h-96 bg-pink-500/10 blur-[120px] rounded-full"></div>
                             <div className="relative z-10">
                                 <div className="flex justify-between items-end mb-12">
                                     <div>
-                                        <h3 className="text-[10px] uppercase tracking-[0.5em] text-pink-400 mb-2 font-bold">Resonance Scoring Matrix</h3>
-                                        <h4 className="text-2xl font-serif text-slate-100">The Alchemical Union Target</h4>
+                                        <h3 className="text-[10px] uppercase tracking-[0.5em] text-pink-600 mb-2 font-bold">Resonance Scoring Matrix</h3>
+                                        <h4 className="text-2xl font-serif text-ink">The Alchemical Union Target</h4>
                                     </div>
                                     <div className="hidden md:block text-right">
-                                        <div className="text-4xl font-mono text-pink-500/80">{idealPartner.totalScore}%</div>
-                                        <div className="text-[9px] uppercase tracking-widest text-slate-500">Match Potential</div>
+                                        <div className="text-4xl font-mono text-pink-600/80">{idealPartner.totalScore}%</div>
+                                        <div className="text-[9px] uppercase tracking-widest text-seal">Match Potential</div>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                                     {/* 1. Core Resonance */}
-                                    <div className="border-l border-pink-500/20 pl-6">
-                                        <div className="text-[9px] uppercase tracking-widest text-slate-500 mb-2">01 Core Resonance</div>
-                                        <div className="text-lg font-serif text-pink-200 mb-1">{idealPartner.coreResonance.targetDayMaster}</div>
-                                        <div className="text-[10px] bg-pink-500/10 text-pink-300 inline-block px-2 py-0.5 rounded mb-3">{idealPartner.coreResonance.relationType}</div>
-                                        <p className="text-xs text-slate-400 leading-relaxed">{idealPartner.coreResonance.description}</p>
+                                    <div className="border-l border-pink-600/20 pl-6">
+                                        <div className="text-[9px] uppercase tracking-widest text-seal mb-2">01 Core Resonance</div>
+                                        <div className="text-lg font-serif text-pink-900 mb-1">{idealPartner.coreResonance.targetDayMaster}</div>
+                                        <div className="text-[10px] bg-pink-600/10 text-pink-700 inline-block px-2 py-0.5 rounded mb-3 font-bold">{idealPartner.coreResonance.relationType}</div>
+                                        <p className="text-xs text-seal leading-relaxed">{idealPartner.coreResonance.description}</p>
                                     </div>
                                     {/* 2. Functional Comp */}
-                                    <div className="border-l border-pink-500/20 pl-6">
-                                        <div className="text-[9px] uppercase tracking-widest text-slate-500 mb-2">02 Complementarity</div>
-                                        <div className="text-lg font-serif text-pink-200 mb-1">{idealPartner.functionalComplementarity.missingArchetype}</div>
-                                        <p className="text-xs text-slate-400 leading-relaxed mt-2">{idealPartner.functionalComplementarity.why}</p>
+                                    <div className="border-l border-pink-600/20 pl-6">
+                                        <div className="text-[9px] uppercase tracking-widest text-seal mb-2">02 Complementarity</div>
+                                        <div className="text-lg font-serif text-pink-900 mb-1">{idealPartner.functionalComplementarity.missingArchetype}</div>
+                                        <p className="text-xs text-seal leading-relaxed mt-2">{idealPartner.functionalComplementarity.why}</p>
                                     </div>
                                     {/* 3. Elemental Healing */}
-                                    <div className="border-l border-pink-500/20 pl-6">
-                                        <div className="text-[9px] uppercase tracking-widest text-slate-500 mb-2">03 Systemic Healing</div>
-                                        <div className="text-lg font-serif text-pink-200 mb-1">High {idealPartner.elementalRebalancing.targetElement}</div>
-                                        <p className="text-xs text-slate-400 leading-relaxed mt-2">{idealPartner.elementalRebalancing.benefit}</p>
+                                    <div className="border-l border-pink-600/20 pl-6">
+                                        <div className="text-[9px] uppercase tracking-widest text-seal mb-2">03 Systemic Healing</div>
+                                        <div className="text-lg font-serif text-pink-900 mb-1">High {idealPartner.elementalRebalancing.targetElement}</div>
+                                        <p className="text-xs text-seal leading-relaxed mt-2">{idealPartner.elementalRebalancing.benefit}</p>
                                     </div>
                                     {/* 4. Temporal Sync */}
-                                    <div className="border-l border-pink-500/20 pl-6">
-                                        <div className="text-[9px] uppercase tracking-widest text-slate-500 mb-2">04 Temporal Sync</div>
-                                        <div className="text-lg font-serif text-pink-200 mb-1">{idealPartner.temporalSync.currentPhase}</div>
-                                        <p className="text-xs text-slate-400 leading-relaxed mt-2">{idealPartner.temporalSync.description}</p>
+                                    <div className="border-l border-pink-600/20 pl-6">
+                                        <div className="text-[9px] uppercase tracking-widest text-seal mb-2">04 Temporal Sync</div>
+                                        <div className="text-lg font-serif text-pink-900 mb-1">{idealPartner.temporalSync.currentPhase}</div>
+                                        <p className="text-xs text-seal leading-relaxed mt-2">{idealPartner.temporalSync.description}</p>
                                     </div>
                                 </div>
                             </div>
@@ -229,16 +229,16 @@ export const TeamDynamics: React.FC<TeamDynamicsProps> = ({ chart }) => {
                         isBlurred={true}
                     >
                         <div className="grid grid-cols-1 mb-16">
-                            <div className="bg-white/2 border border-white/5 p-8 rounded-sm hover:border-pink-500/20 transition-colors group relative overflow-hidden">
-                                {intimateFriction.severity === 'High' && <div className="absolute top-0 right-0 p-2 bg-red-500/20 text-red-300 text-[10px] font-bold uppercase">High Friction Alert</div>}
+                            <div className="bg-silk/40 border border-black/5 p-8 rounded-sm hover:border-pink-600/20 transition-colors group relative overflow-hidden">
+                                {intimateFriction.severity === 'High' && <div className="absolute top-0 right-0 p-2 bg-red-600/20 text-red-700 text-[10px] font-bold uppercase">High Friction Alert</div>}
                                 <div className="flex justify-between items-start mb-4">
-                                    <h4 className="text-slate-100 font-serif">{intimateFriction.title}</h4>
-                                    <span className="text-pink-400 text-xs">▲</span>
+                                    <h4 className="text-ink font-serif font-bold">{intimateFriction.title}</h4>
+                                    <span className="text-pink-600 text-xs font-bold">▲</span>
                                 </div>
-                                <p className="text-slate-400 text-sm leading-relaxed font-mono mb-4">
+                                <p className="text-seal text-sm leading-relaxed font-mono mb-4">
                                     {intimateFriction.diagnosis}
                                 </p>
-                                <p className="text-pink-200 text-sm leading-relaxed italic border-l-2 border-pink-500/50 pl-4">
+                                <p className="text-pink-950 text-sm leading-relaxed italic border-l-2 border-pink-600/50 pl-4 font-bold">
                                     {intimateFriction.actionProtocol}
                                 </p>
                             </div>

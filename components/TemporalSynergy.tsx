@@ -80,11 +80,11 @@ export const TemporalSynergy: React.FC<TemporalSynergyProps> = ({ chart }) => {
     return (
         <div className="w-full max-w-5xl mx-auto px-4">
 
-            <div className="relative bg-midnight/50 border border-white/5 rounded-sm p-4 overflow-hidden group">
+            <div className="relative bg-silk border border-black/5 rounded-sm p-4 overflow-hidden group">
                 <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto drop-shadow-2xl">
                     {/* Grid */}
                     {[0.25, 0.5, 0.75].map(p => (
-                        <line key={p} x1={padding} y1={height * p} x2={width - padding} y2={height * p} stroke="rgba(255,255,255,0.05)" strokeDasharray="4 4" />
+                        <line key={p} x1={padding} y1={height * p} x2={width - padding} y2={height * p} stroke="rgba(0,0,0,0.03)" strokeDasharray="4 4" />
                     ))}
 
                     {/* Synergy Area (Gold) */}
@@ -93,7 +93,7 @@ export const TemporalSynergy: React.FC<TemporalSynergyProps> = ({ chart }) => {
 
                     {/* Friction Area (Red/Slate) */}
                     <path d={`M ${padding},${height - padding} ${frictionPoints} L ${width - padding},${height - padding} Z`} fill="url(#gradFriction)" opacity="0.1" />
-                    <path d={`M ${padding},${getY(timeframe[0].friction)} ${frictionPoints}`} fill="none" stroke="#64748b" strokeWidth="2" strokeDasharray="5 5" />
+                    <path d={`M ${padding},${getY(timeframe[0].friction)} ${frictionPoints}`} fill="none" stroke="#94a3b8" strokeWidth="2" strokeDasharray="5 5" />
 
                     <defs>
                         <linearGradient id="gradSynergy" x1="0" x2="0" y1="0" y2="1">
@@ -101,18 +101,18 @@ export const TemporalSynergy: React.FC<TemporalSynergyProps> = ({ chart }) => {
                             <stop offset="100%" stopColor="#C5A059" stopOpacity="0" />
                         </linearGradient>
                         <linearGradient id="gradFriction" x1="0" x2="0" y1="0" y2="1">
-                            <stop offset="0%" stopColor="#64748b" />
-                            <stop offset="100%" stopColor="#64748b" stopOpacity="0" />
+                            <stop offset="0%" stopColor="#94a3b8" />
+                            <stop offset="100%" stopColor="#94a3b8" stopOpacity="0" />
                         </linearGradient>
                     </defs>
 
                     {/* Interactive Points */}
                     {timeframe.map((t, i) => (
                         <g key={t.year} onMouseEnter={() => setHoveredYear(t.year)} onMouseLeave={() => setHoveredYear(null)} className="cursor-pointer">
-                            <circle cx={getX(i)} cy={getY(t.synergy)} r="4" className="fill-midnight stroke-gold hover:fill-gold transition-colors" />
-                            <circle cx={getX(i)} cy={getY(t.friction)} r="3" className="fill-midnight stroke-slate-500 opacity-50" />
+                            <circle cx={getX(i)} cy={getY(t.synergy)} r="4" className="fill-parchment stroke-gold hover:fill-gold transition-colors" />
+                            <circle cx={getX(i)} cy={getY(t.friction)} r="3" className="fill-parchment stroke-seal/40 opacity-50" />
                             {/* X Axis Labels */}
-                            <text x={getX(i)} y={height - 10} textAnchor="middle" className={`text-[10px] fill-slate-500 font-mono transition-colors ${hoveredYear === t.year ? 'fill-gold font-bold' : ''}`}>
+                            <text x={getX(i)} y={height - 10} textAnchor="middle" className={`text-[10px] fill-seal/60 font-mono transition-colors ${hoveredYear === t.year ? 'fill-gold font-bold' : ''}`}>
                                 {t.year}
                             </text>
                         </g>
@@ -122,15 +122,15 @@ export const TemporalSynergy: React.FC<TemporalSynergyProps> = ({ chart }) => {
                     {activeData && (
                         <line x1={getX(timeframe.findIndex(t => t.year === activeData.year))} y1={padding}
                             x2={getX(timeframe.findIndex(t => t.year === activeData.year))} y2={height - padding}
-                            stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+                            stroke="rgba(0,0,0,0.05)" strokeWidth="1" />
                     )}
                 </svg>
 
                 {/* Tooltip Overlay */}
                 {activeData && (
                     <div className="absolute top-8 left-12 animate-fade-in pointer-events-none">
-                        <div className="glass-midnight border border-gold/20 p-6 rounded-sm shadow-xl backdrop-blur-md">
-                            <h4 className="text-xl font-serif text-slate-100 mb-2">{activeData.year} <span className="text-gold text-sm">{activeData.annual.stemChar}{activeData.annual.branchChar} Year</span></h4>
+                        <div className="glass-light border border-gold/20 p-6 rounded-sm shadow-xl backdrop-blur-md">
+                            <h4 className="text-xl font-serif text-ink mb-2">{activeData.year} <span className="text-gold text-sm">{activeData.annual.stemChar}{activeData.annual.branchChar} Year</span></h4>
 
                             <div className="flex gap-8 mb-4">
                                 <div>
@@ -138,21 +138,21 @@ export const TemporalSynergy: React.FC<TemporalSynergyProps> = ({ chart }) => {
                                     <div className="text-xl font-mono text-gold">{Math.round(activeData.synergy)}</div>
                                 </div>
                                 <div>
-                                    <div className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">Friction</div>
-                                    <div className="text-xl font-mono text-slate-400">{Math.round(activeData.friction)}</div>
+                                    <div className="text-[9px] uppercase tracking-widest text-seal/50 mb-1">Friction</div>
+                                    <div className="text-xl font-mono text-seal">{Math.round(activeData.friction)}</div>
                                 </div>
                             </div>
 
                             {activeData.descriptions.length > 0 ? (
                                 <ul className="space-y-1">
                                     {activeData.descriptions.map((d, i) => (
-                                        <li key={i} className="text-[10px] text-slate-300 italic flex items-center gap-2">
+                                        <li key={i} className="text-[10px] text-seal/80 italic flex items-center gap-2">
                                             <span className="w-1 h-1 bg-gold rounded-full"></span> {d}
                                         </li>
                                     ))}
                                 </ul>
                             ) : (
-                                <p className="text-[10px] text-slate-500 italic">Neutral Atmospheric Pressure.</p>
+                                <p className="text-[10px] text-seal/50 italic">Neutral Atmospheric Pressure.</p>
                             )}
                         </div>
                     </div>
@@ -162,13 +162,13 @@ export const TemporalSynergy: React.FC<TemporalSynergyProps> = ({ chart }) => {
             <div className="grid grid-cols-2 gap-8 mt-12 text-center">
                 <div>
                     <span className="inline-block w-3 h-3 bg-gold rounded-full mb-2"></span>
-                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Synergy Index</h4>
-                    <p className="text-[10px] text-slate-600 mt-1">Expansion Phase</p>
+                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-seal/40">Synergy Index</h4>
+                    <p className="text-[10px] text-seal/60 mt-1">Expansion Phase</p>
                 </div>
                 <div>
-                    <span className="inline-block w-3 h-3 bg-slate-500 rounded-full mb-2 opacity-50"></span>
-                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Friction Index</h4>
-                    <p className="text-[10px] text-slate-600 mt-1">Consolidation Phase</p>
+                    <span className="inline-block w-3 h-3 bg-seal/40 rounded-full mb-2 opacity-50"></span>
+                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-seal/40">Friction Index</h4>
+                    <p className="text-[10px] text-seal/60 mt-1">Consolidation Phase</p>
                 </div>
             </div>
         </div>

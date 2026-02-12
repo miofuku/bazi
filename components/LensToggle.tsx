@@ -30,11 +30,11 @@ export const LENSES: { id: PrismLens; label: string; icon: string; desc: string 
 export const LensToggle: React.FC<LensToggleProps> = ({ activeLens, onLensChange }) => {
     return (
         <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto mb-12">
-            <h3 className="text-[10px] uppercase tracking-[0.8em] text-gold/60 mb-8 font-bold">Multi-Lens Toggle System</h3>
-            <div className="flex w-full bg-midnight-light/50 p-1.5 rounded-full border border-white/5 relative backdrop-blur-md overflow-hidden">
+            <h3 className="text-[10px] uppercase tracking-[0.8em] text-gold/80 mb-8 font-bold">Multi-Lens Toggle System</h3>
+            <div className="flex w-full bg-silk/80 p-1.5 rounded-full border border-black/5 relative backdrop-blur-md overflow-hidden">
                 {/* Fixed Sliding Indicator Pill */}
                 <div
-                    className="absolute h-[calc(100%-12px)] bg-white/5 border border-white/10 shadow-lg rounded-full transition-all duration-500 ease-in-out pointer-events-none z-0"
+                    className="absolute h-[calc(100%-12px)] bg-white/60 border border-black/5 shadow-md rounded-full transition-all duration-500 ease-in-out pointer-events-none z-0"
                     style={{
                         width: `calc((100% - 12px) / ${LENSES.length})`,
                         left: `calc(6px + ((${LENSES.findIndex(l => l.id === activeLens)} * (100% - 12px)) / ${LENSES.length}))`
@@ -49,13 +49,13 @@ export const LensToggle: React.FC<LensToggleProps> = ({ activeLens, onLensChange
                             onClick={() => onLensChange(lens.id)}
                             className="relative flex-1 flex flex-col items-center justify-center py-4 rounded-full transition-all duration-300 group z-10"
                         >
-                            <div className={`flex items-center gap-2 mb-1 transition-colors duration-300 ${isActive ? 'text-gold' : 'text-slate-500 group-hover:text-slate-300'}`}>
+                            <div className={`flex items-center gap-2 mb-1 transition-colors duration-300 ${isActive ? 'text-gold' : 'text-seal group-hover:text-ink'}`}>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={lens.icon} />
                                 </svg>
-                                <span className={`text-xs font-bold uppercase tracking-widest ${isActive ? 'text-slate-100' : ''}`}>{lens.label}</span>
+                                <span className={`text-xs font-bold uppercase tracking-widest ${isActive ? 'text-ink' : ''}`}>{lens.label}</span>
                             </div>
-                            <span className={`text-[9px] uppercase tracking-wider transition-colors duration-300 ${isActive ? 'text-gold/60' : 'text-slate-600'}`}>
+                            <span className={`text-[9px] uppercase tracking-wider transition-colors duration-300 ${isActive ? 'text-gold' : 'text-seal/50'}`}>
                                 {lens.desc}
                             </span>
                         </button>

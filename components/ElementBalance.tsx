@@ -40,7 +40,7 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores, 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-16">
-        <h2 className="text-3xl font-serif text-slate-100 mb-3 tracking-tight">The Core Equilibrium</h2>
+        <h2 className="text-3xl font-serif text-ink mb-3 tracking-tight">The Core Equilibrium</h2>
       </div>
 
       <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -49,7 +49,7 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores, 
           <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-2xl">
             {/* Background Grids */}
             {[20, 40].map(r => (
-              <circle key={r} cx="50" cy="50" r={r} stroke="rgba(255,255,255,0.05)" fill="none" />
+              <circle key={r} cx="50" cy="50" r={r} stroke="rgba(0,0,0,0.03)" fill="none" />
             ))}
             {/* Axes */}
             {ORDERED_ELEMENTS.map((el, i) => {
@@ -58,11 +58,11 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores, 
               const y = 50 + Math.sin(angle) * 40;
               return (
                 <g key={el}>
-                  <line x1="50" y1="50" x2={x} y2={y} stroke="rgba(255,255,255,0.1)" />
+                  <line x1="50" y1="50" x2={x} y2={y} stroke="rgba(0,0,0,0.05)" />
                   {/* Labels */}
                   <text x={50 + Math.cos(angle) * 50} y={50 + Math.sin(angle) * 50}
                     textAnchor="middle" dominantBaseline="middle"
-                    className="text-[3px] fill-slate-400 font-bold uppercase tracking-widest cursor-pointer hover:fill-gold transition-colors"
+                    className="text-[3px] fill-seal/60 font-bold uppercase tracking-widest cursor-pointer hover:fill-gold transition-colors"
                     onMouseEnter={() => setHovered(el)}
                     onMouseLeave={() => setHovered(null)}
                   >
@@ -73,7 +73,7 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores, 
             })}
 
             {/* Data Polygon */}
-            <polygon points={points} fill="rgba(197, 160, 89, 0.2)" stroke="#C5A059" strokeWidth="0.5" className="filter drop-shadow-[0_0_8px_rgba(197,160,89,0.3)] transition-all duration-1000 ease-out" />
+            <polygon points={points} fill="rgba(197, 160, 89, 0.15)" stroke="#C5A059" strokeWidth="0.5" className="filter drop-shadow-[0_0_8px_rgba(197,160,89,0.1)] transition-all duration-1000 ease-out" />
 
             {/* Vertices */}
             {ORDERED_ELEMENTS.map((el, i) => {
@@ -95,14 +95,14 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores, 
 
         {/* 2. Context Panel */}
         <div>
-          <div className="glass-midnight border-gold/10 p-8 rounded-sm min-h-[300px] flex flex-col justify-center transition-all duration-300">
+          <div className="glass-light border-gold/10 p-8 rounded-sm min-h-[300px] flex flex-col justify-center transition-all duration-300 shadow-sm">
             {hovered ? (
               <div className="animate-fade-in">
                 <span className={`text-xs font-bold uppercase tracking-widest mb-2 block ${ELEMENT_COLORS[hovered]}`}>
                   {FIVE_ELEMENTS_INFO[hovered].english} Node Active
                 </span>
-                <h3 className="text-2xl font-serif text-slate-100 mb-4">{FIVE_ELEMENTS_INFO[hovered].keywords}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">
+                <h3 className="text-2xl font-serif text-ink mb-4">{FIVE_ELEMENTS_INFO[hovered].keywords}</h3>
+                <p className="text-seal text-sm leading-relaxed">
                   {hovered === dayMaster.element
                     ? "This is your Core Identifier. It dictates your fundamental operating logic and resource needs."
                     : "An auxiliary system providing resource inputs (Resource) or output channels (Output) relative to your core."}
@@ -113,8 +113,8 @@ export const ElementBalance: React.FC<ElementBalanceProps> = ({ counts, scores, 
                 <div className="text-gold text-4xl mb-4 font-serif italic">
                   {Math.round(((data[dominant] || 0) / total) * 100)}%
                 </div>
-                <h4 className="text-slate-200 font-bold uppercase tracking-widest text-xs mb-2">Dominant Frequency: {FIVE_ELEMENTS_INFO[dominant].english}</h4>
-                <p className="text-[10px] text-slate-500">Hover over the radar nodes to decode specific elemental intelligences.</p>
+                <h4 className="text-ink font-bold uppercase tracking-widest text-xs mb-2">Dominant Frequency: {FIVE_ELEMENTS_INFO[dominant].english}</h4>
+                <p className="text-[10px] text-seal/50">Hover over the radar nodes to decode specific elemental intelligences.</p>
               </div>
             )}
           </div>
