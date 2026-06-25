@@ -4,6 +4,7 @@ import { NatureResult } from './components/result/NatureResult';
 import { calculateBazi } from './services/baziService';
 import { BaziChart, Gender } from './types';
 import { Methodology } from './components/Methodology';
+import { TenNatures, StemMotif } from './components/TenNatures';
 import { Footer } from './components/Footer';
 
 // A quiet, growing-vine line that drifts across the background.
@@ -43,7 +44,7 @@ const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (
         </div>
       </div>
       <nav className="hidden md:flex items-center gap-10">
-        {[['The idea', 'idea'], ['The method', 'method']].map(([label, id]) => (
+        {[['The ten natures', 'natures'], ['How it reads', 'method'], ['Begin', 'begin']].map(([label, id]) => (
           <span
             key={id}
             onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })}
@@ -92,63 +93,90 @@ const App: React.FC = () => {
       <Header onHome={resetApp} />
       <GrowthFlow />
 
-      <main className="relative z-10 h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth">
-        <>
-            {/* HERO */}
-            <section className="h-screen w-full snap-start flex flex-col items-center justify-center px-6 pt-20">
-              <div className="max-w-3xl mx-auto text-center">
-                <span className="text-sage mx-auto mb-8 inline-block"><Sprig className="w-12 h-12" /></span>
-                <h2 className="text-5xl md:text-7xl font-display font-semibold text-ink mb-8 tracking-tight leading-[1.05]">
-                  Your birthday holds <span className="text-sage italic">your nature</span>.
-                </h2>
-                <p className="text-lg md:text-xl font-sans text-stone max-w-2xl mx-auto leading-relaxed mb-12">
-                  In the old Chinese art of 八字象法, each of us is a living thing — a tree, a river, a flame — born into a particular season. Rootwise reads your birth as that image: who you are, and the conditions that help you flourish.
-                </p>
-                <div className="flex justify-center gap-5 flex-wrap">
-                  <button
-                    onClick={() => document.getElementById('begin')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="bg-sage hover:bg-sage-deep text-white px-9 py-4 font-sans font-semibold uppercase tracking-widest transition-all rounded-full text-xs md:text-sm"
-                  >
-                    Reveal my nature
-                  </button>
-                  <button
-                    onClick={() => document.getElementById('idea')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="border border-ink/15 hover:border-sage/60 text-ink px-9 py-4 font-sans font-semibold uppercase tracking-widest transition-all rounded-full hover:bg-sage/5 text-xs md:text-sm"
-                  >
-                    The idea
-                  </button>
-                </div>
+      <main className="relative z-10">
+        {/* HERO — editorial, asymmetric */}
+        <section className="relative flex min-h-screen items-center px-6 pt-24 pb-16">
+          <div className="mx-auto grid w-full max-w-5xl items-center gap-14 md:grid-cols-[1.45fr_1fr]">
+            <div className="animate-slide-up">
+              <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">
+                You are a part of nature
+              </p>
+              <h2 className="mt-7 font-display text-5xl font-semibold leading-[1.0] tracking-tight text-ink md:text-7xl">
+                You're not a sign.
+                <br />
+                <span className="italic text-sage">You're a living thing.</span>
+              </h2>
+              <p className="mt-8 max-w-xl text-lg font-sans leading-relaxed text-stone">
+                A tree grows toward light; a river finds its channel; a seed waits for its season. People grow by the same rules. Rootwise shows you the living thing you are, the climate you grew up in, and the conditions that help you flourish.
+              </p>
+              <div className="mt-10 flex flex-wrap gap-4">
+                <button
+                  onClick={() => document.getElementById('begin')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="rounded-full bg-sage px-9 py-4 font-sans text-xs font-semibold uppercase tracking-widest text-white transition-all hover:bg-sage-deep md:text-sm"
+                >
+                  Find your nature
+                </button>
+                <button
+                  onClick={() => document.getElementById('natures')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="rounded-full border border-ink/15 px-9 py-4 font-sans text-xs font-semibold uppercase tracking-widest text-ink transition-all hover:border-sage/60 hover:bg-sage/5 md:text-sm"
+                >
+                  See the ten natures
+                </button>
               </div>
-            </section>
+            </div>
 
-            {/* THE IDEA */}
-            <section id="idea" className="h-screen w-full snap-start flex flex-col items-center justify-center px-8 border-y border-black/5 bg-mist/40 backdrop-blur-sm">
-              <div className="max-w-3xl mx-auto text-center">
-                <span className="inline-block px-3 py-1 bg-sage text-white text-[11px] uppercase tracking-[0.3em] font-semibold mb-8 rounded-full">The idea</span>
-                <h3 className="text-4xl md:text-5xl font-display font-semibold text-ink mb-10 tracking-tight">A person is a part of nature</h3>
-                <p className="text-2xl md:text-3xl font-display text-ink leading-snug italic">
-                  “The same forces that shape a tree, a field, or a river shape a person. Your birth names which living thing you are — and the season you were born into is the climate you first had to grow in.”
-                </p>
-              </div>
-            </section>
+            {/* Specimen sheet of the ten glyphs */}
+            <div className="hidden md:block">
+              <StemMotif />
+            </div>
+          </div>
+        </section>
 
-            {/* THE METHOD */}
-            <section id="method" className="min-h-screen w-full snap-start flex flex-col items-center justify-center px-6 py-24">
-              <div className="max-w-5xl mx-auto w-full">
-                <Methodology />
-              </div>
-            </section>
+        {/* PULL QUOTE — editorial band */}
+        <section className="border-y border-ink/5 bg-mist/40 px-6 py-28 backdrop-blur-sm">
+          <div className="mx-auto max-w-4xl">
+            <p className="font-display text-3xl leading-snug text-ink md:text-[2.6rem] md:leading-[1.25]">
+              <span className="text-sage">“</span>The same forces that shape a tree, a field, or a river shape a person. Your birth names which living thing you are — and the season you were born into is the climate you first had to grow in.<span className="text-sage">”</span>
+            </p>
+          </div>
+        </section>
 
-            {/* INPUT */}
-            <section id="begin" className="h-screen w-full snap-start flex flex-col items-center justify-center px-6">
-              <div className="animate-slide-up w-full max-w-4xl mx-auto flex flex-col items-center text-center">
-                <span className="inline-block px-3 py-1 bg-sage text-white text-[11px] uppercase tracking-[0.3em] font-semibold mb-8 rounded-full">Begin</span>
-                <h3 className="text-4xl md:text-5xl font-display font-semibold text-ink mb-4 tracking-tight">When were you born?</h3>
-                <p className="text-stone mb-12 max-w-md">Your date, time, and sex set the four pillars and the seasons of your life ahead.</p>
-                <InputForm onCalculate={handleCalculate} />
+        {/* THE TEN NATURES — the field guide */}
+        <section id="natures" className="px-6 py-28">
+          <div className="mx-auto max-w-5xl">
+            <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">The ten natures</p>
+                <h3 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink md:text-5xl">
+                  Everyone is one of ten living things
+                </h3>
               </div>
-            </section>
-        </>
+              <p className="max-w-xs text-sm leading-relaxed text-stone">
+                Your day of birth decides which — then the season you arrived in colours everything. Find yours below.
+              </p>
+            </div>
+            <TenNatures />
+          </div>
+        </section>
+
+        {/* HOW IT READS */}
+        <section id="method" className="border-y border-ink/5 bg-mist/40 px-6 py-28">
+          <div className="mx-auto w-full max-w-5xl">
+            <Methodology />
+          </div>
+        </section>
+
+        {/* BEGIN */}
+        <section id="begin" className="px-6 py-28">
+          <div className="mx-auto flex w-full max-w-4xl flex-col items-center text-center">
+            <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">Begin</p>
+            <h3 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink md:text-5xl">When were you born?</h3>
+            <p className="mb-12 mt-4 max-w-md text-stone">
+              Your date, time, and place in the year reveal the living thing you are — and the seasons of the life ahead.
+            </p>
+            <InputForm onCalculate={handleCalculate} />
+          </div>
+        </section>
       </main>
 
       <Footer />

@@ -1,28 +1,19 @@
 import React from 'react';
 import { StemImageProfile } from '../../content/xiangfa';
-import { ELEMENT_COLORS } from '../../utils/constants';
-import { ElementIcon } from './icons';
+import { NatureArt } from '../illustrations/NatureArt';
 import { useAccent } from './AtmosphereContext';
 
-// "Your Nature" — the day master as a living natural image.
+// "Your Nature" — the person rendered as a living natural image.
 export const YourNature: React.FC<{ stem: StemImageProfile }> = ({ stem }) => {
   const { accent, accentDeep } = useAccent();
   return (
     <section className="grid items-center gap-10 md:grid-cols-[auto_1fr]">
-      {/* Big glyph + symbol */}
-      <div className="flex flex-col items-center">
-        <div className={`flex h-36 w-36 items-center justify-center rounded-full bg-white/55 ring-1 ring-ink/5 ${ELEMENT_COLORS[stem.element]}`}>
-          <span className="font-sc text-7xl font-semibold">{stem.stem}</span>
-        </div>
-        <span className={`mt-4 ${ELEMENT_COLORS[stem.element]}`}>
-          <ElementIcon type={stem.symbol} className="h-8 w-8 stroke-[1.3]" />
-        </span>
-      </div>
+      <NatureArt id={stem.symbol} accent={accent} className="h-40 w-40 md:h-44 md:w-44" />
 
       <div>
         <p className="font-sans text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: accentDeep }}>Your nature</p>
-        <h2 className="mt-2 font-display text-4xl font-semibold leading-tight text-ink md:text-5xl">{stem.imageTitle}</h2>
-        <p className="mt-3 font-display text-lg italic text-stone">{stem.imageSubtitle}</p>
+        <h2 className="mt-2 font-display text-4xl font-semibold leading-tight text-ink md:text-5xl">{stem.archetypeName}</h2>
+        <p className="mt-3 font-display text-lg italic text-stone">{stem.imageTitle}</p>
         <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-ink/80">{stem.essence}</p>
 
         <div className="mt-8 grid gap-6 sm:grid-cols-2">

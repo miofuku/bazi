@@ -28,7 +28,8 @@ export interface StemImageProfile {
   stem: StemChar;
   element: ElementType;
   polarity: 'Yang' | 'Yin';
-  symbol: string;          // key into STEM_SYMBOLS (tree/sun/river…)
+  symbol: string;          // key into STEM_SYMBOLS / NatureArt (tree/sun/river…)
+  archetypeName: string;   // plain-English name shown on the surface, e.g. "The Tree"
   imageTitle: string;      // e.g. "A tree reaching for the sky"
   imageSubtitle: string;   // short poetic line under the title
   essence: string;         // 2–3 sentence psychological core

@@ -22,6 +22,7 @@ const N = {
 export const JIA: StemImageProfile = {
   stem: '甲', element: WOOD, polarity: 'Yang',
   symbol: 'tree',
+  archetypeName: 'The Tree',
   imageTitle: 'A great tree reaching for the sky',
   imageSubtitle: 'The first of the ten — built to grow upward and be seen.',
   essence:
@@ -40,6 +41,7 @@ export const JIA: StemImageProfile = {
 export const YI: StemImageProfile = {
   stem: '乙', element: WOOD, polarity: 'Yin',
   symbol: 'sprout',
+  archetypeName: 'The Vine',
   imageTitle: 'Grass, flowers, and climbing vines',
   imageSubtitle: 'Soft, adaptive, and quietly unkillable.',
   essence:
@@ -61,6 +63,7 @@ export const YI: StemImageProfile = {
 export const BING: StemImageProfile = {
   stem: '丙', element: FIRE, polarity: 'Yang',
   symbol: 'sun',
+  archetypeName: 'The Sun',
   imageTitle: 'The sun high in the sky',
   imageSubtitle: 'Radiant by nature — it shines on everyone the same.',
   essence:
@@ -88,6 +91,7 @@ export const BING: StemImageProfile = {
 export const DING: StemImageProfile = {
   stem: '丁', element: FIRE, polarity: 'Yin',
   symbol: 'lantern',
+  archetypeName: 'The Flame',
   imageTitle: 'The hearth-fire and the lantern',
   imageSubtitle: 'The human flame — kept alive so it is always there when needed.',
   essence:
@@ -115,6 +119,7 @@ export const DING: StemImageProfile = {
 export const WU: StemImageProfile = {
   stem: '戊', element: EARTH, polarity: 'Yang',
   symbol: 'rock',
+  archetypeName: 'The Mountain',
   imageTitle: 'The mountain and the wild land',
   imageSubtitle: 'What matters is not the mountain, but what lives on it.',
   essence:
@@ -136,6 +141,7 @@ export const WU: StemImageProfile = {
 export const JI: StemImageProfile = {
   stem: '己', element: EARTH, polarity: 'Yin',
   symbol: 'field',
+  archetypeName: 'The Field',
   imageTitle: 'Tended farmland and garden soil',
   imageSubtitle: 'Its whole worth is in what it grows.',
   essence:
@@ -157,6 +163,7 @@ export const JI: StemImageProfile = {
 export const GENG: StemImageProfile = {
   stem: '庚', element: METAL, polarity: 'Yang',
   symbol: 'sword',
+  archetypeName: 'The Blade',
   imageTitle: 'Raw ore, forged into a blade',
   imageSubtitle: 'From useless rock, to useful tool, to mastered instrument.',
   essence:
@@ -180,6 +187,7 @@ export const GENG: StemImageProfile = {
 export const XIN: StemImageProfile = {
   stem: '辛', element: METAL, polarity: 'Yin',
   symbol: 'gem',
+  archetypeName: 'The Jewel',
   imageTitle: 'A jewel that wants to be seen',
   imageSubtitle: 'A gem that no one sees has lost the point of being a gem.',
   essence:
@@ -207,6 +215,7 @@ export const XIN: StemImageProfile = {
 export const REN: StemImageProfile = {
   stem: '壬', element: WATER, polarity: 'Yang',
   symbol: 'river',
+  archetypeName: 'The River',
   imageTitle: 'The river, the lake, the open sea',
   imageSubtitle: 'Vast moving water that can flow anywhere.',
   essence:
@@ -234,6 +243,7 @@ export const REN: StemImageProfile = {
 export const GUI: StemImageProfile = {
   stem: '癸', element: WATER, polarity: 'Yin',
   symbol: 'rain',
+  archetypeName: 'The Rain',
   imageTitle: 'Rain, dew, and the quiet stream',
   imageSubtitle: 'Falling softly to make things grow.',
   essence:

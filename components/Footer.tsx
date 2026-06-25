@@ -18,15 +18,18 @@ export const Footer: React.FC = () => (
       <h3 className="text-2xl font-display font-semibold text-ink mb-2 tracking-tight">Rootwise</h3>
       <p className="text-[10px] uppercase tracking-[0.5em] text-sage-deep mb-12 font-semibold">Your nature, by season</p>
 
-      <p className="text-sm text-stone max-w-md leading-relaxed mb-12">
-        Rootwise is a quiet space for self-reflection drawn from 八字象法. It offers a way to understand your temperament — not a prediction of fortune, luck, or destiny.
+      <p className="text-sm text-stone max-w-md leading-relaxed mb-4">
+        A quiet space for self-reflection — a way to understand your temperament, not a prediction of fortune, luck, or destiny.
+      </p>
+      <p className="text-xs text-stone/70 italic max-w-md leading-relaxed mb-12">
+        Rooted in 象法 — an old Chinese way of seeing a person as part of nature.
       </p>
 
       <div className="w-full pt-10 border-t border-black/5 flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="text-[10px] text-stone uppercase tracking-widest">
           &copy; {new Date().getFullYear()} Rootwise · made with care for human nature
         </p>
-        <p className="text-[10px] text-stone uppercase tracking-widest">象法 · the image method</p>
+        <p className="text-[10px] text-stone uppercase tracking-widest">Your nature, by season</p>
       </div>
     </div>
   </footer>

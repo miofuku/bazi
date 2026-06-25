@@ -27,10 +27,10 @@ const cards = [
 export const Methodology: React.FC = () => (
   <div className="w-full max-w-5xl mx-auto px-4">
     <div className="text-center mb-16">
-      <span className="inline-block px-3 py-1 bg-sage text-white text-[11px] uppercase tracking-[0.3em] font-semibold mb-8 rounded-full">The method · 八字象法</span>
+      <span className="inline-block px-3 py-1 bg-sage text-white text-[11px] uppercase tracking-[0.3em] font-semibold mb-8 rounded-full">How it works</span>
       <h3 className="text-4xl md:text-5xl font-display font-semibold text-ink mb-6 tracking-tight">Reading a life the way you read a landscape</h3>
       <p className="text-stone max-w-2xl mx-auto leading-relaxed">
-        象法 — the “image method” — is an old, grounded way of reading the Chinese birth chart. It keeps the same calculation behind Bazi, but trades fortune-telling for something closer to ecology and psychology: harmony between a person and the natural world.
+        We grow the way living things grow. So instead of labels and predictions, Rootwise looks at you as a part of the natural world — the living thing you most resemble, the season it took root in, and the conditions it needs to thrive. It's less fortune-telling, more ecology and psychology: the quiet harmony between a person and nature.
       </p>
     </div>
 

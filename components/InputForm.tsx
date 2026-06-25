@@ -195,7 +195,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
           <WheelColumn items={minutes} value={timeValue.minute} onChange={(v) => setTimeValue({ ...timeValue, minute: Number(v) })} label="Min" />
         </div>
 
-        {/* Sex (sets the direction of the life seasons / 大运) */}
+        {/* Sex (sets the direction of the life seasons) */}
         <div className="bg-black/[0.02] p-6 border border-black/5 rounded-lg">
           <p className="text-[10px] font-sans text-stone uppercase tracking-[0.2em] text-center mb-4">Sex at birth</p>
           <div className="flex justify-center gap-8">
