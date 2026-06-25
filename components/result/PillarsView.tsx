@@ -2,12 +2,20 @@ import React from 'react';
 import { BaziChart, Pillar } from '../../types';
 import { ELEMENT_COLORS, STEM_SYMBOLS, BRANCH_SYMBOLS } from '../../utils/constants';
 import { ElementIcon } from './icons';
+import { useAccent } from './AtmosphereContext';
 
 // The four pillars, shown calmly: Chinese glyphs as accents, the Day pillar
 // (the self) gently highlighted. No fortune-telling deity labels.
-const PillarColumn: React.FC<{ pillar: Pillar; label: string; isSelf?: boolean }> = ({ pillar, label, isSelf }) => (
-  <div className={`flex flex-col items-center rounded-2xl p-5 transition-all duration-500 ${isSelf ? 'bg-sage/8 ring-1 ring-sage/30' : 'bg-white/40 ring-1 ring-ink/5'}`}>
-    <div className={`mb-4 text-[10px] font-sans font-semibold uppercase tracking-[0.25em] ${isSelf ? 'text-sage-deep' : 'text-stone/70'}`}>
+const PillarColumn: React.FC<{ pillar: Pillar; label: string; isSelf?: boolean }> = ({ pillar, label, isSelf }) => {
+  const { accent, accentDeep } = useAccent();
+  return (
+  <div
+    className="flex flex-col items-center rounded-2xl p-5 ring-1 transition-all duration-500"
+    style={isSelf
+      ? { background: `${accent}14`, '--tw-ring-color': `${accent}4d` } as React.CSSProperties
+      : { background: 'rgba(255,255,255,0.4)', '--tw-ring-color': 'rgba(38,48,43,0.05)' } as React.CSSProperties}
+  >
+    <div className="mb-4 text-[10px] font-sans font-semibold uppercase tracking-[0.25em]" style={{ color: isSelf ? accentDeep : 'rgba(91,102,96,0.7)' }}>
       {isSelf ? 'You' : label}
     </div>
 
@@ -40,7 +48,8 @@ const PillarColumn: React.FC<{ pillar: Pillar; label: string; isSelf?: boolean }
       </div>
     )}
   </div>
-);
+  );
+};
 
 export const PillarsView: React.FC<{ chart: BaziChart }> = ({ chart }) => (
   <div className="grid grid-cols-2 gap-4 md:grid-cols-4">

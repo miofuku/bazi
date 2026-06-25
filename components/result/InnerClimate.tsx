@@ -2,6 +2,7 @@ import React from 'react';
 import { ElementType } from '../../types';
 import { ELEMENT_BG_COLORS, ELEMENT_COLORS } from '../../utils/constants';
 import { ELEMENT_NATURE } from './icons';
+import { useAccent } from './AtmosphereContext';
 
 interface InnerClimateProps {
   elementShare: Record<ElementType, number>;
@@ -14,9 +15,11 @@ const ORDER: ElementType[] = [
 ];
 
 // Element balance as an ecological "climate strip" rather than a corporate radar.
-export const InnerClimate: React.FC<InnerClimateProps> = ({ elementShare, dominantElement, weakestElement }) => (
-  <section>
-    <p className="font-sans text-xs font-semibold uppercase tracking-[0.3em] text-sage-deep">Your inner climate</p>
+export const InnerClimate: React.FC<InnerClimateProps> = ({ elementShare, dominantElement, weakestElement }) => {
+  const { accentDeep } = useAccent();
+  return (
+    <section>
+    <p className="font-sans text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: accentDeep }}>Your inner climate</p>
     <h2 className="mt-2 font-display text-3xl font-semibold text-ink md:text-4xl">The weather you carry inside</h2>
     <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink/70">
       The five natural forces, in the proportions they run through you. Most of us lean heavy in one and light in another — that imbalance is simply your climate, not a flaw.
@@ -54,4 +57,5 @@ export const InnerClimate: React.FC<InnerClimateProps> = ({ elementShare, domina
       {' '}is the quietest — often the very quality that, when tended, helps you feel whole.
     </p>
   </section>
-);
+  );
+};

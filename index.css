@@ -46,4 +46,17 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  /* Landing background: a soft natural sky drifting slowly through the seasons */
+  .season-sky {
+    background: linear-gradient(135deg, #EAF1E3 0%, #F4ECDC 28%, #E6EEF3 55%, #ECEAF2 78%, #EAF1E3 100%);
+    background-size: 300% 300%;
+    animation: drift 44s ease-in-out infinite;
+  }
+}
+
+@keyframes drift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }

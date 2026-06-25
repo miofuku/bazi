@@ -77,14 +77,23 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  if (chart) {
+    return (
+      <div className="relative min-h-screen text-ink font-sans">
+        <NatureResult chart={chart} onReset={resetApp} />
+        <Footer />
+      </div>
+    );
+  }
+
   return (
-    <div className="relative min-h-screen text-ink font-sans generative-bg">
+    <div className="relative min-h-screen text-ink font-sans">
+      <div className="fixed inset-0 -z-10 season-sky" aria-hidden />
       <Header onHome={resetApp} />
       <GrowthFlow />
 
-      <main className={`relative z-10 ${chart ? 'pt-28 pb-24 px-4 md:px-6 max-w-4xl mx-auto' : 'h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth'}`}>
-        {!chart ? (
-          <>
+      <main className="relative z-10 h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth">
+        <>
             {/* HERO */}
             <section className="h-screen w-full snap-start flex flex-col items-center justify-center px-6 pt-20">
               <div className="max-w-3xl mx-auto text-center">
@@ -139,18 +148,7 @@ const App: React.FC = () => {
                 <InputForm onCalculate={handleCalculate} />
               </div>
             </section>
-          </>
-        ) : (
-          <div className="animate-fade-in">
-            <button
-              onClick={resetApp}
-              className="text-stone hover:text-sage text-xs font-semibold uppercase tracking-widest transition-colors mb-10 flex items-center gap-2"
-            >
-              <span>←</span> Read another
-            </button>
-            <NatureResult chart={chart} />
-          </div>
-        )}
+        </>
       </main>
 
       <Footer />
