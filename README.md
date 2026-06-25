@@ -1,20 +1,33 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Rootwise
 
-# Run and deploy your AI Studio app
+**Your nature, by season.**
 
-This contains everything you need to run your app locally.
+Rootwise reads your birth chart through **八字象法** (the "image method") — an old, grounded
+way of reading the Chinese four pillars. It keeps the same Bazi calculation, but trades
+fortune-telling for something closer to ecology and psychology: each person is a living
+thing in nature (a tree, the sun, a river, gentle rain), born into a particular season,
+with conditions that help them flourish.
 
-View your app in AI Studio: https://ai.studio/apps/temp/1
+This is a space for self-understanding, not a prediction of fortune, luck, or destiny.
 
-## Run Locally
+## Run locally
 
-**Prerequisites:**  Node.js
-
+**Prerequisites:** Node.js
 
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+2. Run the app:
+   `npm run dev`  (http://localhost:3000)
+
+No API keys or backend required — the chart is computed client-side with
+[`tyme4ts`](https://www.npmjs.com/package/tyme4ts).
+
+## How it works
+
+- `services/baziService.ts` — computes the four pillars, day master, hidden stems,
+  element scores, and life cycles (大运).
+- `content/xiangfa/` — the curated 象法 content model: ten natural-image profiles
+  (one per day master), seasonal climate readings, and the mapping from a chart to a
+  reading (`buildXiangfaReading`).
+- `components/result/` — the reading experience: Your Nature, the Season You Were Born
+  Into, What Helps You Grow, Your Inner Climate, and the four pillars.

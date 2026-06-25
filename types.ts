@@ -19,12 +19,6 @@ export enum Polarity {
 export type ElementCounts = Record<ElementType, number>;
 export type ElementScore = Record<ElementType, number>;
 
-export interface ElementInfo {
-  chinese?: string;
-  english: string;
-  keywords: string;
-}
-
 export interface Stem {
   name: string; // e.g., Jia
   chinese: string; // e.g., 甲
@@ -50,14 +44,6 @@ export interface Branch {
   keywords?: string;
 }
 
-export interface InteractionInfo {
-  relation: string;
-  traditional?: string;
-  modern: string;
-  context: string;
-  keyword?: string;
-}
-
 export interface Pillar {
   stem: Stem;
   branch: Branch;
@@ -71,14 +57,6 @@ export interface DaYun {
   pillar: Pillar;
 }
 
-export interface SystemMetric {
-  label: string;
-  value: number; // 0-100
-  description: string;
-  founderInsight?: string;
-  status?: string;
-}
-
 export interface BaziChart {
   date?: Date;
   yearPillar: Pillar;
@@ -89,7 +67,4 @@ export interface BaziChart {
   daYun: DaYun[];
   elementCounts: ElementCounts;
   elementScores?: ElementScore; // Detailed strength scores
-  systemMetrics?: Record<string, SystemMetric>;
-  geneticId?: string; // e.g. "CHRONO-8829-X"
-  solarTimeCorrection?: string; // e.g. "+12min"
 }

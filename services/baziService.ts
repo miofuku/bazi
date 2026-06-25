@@ -91,7 +91,6 @@ export const calculateBazi = (
 
 import { calculateDeity, getHiddenStemsForBranch, DEITY_FULL_NAMES } from '../utils/baziCalculator';
 import { calculateFiveElementScores } from '../utils/FiveElementScorer';
-import { calculateSystemMetrics } from '../utils/systemMetrics';
 
 // Helper to aggregate counts and return final chart structure
 const generateChartResult = (
@@ -161,17 +160,5 @@ const generateChartResult = (
 
     elementCounts,
     elementScores: scores,
-    systemMetrics: calculateSystemMetrics({
-      yearPillar,
-      monthPillar,
-      dayPillar,
-      hourPillar,
-      dayMaster: dayPillar.stem,
-      daYun,
-      elementCounts,
-      elementScores: scores
-    }),
-    geneticId: `CHRONO-${Math.floor(Math.random() * 9000) + 1000}-X`,
-    solarTimeCorrection: "+0min (UTC Adjusted)"
   };
 };

@@ -4,13 +4,13 @@
 
 @layer base {
   body {
-    @apply bg-parchment text-ink;
+    @apply bg-canvas text-ink;
   }
 }
 
 @layer components {
   .generative-bg {
-    background: radial-gradient(circle at 50% 50%, #F3F0E8 0%, #FBFAF8 100%);
+    background: radial-gradient(circle at 50% 0%, #ECEEE6 0%, #F7F5EF 60%);
     position: relative;
     overflow: hidden;
   }
@@ -28,11 +28,11 @@
   }
 
   .text-glow-gold {
-    text-shadow: 0 0 8px rgba(184, 134, 11, 0.2);
+    text-shadow: 0 0 8px rgba(110, 139, 106, 0.25);
   }
 
   .border-gold-fade {
-    border-image: linear-gradient(to bottom, #B8860B, transparent) 1;
+    border-image: linear-gradient(to bottom, #6E8B6A, transparent) 1;
   }
 
   .glass-light {

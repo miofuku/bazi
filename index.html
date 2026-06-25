@@ -4,44 +4,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CHRONOSOPHY</title>
+  <title>Rootwise — Your nature, by season</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Noto+Serif+SC:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@200;300;400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Noto+Serif+SC:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap"
     rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            midnight: '#0B1221', // Midnight Blue
-            'midnight-light': '#1A2333',
-            gold: '#B8860B', // Balanced Goldenrod for Light Mode
-            'gold-light': '#DAA520',
-            parchment: '#FBFAF8', // Primary Light Background
-            silk: '#F3F0E8', // Secondary Background
-            ink: '#1A202C', // Primary Text
-            seal: '#4A5568', // Secondary Text
-            slate: {
-              400: '#94A3B8',
-              500: '#64748B',
-              600: '#475569',
-              700: '#334155',
-              800: '#1E293B',
-              900: '#0F172A',
-            },
-            paper: '#F8FAFC',
+            // Rootwise — calm botanical / earth palette
+            canvas: '#F7F5EF', // warm paper (primary background)
+            mist: '#ECEEE6', // secondary background
+            parchment: '#F7F5EF', // legacy alias → warm paper
+            silk: '#ECEEE6', // legacy alias → mist
+            ink: '#26302B', // deep evergreen-ink (primary text)
+            seal: '#5B6660', // legacy alias → stone
+            stone: '#5B6660', // secondary text
+            sage: '#6E8B6A', // primary accent / CTA
+            'sage-deep': '#4F6B4C', // accent hover / emphasis
+            gold: '#6E8B6A', // legacy alias → sage (safety net)
+            'gold-light': '#4F6B4C', // legacy alias → sage-deep
+            clay: '#B98A66', // warm secondary accent
+            // five natural forces
             wood: '#4A6741',
-            fire: '#B24C3B',
+            fire: '#C4664A',
             earth: '#8C7051',
-            metal: '#B8860B',
+            metal: '#8A8C84',
             water: '#3D5A6C',
           },
           fontFamily: {
-            serif: ['Playfair Display', 'serif'],
+            display: ['Fraunces', 'serif'],
+            serif: ['Fraunces', 'serif'],
             sans: ['Inter', 'sans-serif'],
+            sc: ['Noto Serif SC', 'serif'],
+            title: ['Fraunces', 'serif'],
           },
           animation: {
             'fade-in': 'fadeIn 1.2s ease-out forwards',
@@ -97,7 +97,7 @@
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: #A93832;
+      background: #6E8B6A;
     }
   </style>
   <script type="importmap">
@@ -106,7 +106,6 @@
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
     "tyme4ts": "https://aistudiocdn.com/tyme4ts@^1.3.9"
   }
 }
@@ -115,7 +114,7 @@
 </head>
 
 <body
-  class="bg-parchment text-ink font-sans antialiased selection:bg-gold selection:text-white overflow-x-hidden min-h-screen">
+  class="bg-canvas text-ink font-sans antialiased selection:bg-sage selection:text-white overflow-x-hidden min-h-screen">
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>
