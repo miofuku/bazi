@@ -73,7 +73,7 @@ export const BING: StemImageProfile = {
   needs: [
     {
       id: 'clarity', label: 'Clear water to see yourself in', element: WATER, classicStems: ['壬'],
-      why: 'You are like a runner who only knows how to sprint ahead — you may take a wrong turn, rattle at rivals, or rush. Clarity (壬水) is what lets you look inward and truly see yourself; no outside help can do this for you.',
+      why: 'You are like a runner who only knows how to sprint ahead — you may take a wrong turn, rattle at rivals, or rush. Clarity is what lets you look inward and truly see yourself; no outside help can do this for you.',
     },
     {
       id: 'land', label: 'Land to shine upon', element: EARTH, classicStems: ['戊', '己'],
@@ -101,11 +101,11 @@ export const DING: StemImageProfile = {
   needs: [
     {
       id: 'fuel', label: 'Lasting fuel to burn', element: WOOD, classicStems: ['甲'],
-      why: 'A flame needs wood to keep going. Long-term purpose and substance (甲木) are what let you last through any winter without going out.',
+      why: 'A flame needs wood to keep going. Long-term purpose and substance are what let you last through any winter without going out.',
     },
     {
       id: 'craft', label: 'A tool to make fuel usable', element: METAL, classicStems: ['庚'],
-      why: 'Raw timber must be split into kindling before it can feed a flame. Steady work and skill (庚金) turn raw potential into something you can actually live on — your quiet, reliable form of perseverance.',
+      why: 'Raw timber must be split into kindling before it can feed a flame. Steady work and skill turn raw potential into something you can actually live on — your quiet, reliable form of perseverance.',
     },
     {
       id: 'restraint', label: 'Water to keep from burning out', element: WATER, classicStems: ['壬'],
@@ -127,8 +127,8 @@ export const WU: StemImageProfile = {
   strengths: ['Steady and unshaken — calm when others panic', 'Trustworthy, carries real weight for others', 'Quietly resourceful, holds a great deal inside'],
   growthEdges: ['Can become a barren heap — solid but lifeless — if nothing is allowed to grow', 'Overreaches or stagnates when out of touch with your true capacity'],
   needs: [
-    N.sunToGrow('Sun (丙) warms the mountain and lifts its spirit, so that whatever grows on you can actually flourish.'),
-    N.waterToDrink('Water (癸) feeds the grass and trees on your slopes — your generosity needs replenishing to keep giving life.'),
+    N.sunToGrow('Sun warms the mountain and lifts its spirit, so that whatever grows on you can actually flourish.'),
+    N.waterToDrink('Water feeds the grass and trees on your slopes — your generosity needs replenishing to keep giving life.'),
     {
       id: 'cultivate', label: 'Cultivation to bring you to life', element: WOOD, classicStems: ['甲'],
       why: 'Roots break open hard ground and make it fertile. Being worked, planted, and put to use is what turns idle land into a living, valued landscape.',
@@ -153,8 +153,8 @@ export const JI: StemImageProfile = {
       id: 'cultivate', label: 'Crops to nourish', element: WOOD, classicStems: ['甲', '乙'],
       why: 'A field with nothing growing has no purpose. Real work, people, or projects to tend (the "crops") are not a burden on you — they are the very reason you exist.',
     },
-    N.waterToDrink('Rain (癸) lets your crops grow. Steady nourishment is what turns your care into a real harvest.'),
-    N.sunToGrow('Sun (丙) ripens what you grow. The more you are tending, the more warmth and light you need to bring it to fruit.'),
+    N.waterToDrink('Rain lets your crops grow. Steady nourishment is what turns your care into a real harvest.'),
+    N.sunToGrow('Sun ripens what you grow. The more you are tending, the more warmth and light you need to bring it to fruit.'),
   ],
   inLife: 'You give without fanfare and ask little; you flourish when your care visibly bears fruit in the people and work around you.',
   thrivingLine: 'A field in full harvest — quiet ground whose worth is plain in what it grows.',
@@ -173,7 +173,7 @@ export const GENG: StemImageProfile = {
   needs: [
     {
       id: 'forge', label: 'Fire to be forged by', element: FIRE, classicStems: ['丁'],
-      why: 'Ore becomes a blade only in the fire (丁火). Trials and refinement early in life are what shape your raw strength into something genuinely capable.',
+      why: 'Ore becomes a blade only in the fire. Trials and refinement early in life are what shape your raw strength into something genuinely capable.',
     },
     {
       id: 'temper', label: 'Water to be tempered by', element: WATER, classicStems: ['壬', '癸'],
@@ -197,11 +197,11 @@ export const XIN: StemImageProfile = {
   needs: [
     {
       id: 'cleanse', label: 'Clear water to be washed bright', element: WATER, classicStems: ['壬'],
-      why: 'A gem is cleansed in water to reveal its shine. Clear-mindedness (壬水) — washing off the day, seeing your own desires honestly — is what keeps you bright and lets your quality show.',
+      why: 'A gem is cleansed in water to reveal its shine. Clear-mindedness — washing off the day, seeing your own desires honestly — is what keeps you bright and lets your quality show.',
     },
     {
       id: 'light', label: 'Gentle light to shine in', element: FIRE, classicStems: ['丙'],
-      why: 'Soft, broad light (丙, the sun — never the harsh flame that pressures you) lets your facets catch and reflect, so others can finally see what you are.',
+      why: 'Soft, broad light (the sun — never the harsh flame that pressures you) lets your facets catch and reflect, so others can finally see what you are.',
     },
     {
       id: 'space', label: 'Room to be seen, not buried', element: EARTH, classicStems: [],
@@ -225,11 +225,11 @@ export const REN: StemImageProfile = {
   needs: [
     {
       id: 'direction', label: 'A channel to give you direction', element: METAL, classicStems: ['庚'],
-      why: 'Water with no banks wanders everywhere. A guiding structure or principle (庚金) does not so much fill you as point you — it tells your boundless flow which way to run.',
+      why: 'Water with no banks wanders everywhere. A guiding structure or principle does not so much fill you as point you — it tells your boundless flow which way to run.',
     },
     {
       id: 'expression', label: 'A way to express your power', element: FIRE, classicStems: ['丙'],
-      why: 'Light on water reveals its breadth. An outlet (丙火) that shows your ability and turns your reach into real results lets your vastness become visible value rather than aimless drift.',
+      why: 'Light on water reveals its breadth. An outlet that shows your ability and turns your reach into real results lets your vastness become visible value rather than aimless drift.',
     },
     {
       id: 'clarity', label: 'Clear water, free of mud', element: WATER, classicStems: ['壬'],
@@ -251,7 +251,7 @@ export const GUI: StemImageProfile = {
   strengths: ['Gentle, nurturing, devoted', 'Penetrating — reaches places others cannot', 'Sensitive and emotionally deep'],
   growthEdges: ['Giving can be quietly conditional — you need to see it bear fruit', 'Can grow cold or withdrawn when your care goes unrewarded'],
   needs: [
-    N.sunToGrow('Rain alone makes a grey, sodden world; rain with sun (丙癸 together) is the perfect weather for growing things. Warmth and optimism turn your care into a harvest.'),
+    N.sunToGrow('Rain alone makes a grey, sodden world; rain with sun together is the perfect weather for growing things. Warmth and optimism turn your care into a harvest.'),
     {
       id: 'purpose', label: 'Living things to nourish', element: WOOD, classicStems: ['甲', '乙'],
       why: 'Rain on barren ground is wasted. People, work, or causes that visibly grow from your care give your devotion its meaning and its reward.',

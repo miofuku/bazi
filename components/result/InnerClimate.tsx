@@ -15,9 +15,31 @@ const ORDER: ElementType[] = [
   ElementType.WOOD, ElementType.FIRE, ElementType.EARTH, ElementType.METAL, ElementType.WATER,
 ];
 
+// Join element labels into a coloured, grammatical list ("A", "A and B", "A, B and C").
+const ForceList: React.FC<{ els: ElementType[] }> = ({ els }) => (
+  <>
+    {els.map((el, i) => (
+      <React.Fragment key={el}>
+        {i > 0 && (i === els.length - 1 ? ' and ' : ', ')}
+        <span className={`font-semibold ${ELEMENT_COLORS[el]}`}>{ELEMENT_NATURE[el].label}</span>
+      </React.Fragment>
+    ))}
+  </>
+);
+
 // The five natural forces as the "weather" a person carries inside.
-export const InnerClimate: React.FC<InnerClimateProps> = ({ elementShare, dominantElement, weakestElement }) => {
+export const InnerClimate: React.FC<InnerClimateProps> = ({ elementShare }) => {
   const { accentDeep } = useAccent();
+
+  // Tie-aware: read strongest/weakest off the *displayed* percentages, so when
+  // two forces show the same %, both are named.
+  const pct = (el: ElementType) => Math.round(elementShare[el] * 100);
+  const maxP = Math.max(...ORDER.map(pct));
+  const minP = Math.min(...ORDER.map(pct));
+  const strongest = ORDER.filter((el) => pct(el) === maxP);
+  const weakest = ORDER.filter((el) => pct(el) === minP);
+  const allEven = maxP === minP;
+
   return (
     <section>
       <p className="font-sans text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: accentDeep }}>Your inner weather</p>
@@ -53,10 +75,18 @@ export const InnerClimate: React.FC<InnerClimateProps> = ({ elementShare, domina
       </div>
 
       <p className="mt-6 text-sm leading-relaxed text-ink/75">
-        <span className={`font-semibold ${ELEMENT_COLORS[dominantElement]}`}>{ELEMENT_NATURE[dominantElement].label}</span>
-        {' '}runs strongest in you, while{' '}
-        <span className={`font-semibold ${ELEMENT_COLORS[weakestElement]}`}>{ELEMENT_NATURE[weakestElement].label}</span>
-        {' '}is the quietest — often the very quality that, when tended, helps you feel whole.
+        {allEven ? (
+          <>Your forces run unusually even — no single one takes the lead, and none falls away. A rare, level climate to live in.</>
+        ) : (
+          <>
+            <ForceList els={strongest} />{' '}
+            {strongest.length > 1 ? 'run strongest in you' : 'runs strongest in you'}, while{' '}
+            <ForceList els={weakest} />{' '}
+            {weakest.length > 1
+              ? 'are the quietest — often the very qualities that, when tended, help you feel whole.'
+              : 'is the quietest — often the very quality that, when tended, helps you feel whole.'}
+          </>
+        )}
       </p>
     </section>
   );

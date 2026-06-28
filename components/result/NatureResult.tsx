@@ -3,14 +3,18 @@ import { BaziChart } from '../../types';
 import { buildXiangfaReading } from '../../content/xiangfa';
 import { getAtmosphere } from '../../content/xiangfa/atmosphere';
 import { buildRelationships, buildLifeSeasons } from '../../content/xiangfa/relationships';
+import { buildInteractions } from '../../content/xiangfa/interactions';
+import { buildStoryline } from '../../content/xiangfa/narrative';
 import { AtmosphereProvider } from './AtmosphereContext';
 import { NatureArt } from '../illustrations/NatureArt';
 import { YourNature } from './YourNature';
 import { SeasonEnvironment } from './SeasonEnvironment';
 import { ThriveNeeds } from './ThriveNeeds';
 import { InnerClimate } from './InnerClimate';
+import { Interactions } from './Interactions';
 import { Relationships } from './Relationships';
 import { LifeSeasons } from './LifeSeasons';
+import { Storyline } from './Storyline';
 import { TheFullChart } from './TheFullChart';
 
 const Divider: React.FC<{ accent: string }> = ({ accent }) => (
@@ -21,9 +25,14 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
   const reading = useMemo(() => buildXiangfaReading(chart), [chart]);
   const atmo = useMemo(() => getAtmosphere(reading.stem.element, reading.season.season), [reading]);
   const relationships = useMemo(() => buildRelationships(chart), [chart]);
+  const interactions = useMemo(() => buildInteractions(chart, reading), [chart, reading]);
   const lifeSeasons = useMemo(
     () => buildLifeSeasons(chart, reading, new Date().getFullYear()),
     [chart, reading],
+  );
+  const storyline = useMemo(
+    () => buildStoryline(chart, reading, relationships, lifeSeasons, interactions),
+    [chart, reading, relationships, lifeSeasons, interactions],
   );
 
   // Tint the page to the reading while it's open.
@@ -95,9 +104,13 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
           weakestElement={reading.weakestElement}
         />
         <Divider accent={atmo.accent} />
+        <Interactions data={interactions} />
+        <Divider accent={atmo.accent} />
         <Relationships items={relationships} />
         <Divider accent={atmo.accent} />
         <LifeSeasons seasons={lifeSeasons} />
+        <Divider accent={atmo.accent} />
+        <Storyline beats={storyline} />
 
         <p className="pt-4 text-center font-display text-lg italic text-stone">
           You are one small, particular part of the living world — and it has a place for exactly your kind.
