@@ -7,19 +7,59 @@ import { ELEMENT_HEX } from './illustrations/ForceArt';
 const ORDER: StemChar[] = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
 
 // The full field-guide gallery of the ten natures — illustration-led, no glyphs.
+// Hovering (or focusing) a nature reveals a bubble with more about that living thing.
 export const TenNatures: React.FC = () => (
   <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
     {ORDER.map((c) => {
       const p = STEM_PROFILES[c];
       const accent = ELEMENT_HEX[p.element];
       return (
-        <div
-          key={c}
-          className="group flex flex-col items-center rounded-2xl bg-white/50 p-5 text-center ring-1 ring-ink/5 transition-all duration-500 hover:-translate-y-1 hover:bg-white/75"
-        >
-          <NatureArt id={p.symbol} accent={accent} className="h-20 w-20 transition-transform duration-500 group-hover:scale-105" />
-          <h4 className="mt-4 font-display text-lg font-semibold text-ink">{p.archetypeName}</h4>
-          <p className="mt-1 text-xs leading-snug text-stone">{p.imageTitle}</p>
+        <div key={c} className="group relative">
+          <button
+            type="button"
+            className="flex w-full flex-col items-center rounded-2xl bg-white/50 p-5 text-center ring-1 ring-ink/5 transition-all duration-500 hover:-translate-y-1 hover:bg-white/75 focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
+          >
+            <NatureArt id={p.symbol} accent={accent} className="h-20 w-20 transition-transform duration-500 group-hover:scale-105" />
+            <h4 className="mt-4 font-display text-lg font-semibold text-ink">{p.archetypeName}</h4>
+            <p className="mt-1 text-xs leading-snug text-stone">{p.imageTitle}</p>
+          </button>
+
+          {/* Detail bubble — appears on hover / keyboard focus */}
+          <div
+            role="tooltip"
+            className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-3 w-72 max-w-[80vw] -translate-x-1/2 translate-y-1 rounded-2xl bg-white p-5 text-left opacity-0 shadow-xl ring-1 ring-ink/10 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100"
+          >
+            <div className="flex items-center gap-3">
+              <NatureArt id={p.symbol} accent={accent} className="h-10 w-10 shrink-0" />
+              <div>
+                <h5 className="font-display text-base font-semibold text-ink">{p.archetypeName}</h5>
+                <p className="text-[11px] uppercase tracking-wider" style={{ color: accent }}>
+                  {p.polarity} {p.element}
+                </p>
+              </div>
+            </div>
+
+            <p className="mt-3 text-sm leading-relaxed text-ink/80">{p.essence}</p>
+
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {p.strengths.slice(0, 3).map((s) => (
+                <span
+                  key={s}
+                  className="rounded-full px-2.5 py-0.5 text-[11px]"
+                  style={{ background: `${accent}1f`, color: accent }}
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+
+            <p className="mt-3 border-t border-ink/5 pt-2 text-xs italic leading-relaxed text-stone">
+              {p.thrivingLine}
+            </p>
+
+            {/* little pointer */}
+            <div className="absolute left-1/2 top-full h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-white ring-1 ring-ink/10" />
+          </div>
         </div>
       );
     })}

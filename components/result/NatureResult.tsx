@@ -15,6 +15,7 @@ import { Interactions } from './Interactions';
 import { Relationships } from './Relationships';
 import { LifeSeasons } from './LifeSeasons';
 import { Storyline } from './Storyline';
+import { DailyCalendar } from './DailyCalendar';
 import { TheFullChart } from './TheFullChart';
 
 const Divider: React.FC<{ accent: string }> = ({ accent }) => (
@@ -103,6 +104,8 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
           dominantElement={reading.dominantElement}
           weakestElement={reading.weakestElement}
         />
+        <Divider accent={atmo.accent} />
+        <DailyCalendar chart={chart} />
         <Divider accent={atmo.accent} />
         <Interactions data={interactions} />
         <Divider accent={atmo.accent} />
