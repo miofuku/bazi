@@ -46,3 +46,6 @@ coverage/
 */__pycache__
 
 docs/
+
+.claude/
+CLAUDE.md 

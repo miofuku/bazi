@@ -57,6 +57,24 @@ export interface DaYun {
   pillar: Pillar;
 }
 
+// Day-master strength (日干旺衰), multiplier method — see docs/wangshuai.md.
+export type StrengthCategory =
+  | 'follow-weak'   // 从弱
+  | 'weak'          // 身弱
+  | 'balanced'      // 中和
+  | 'strong'        // 身强
+  | 'follow-strong'; // 从强
+
+export interface StrengthReading {
+  elementPower: Record<ElementType, number>;
+  totalPower: number;
+  dayElement: ElementType;
+  resourceElement: ElementType; // element that generates the day master (印)
+  supportShare: number;         // 同党 (day element + resource) share, 0..1
+  rooted: boolean;              // day master has a living root (未被冲拔)
+  category: StrengthCategory;
+}
+
 export interface BaziChart {
   date?: Date;
   yearPillar: Pillar;
@@ -67,4 +85,5 @@ export interface BaziChart {
   daYun: DaYun[];
   elementCounts: ElementCounts;
   elementScores?: ElementScore; // Detailed strength scores
+  strength?: StrengthReading;   // Day-master strength (日干旺衰)
 }

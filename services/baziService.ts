@@ -81,7 +81,20 @@ export const calculateBazi = (
       currentDecade = currentDecade.next(1);
     }
 
-    return generateChartResult(yearPillar, monthPillar, dayPillar, hourPillar, daYunList);
+    // 6. 人元司令 — the month branch's ruling hidden stem on the birth day.
+    // Days from the governing 节 (0-based) drive 分野.
+    let rulingStem: string | undefined;
+    try {
+      const birthDay = t.getSolarDay();
+      let term = birthDay.getTerm();
+      while (!term.isJie()) term = term.next(-1);
+      const daysIntoMonth = birthDay.subtract(term.getSolarDay());
+      rulingStem = getRulingStem(monthPillar.branch.chinese, daysIntoMonth)?.stem;
+    } catch (e) {
+      console.error('Failed to compute 司令:', e);
+    }
+
+    return generateChartResult(yearPillar, monthPillar, dayPillar, hourPillar, daYunList, rulingStem);
 
   } catch (e) {
     console.error("Tyme4ts Library Execution Error:", e);
@@ -91,6 +104,8 @@ export const calculateBazi = (
 
 import { calculateDeity, getHiddenStemsForBranch, DEITY_FULL_NAMES } from '../utils/baziCalculator';
 import { calculateFiveElementScores } from '../utils/FiveElementScorer';
+import { calculateStrength } from '../utils/StrengthCalculator';
+import { getRulingStem } from '../utils/qiLing';
 
 // Helper to aggregate counts and return final chart structure
 const generateChartResult = (
@@ -98,7 +113,8 @@ const generateChartResult = (
   monthPillar: Pillar,
   dayPillar: Pillar,
   hourPillar: Pillar,
-  daYun: DaYun[]
+  daYun: DaYun[],
+  rulingStem?: string
 ): BaziChart => {
   const elementCounts: Record<ElementType, number> = {
     [ElementType.WOOD]: 0,
@@ -150,6 +166,8 @@ const generateChartResult = (
     hourPillar.stem, hourPillar.branch
   );
 
+  const strength = calculateStrength(yearPillar, monthPillar, dayPillar, hourPillar, rulingStem);
+
   return {
     yearPillar,
     monthPillar,
@@ -160,5 +178,6 @@ const generateChartResult = (
 
     elementCounts,
     elementScores: scores,
+    strength,
   };
 };

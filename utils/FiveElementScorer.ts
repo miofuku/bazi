@@ -5,8 +5,8 @@ import { STEMS, BRANCHES } from './constants';
 const GAN_SCORE = 5;
 
 // Hidden stem weights for Earthly Branches (Zhi)
-// Based on 'zhi5' dictionary in ganzhi.py
-const ZHI_WEIGHTS: Record<string, Record<string, number>> = {
+// Based on 'zhi5' dictionary in ganzhi.py. Every row sums to 8.
+export const ZHI_WEIGHTS: Record<string, Record<string, number>> = {
     '子': { '癸': 8 },
     '丑': { '己': 5, '癸': 2, '辛': 1 },
     '寅': { '甲': 5, '丙': 2, '戊': 1 },
