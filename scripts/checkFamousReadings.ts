@@ -16,7 +16,7 @@ const CAT: Record<string, string> = {
   'follow-weak': '从弱', 'weak': '身弱', 'balanced': '中和', 'strong': '身强', 'follow-strong': '从强',
 };
 
-const csv = fs.readFileSync('docs/名人AA级八字验证集_1.csv', 'utf8').replace(/^﻿/, '');
+const csv = fs.readFileSync('docs/名人AA级八字验证集.csv', 'utf8').replace(/^﻿/, '');
 const rows = csv.split('\n').slice(1).filter((l) => l.trim());
 
 interface Rec { name: string; person: Person; chart: ReturnType<typeof calculateBazi>; summary: string; }

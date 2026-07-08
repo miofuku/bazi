@@ -2,6 +2,8 @@ import { BaziChart, ElementType } from '../../types';
 import { STEMS } from '../../utils/constants';
 import { calculateDeity, DEITY_FULL_NAMES } from '../../utils/baziCalculator';
 import { pillarFavor } from '../../utils/timeFavor';
+import { structuralFavor } from '../../utils/structural';
+import { stageOf, vitalityMatch, LifeStage } from '../../utils/twelveStage';
 import { XiangfaReading } from './index';
 
 // ── The five relationships (the Ten Gods 十神, masked as nature) ──────────────
@@ -176,7 +178,9 @@ export interface LifeSeason {
   blurb: string;
   theme: string;
   tone: 'kind' | 'steady' | 'demanding';
-  favor: number; // 用神 favorability of this 大运's 干支, −1..1 (Tailwind/Headwind)
+  favor: number;          // element favorability + structural + 十二长生 vitality, −1..1
+  structuralEvents: string[]; // 天克地冲 / 合冲会 with the natal chart
+  stage: LifeStage;       // day master's 十二长生 phase in this 大运's branch
   note?: string;
   current: boolean;
 }
@@ -200,7 +204,18 @@ export function buildLifeSeasons(chart: BaziChart, reading: XiangfaReading, nowY
     if (scarce.has(element)) { tone = 'kind'; note = 'It brings a kind of force you have been short on.'; }
     else if (element === dominant) { tone = tone === 'kind' ? 'steady' : 'demanding'; note = 'It adds more of what you already carry in plenty.'; }
 
-    const favor = chart.yongshen ? pillarFavor(chart.yongshen.favor, cyc.pillar) : 0;
+    // Decade favorability = 用神 element supply + structural interactions
+    // (天克地冲/合冲会) + 十二长生 vitality-vs-life-stage (老怕帝旺、少怕衰…).
+    const stage = stageOf(dm, cyc.pillar.branch.chinese);
+    let favor = 0;
+    let structuralEvents: string[] = [];
+    if (chart.yongshen) {
+      const base = pillarFavor(chart.yongshen.favor, cyc.pillar);
+      const struct = structuralFavor(cyc.pillar, chart, chart.yongshen.favor);
+      const vitality = vitalityMatch(dm, cyc.pillar.branch.chinese, cyc.startAge);
+      structuralEvents = struct.events;
+      favor = Math.max(-1, Math.min(1, base + struct.delta + vitality * 0.35));
+    }
 
     return {
       startAge: cyc.startAge,
@@ -212,6 +227,8 @@ export function buildLifeSeasons(chart: BaziChart, reading: XiangfaReading, nowY
       theme: SEASON_THEME[cat],
       tone,
       favor,
+      structuralEvents,
+      stage,
       note,
       current,
     };

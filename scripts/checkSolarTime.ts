@@ -7,7 +7,7 @@ import { toTrueSolarTime } from '../utils/trueSolarTime';
 import { calculateBazi } from '../services/baziService';
 import { Gender } from '../types';
 
-const csv = fs.readFileSync('docs/名人AA级八字验证集_1.csv', 'utf8').replace(/^﻿/, '');
+const csv = fs.readFileSync('docs/名人AA级八字验证集.csv', 'utf8').replace(/^﻿/, '');
 const rows = csv.split('\n').slice(1).filter((l) => l.trim());
 
 const gz = (p: { stem: { chinese: string }; branch: { chinese: string } }) =>

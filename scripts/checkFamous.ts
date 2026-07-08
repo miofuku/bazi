@@ -1,4 +1,4 @@
-// Validate the pillar engine against docs/名人AA级八字验证集_1.csv (17 AA-rated
+// Validate the pillar engine against docs/名人AA级八字验证集.csv (17 AA-rated
 // charts). Each row gives the CSV author's pillars plus BOTH hour pillars
 // (真太阳时 vs 钟表). We run the engine with each time and compare, to (a) confirm
 // tyme4ts reproduces the pillars and (b) prove 真太阳时 is the correct input.
@@ -9,7 +9,7 @@ import * as fs from 'fs';
 import { calculateBazi } from '../services/baziService';
 import { Gender } from '../types';
 
-const csv = fs.readFileSync('docs/名人AA级八字验证集_1.csv', 'utf8').replace(/^﻿/, '');
+const csv = fs.readFileSync('docs/名人AA级八字验证集.csv', 'utf8').replace(/^﻿/, '');
 const rows = csv.split('\n').slice(1).filter((l) => l.trim());
 
 interface Row {

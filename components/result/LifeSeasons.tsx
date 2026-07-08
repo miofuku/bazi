@@ -43,9 +43,12 @@ export const LifeSeasons: React.FC<{ seasons: LifeSeason[] }> = ({ seasons }) =>
             {current.theme}{current.note ? ` ${current.note}` : ''}
           </p>
           {(() => { const w = windOf(current.favor); return (
-            <p className="mt-3 flex items-center gap-2 text-sm">
+            <p className="mt-3 flex flex-wrap items-center gap-2 text-sm">
               <span className="rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider" style={{ background: `${w.hex}1f`, color: w.hex }}>{w.label}</span>
               <span className="text-ink/70">{w.blurb}.</span>
+              {current.structuralEvents.map((e) => (
+                <span key={e} className="font-sc rounded-full bg-ink/5 px-2 py-0.5 text-[11px] text-ink/55">{e}</span>
+              ))}
             </p>
           ); })()}
         </div>
@@ -68,7 +71,10 @@ export const LifeSeasons: React.FC<{ seasons: LifeSeason[] }> = ({ seasons }) =>
                 <span className="rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider" style={{ background: `${w.hex}1f`, color: w.hex }}>{w.label}</span>
               </div>
               <p className="text-[11px] uppercase tracking-wider text-stone/70">from {s.startYear}</p>
-              <p className="mt-3 text-sm font-semibold" style={{ color: hex }}>{s.label}</p>
+              <p className="mt-3 flex items-center gap-2 text-sm font-semibold" style={{ color: hex }}>
+                {s.label}
+                <span className="font-sc text-[11px] font-normal text-stone/60">{s.stage}</span>
+              </p>
               <p className="mt-1 text-xs leading-relaxed text-ink/65">{s.blurb}</p>
               {s.current && (
                 <p className="mt-3 text-[10px] font-semibold uppercase tracking-widest" style={{ color: accentDeep }}>● You are here</p>
