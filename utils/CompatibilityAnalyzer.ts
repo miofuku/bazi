@@ -65,18 +65,13 @@ export interface CompatibilityReading {
 
 const FAVOR_WEIGHT: Record<Favor, number> = { favorable: 1, neutral: 0, unfavorable: -1 };
 
-const NOUN: Record<ElementType, string> = {
-  [ElementType.WOOD]: '木', [ElementType.FIRE]: '火', [ElementType.EARTH]: '土',
-  [ElementType.METAL]: '金', [ElementType.WATER]: '水',
-};
-
-// 十神 group → business role label.
+// 十神 group → founder-role label (first word is the short radar label).
 export const ROLE: Record<keyof TenGods, string> = {
-  output: '产品·创意·愿景',
-  wealth: '经营·变现·拓展',
-  authority: '执行·管控·纪律',
-  resource: '风控·知识·后盾',
-  self: '冲劲·自立·带队',
+  output: 'Product·Vision·Craft',
+  wealth: 'Growth·Deals·Ops',
+  authority: 'Execution·Rigor',
+  resource: 'Ballast·Knowledge',
+  self: 'Drive·Leadership',
 };
 // Radar axis order (key roles first).
 export const ROLE_ORDER: (keyof TenGods)[] = ['output', 'wealth', 'authority', 'resource', 'self'];
@@ -158,14 +153,14 @@ const rivalryRisk = (a: Person, b: Person, samePeers: boolean): Rivalry => {
 
   let score = 0;
   const reasons: string[] = [];
-  if (samePeers) { score += 1; reasons.push('同为' + NOUN[a.strength.dayElement] + '日主(比劫)'); }
-  if (bothSelfDriven) { score += 1; reasons.push('双方皆自我·带队型'); }
-  if (overlap) { score += 1; reasons.push('主导领域重叠'); }
-  if (balancedPower) { score += 1; reasons.push('旺衰相当、无天然主次'); }
-  else { score -= 1; reasons.push('旺衰有别、主辅自然'); }
+  if (samePeers) { score += 1; reasons.push(`both ${(a.strength.dayElement as string).toLowerCase()} day masters (比劫)`); }
+  if (bothSelfDriven) { score += 1; reasons.push('both driven to lead'); }
+  if (overlap) { score += 1; reasons.push('overlapping strengths'); }
+  if (balancedPower) { score += 1; reasons.push('evenly matched, no natural lead'); }
+  else { score -= 1; reasons.push('different weights, a natural lead & second'); }
 
   const level = score <= 0 ? 'low' : score === 1 ? 'medium' : 'high';
-  return { level, reason: reasons.join('；') };
+  return { level, reason: reasons.join('; ') };
 };
 
 // Elements held in a person's 日支 (spouse palace), via hidden stems.
@@ -198,11 +193,11 @@ export const analyzeCompatibility = (
   const dB = dominantGroup(b);
   const divergentDomains = dA !== dB;
 
+  const els = (arr: ElementType[]) => arr.map((e) => (e as string).toLowerCase()).join(' & ');
+  // Directional supply score; the elements each brings are shown visually in the
+  // SupplyRow above, so the note keeps just the numbers.
   const feed = (d: SupplyDirection) =>
-    `${d.from}→${d.to} ${d.score >= 0 ? '+' : ''}${d.score.toFixed(2)}` +
-    (d.brings.length
-      ? `（带来${d.brings.map((x) => NOUN[x.element] + (x.favor === 'favorable' ? '喜' : '忌')).join('')}）`
-      : '');
+    `${d.from} → ${d.to}: ${d.score >= 0 ? '+' : ''}${d.score.toFixed(2)}`;
 
   const reading: CompatibilityReading = {
     lens, aToB, bToA, mutualScore, asymmetry, samePeers,
@@ -211,10 +206,10 @@ export const analyzeCompatibility = (
     note: '',
   };
 
-  let note = `${feed(aToB)}；${feed(bToA)}。`;
+  let note = `${feed(aToB)}; ${feed(bToA)}.`;
   if (asymmetry > 0.25) {
     const s = aToB.score > bToA.score ? aToB : bToA;
-    note += ` 供需不对称：${s.from}更能滋养${s.to}。`;
+    note += ` It runs uneven — ${s.from} nourishes ${s.to} more than the other way round.`;
   }
 
   if (lens === 'partner') {
@@ -223,33 +218,33 @@ export const analyzeCompatibility = (
     reading.roleCoverage = cov;
     reading.rivalry = riv;
 
-    // 用神互补 = 能量相吸 (chemistry) — for co-founders only the spark, not durability.
-    // 长久有效 rests on the 角色分工 + 比劫争权 axes below (相吸 ≠ 长久有效).
+    // 用神互补 = chemistry — for co-founders only the spark, not durability. Staying
+    // power rests on the role split + rivalry axes below (相吸 ≠ 长久有效).
     note += mutualScore > 0.15
-      ? ' 用神互补、能量相吸——合作有火花；但相吸只是「来电」，能否长久有效更看下面的分工与争权。'
-      : ' 用神供需平淡——少了天然火花，更靠事上磨合；成败仍取决于下面的分工与争权。';
+      ? ' Your energies draw together — real chemistry (用神互补). But a spark is only the start; whether it lasts rests on the split of roles and the pull for control below.'
+      : ' The energy exchange is quiet — less natural draw, more worked out in the doing; it stands or falls on the role split and rivalry below.';
     note += divergentDomains
-      ? ` 主导领域相异（${a.label}偏${ROLE[dA]}，${b.label}偏${ROLE[dB]}）→ 天然分工。`
-      : ` 主导领域相同（皆${ROLE[dA]}）→ 易争同一角色。`;
-    note += ` 关键职能：已覆盖${cov.covered.join('、') || '无'}`;
-    if (cov.gaps.length) note += `；盲区${cov.gaps.join('、')}（宜引入第三人补位）`;
-    if (cov.overlaps.length) note += `；${cov.overlaps.join('、')}两人皆强、恐撞车`;
-    note += `。比劫争权：${{ low: '低', medium: '中', high: '高' }[riv.level]}（${riv.reason}）。`;
+      ? ` Your strengths point different ways (${a.label} toward ${ROLE[dA].split('·')[0]}, ${b.label} toward ${ROLE[dB].split('·')[0]}) — a natural division of labour.`
+      : ` You lead with the same strength (both ${ROLE[dA].split('·')[0]}) — you may reach for the same seat.`;
+    note += ` Key roles covered: ${cov.covered.map((r) => r.split('·')[0]).join(', ') || 'none'}`;
+    if (cov.gaps.length) note += `; blind spots in ${cov.gaps.map((r) => r.split('·')[0]).join(', ')} (worth a third person)`;
+    if (cov.overlaps.length) note += `; both strong in ${cov.overlaps.map((r) => r.split('·')[0]).join(', ')} — risk of collision`;
+    note += `. Rivalry for the lead (比劫): ${riv.level} — ${riv.reason}.`;
   } else {
     const sp: [SpousePalace, SpousePalace] = [spousePalace(a, b), spousePalace(b, a)];
     reading.spousePalace = sp;
 
-    note += samePeers ? ' 同类日主，性情相近、如手足。' : ' 日主相异，异性相吸。';
-    // 用神互补 measures 能量化学反应 (chemistry/attraction), NOT longevity — validated
-    // inverted on royal marriages (docs/王室家庭关系边表.csv): 相吸 ≠ 相守.
+    note += samePeers ? ' Same day-master element — kindred temperaments, more like siblings.' : ' Different day masters — opposites that draw each other in.';
+    // 用神互补 measures chemistry/attraction, NOT longevity — validated inverted on
+    // royal marriages (docs/王室家庭关系边表.csv): 相吸 ≠ 相守.
     note += mutualScore > 0.15
-      ? ' 用神互补、能量相吸——化学反应强；但相吸非相守，能否长久更看经营与配偶宫。'
-      : ' 用神供需平淡——少了自然的能量牵引，感情更靠共同经营，而非天生投合。';
+      ? ' Your energies attract (用神互补) — strong chemistry. But attraction isn’t endurance; lasting comes down to tending and the spouse palace.'
+      : ' The energy pull is faint — little born-in draw, so the bond leans on tending rather than natural fit.';
     const desc = (s: SpousePalace, other: string) =>
       s.holds.length
-        ? `${s.from}配偶宫藏${s.holds.map((e) => NOUN[e]).join('')}（正是${other}喜用${s.clashes.length ? '，惟兼带忌' + s.clashes.map((e) => NOUN[e]).join('') : ''}）`
-        : `${s.from}配偶宫未藏${other}喜用${s.clashes.length ? '，反带忌' + s.clashes.map((e) => NOUN[e]).join('') : ''}`;
-    note += ` 配偶宫：${desc(sp[0], b.label)}；${desc(sp[1], a.label)}。`;
+        ? `${s.from}’s holds ${els(s.holds)} — just what ${other} thrives on${s.clashes.length ? `, though it also carries ${els(s.clashes)} they’d rather avoid` : ''}`
+        : `${s.from}’s holds none of what ${other} thrives on${s.clashes.length ? `, and carries ${els(s.clashes)} against them` : ''}`;
+    note += ` Spouse palace (配偶宫): ${desc(sp[0], b.label)}; ${desc(sp[1], a.label)}.`;
   }
 
   reading.note = note;

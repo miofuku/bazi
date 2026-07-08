@@ -152,7 +152,7 @@ const Chip: React.FC<{ children: React.ReactNode; tone: 'good' | 'warn' | 'bad' 
   return <span className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: c[0], color: c[1] }}>{children}</span>;
 };
 
-const RIVALRY_LABEL = { low: '低', medium: '中', high: '高' } as const;
+const RIVALRY_LABEL = { low: 'Low', medium: 'Med', high: 'High' } as const;
 const RIVALRY_TONE = { low: 'good', medium: 'warn', high: 'bad' } as const;
 
 // ── Two-axis headline: 相吸 (chemistry) vs 相守 (built to last) ────────────────
@@ -163,12 +163,12 @@ const RIVALRY_TONE = { low: 'good', medium: 'warn', high: 'bad' } as const;
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 
 const AxisMeter: React.FC<{
-  title: string; en: string; pct: number; verdict: string; hex: string; detail: string;
-}> = ({ title, en, pct, verdict, hex, detail }) => (
+  title: string; cn: string; pct: number; verdict: string; hex: string; detail: string;
+}> = ({ title, cn, pct, verdict, hex, detail }) => (
   <div>
     <div className="flex items-baseline justify-between">
       <span className="font-display text-base font-semibold text-ink">
-        {title} <span className="font-sans text-xs font-normal uppercase tracking-wider text-ink/40">{en}</span>
+        {title} <span className="font-sc text-xs font-normal text-ink/35">{cn}</span>
       </span>
       <span className="text-sm font-semibold" style={{ color: hex }}>{verdict}</span>
     </div>
@@ -183,54 +183,54 @@ const TwoAxes: React.FC<{ reading: CompatibilityReading; lens: RelationLens }> =
   // 相吸 (chemistry) from mutual 用神 supply, mapped [-0.6,0.6] → [0,1].
   const spark = clamp01((reading.mutualScore + 0.6) / 1.2);
   const sparkVerdict =
-    reading.mutualScore > 0.3 ? '火花强' : reading.mutualScore > 0.1 ? '有来电' : reading.mutualScore > -0.2 ? '平淡' : '相斥';
+    reading.mutualScore > 0.3 ? 'Strong spark' : reading.mutualScore > 0.1 ? 'Some draw' : reading.mutualScore > -0.2 ? 'Faint' : 'At odds';
   const sparkDetail =
     reading.mutualScore > 0.1
-      ? '用神互补、能量相吸——天生投合的化学反应。'
-      : '能量供需平淡——少了天生的牵引，更靠事上磨合。';
+      ? 'Your elements feed each other — a natural, born-in draw.'
+      : 'Quiet supply — less natural pull, more worked out in the doing.';
   const sparkHex = lens === 'partner' ? WIND.tailwind : WIND.headwind;
 
   if (lens === 'partner' && reading.roleCoverage && reading.rivalry) {
     const cov = reading.roleCoverage;
     const riv = reading.rivalry;
-    // 相守 (durability) for co-founders = role split + 争权 + coverage — the axes the
+    // Staying power for co-founders = role split + rivalry + coverage — the axes the
     // analyzer already computes, aggregated into one scannable read.
     let d = reading.divergentDomains ? 0.5 : -0.3;
     d += { low: 0.4, medium: 0, high: -0.5 }[riv.level];
     d -= cov.gaps.length * 0.1 + cov.overlaps.length * 0.1;
     const struct = clamp01((d + 0.6) / 1.2);
-    const structVerdict = d > 0.4 ? '结构稳' : d > 0 ? '可打磨' : '易散伙';
+    const structVerdict = d > 0.4 ? 'Solid' : d > 0 ? 'Workable' : 'Fragile';
     const structDetail =
-      `${reading.divergentDomains ? '分工天然' : '争同一角色'} · 比劫争权${RIVALRY_LABEL[riv.level]}` +
-      `${cov.gaps.length ? ` · 盲区${cov.gaps.length}处` : ' · 职能覆盖全'}。`;
+      `${reading.divergentDomains ? 'Natural role split' : 'Same role contested'} · rivalry ${RIVALRY_LABEL[riv.level].toLowerCase()}` +
+      `${cov.gaps.length ? ` · ${cov.gaps.length} blind spot${cov.gaps.length > 1 ? 's' : ''}` : ' · roles covered'}.`;
     return (
       <div className="mt-8 grid gap-5 rounded-2xl bg-white/60 p-6 ring-1 ring-ink/5 sm:grid-cols-2">
-        <AxisMeter title="相吸" en="chemistry" pct={spark * 100} verdict={sparkVerdict} hex={sparkHex} detail={sparkDetail} />
-        <AxisMeter title="相守" en="built to last" pct={struct * 100} verdict={structVerdict} hex={ELEMENT_HEX[ElementType.EARTH]} detail={structDetail} />
+        <AxisMeter title="Chemistry" cn="相吸" pct={spark * 100} verdict={sparkVerdict} hex={sparkHex} detail={sparkDetail} />
+        <AxisMeter title="Built to last" cn="相守" pct={struct * 100} verdict={structVerdict} hex={ELEMENT_HEX[ElementType.EARTH]} detail={structDetail} />
         <p className="border-t border-ink/5 pt-3 text-xs italic text-stone sm:col-span-2">
-          相吸 ≠ 相守 —— 火花是起点；能不能长久有效，靠的是分工与争权这一轴。
+          Chemistry <span className="font-sc not-italic">相吸</span> isn’t staying power <span className="font-sc not-italic">相守</span> — a spark is the start; lasting rests on the split of roles and the pull for control.
         </p>
       </div>
     );
   }
 
-  // marriage: 八字 reads 相吸; 相守 is tending + choices, not fate.
+  // marriage: the chart reads the spark (相吸); staying power (相守) is tending + choice, not fate.
   return (
     <div className="mt-8 grid gap-5 rounded-2xl bg-white/60 p-6 ring-1 ring-ink/5 sm:grid-cols-2">
-      <AxisMeter title="相吸" en="chemistry" pct={spark * 100} verdict={sparkVerdict} hex={sparkHex} detail={sparkDetail} />
+      <AxisMeter title="Chemistry" cn="相吸" pct={spark * 100} verdict={sparkVerdict} hex={sparkHex} detail={sparkDetail} />
       <div>
         <div className="flex items-baseline justify-between">
           <span className="font-display text-base font-semibold text-ink">
-            相守 <span className="font-sans text-xs font-normal uppercase tracking-wider text-ink/40">built to last</span>
+            Built to last <span className="font-sc text-xs font-normal text-ink/35">相守</span>
           </span>
-          <span className="text-sm font-semibold text-stone">看经营</span>
+          <span className="text-sm font-semibold text-stone">Yours to write</span>
         </div>
         <p className="mt-3 text-xs leading-relaxed text-ink/60">
-          八字只照见相吸；能否长久是经营与选择，非命中注定——最恩爱的盘也可能离散，最平淡的盘却能白头。
+          The chart shows only the spark. Whether it lasts is tending and choice, not fate — the most loving pairing can part, and the plainest can last a lifetime.
         </p>
       </div>
       <p className="border-t border-ink/5 pt-3 text-xs italic text-stone sm:col-span-2">
-        相吸 ≠ 相守 —— 化学反应我们能读，长久与否由你们书写。
+        Chemistry <span className="font-sc not-italic">相吸</span> we can read; how long it lasts <span className="font-sc not-italic">相守</span>, you write.
       </p>
     </div>
   );
@@ -295,12 +295,12 @@ export const Compatibility: React.FC<{
             {lens === 'partner' && reading.roleCoverage && reading.rivalry && (
               <div className="mt-1 flex flex-col gap-3 border-t border-ink/5 pt-3">
                 <div className="flex flex-wrap gap-2">
-                  {reading.roleCoverage.covered.map((r) => <Chip key={r} tone="good">✓ {r}</Chip>)}
-                  {reading.roleCoverage.gaps.map((r) => <Chip key={r} tone="warn">⚠ 盲区 {r}</Chip>)}
-                  {reading.roleCoverage.overlaps.map((r) => <Chip key={r} tone="bad">↯ 撞车 {r}</Chip>)}
+                  {reading.roleCoverage.covered.map((r) => <Chip key={r} tone="good">✓ {r.split('·')[0]}</Chip>)}
+                  {reading.roleCoverage.gaps.map((r) => <Chip key={r} tone="warn">⚠ Gap · {r.split('·')[0]}</Chip>)}
+                  {reading.roleCoverage.overlaps.map((r) => <Chip key={r} tone="bad">↯ Clash · {r.split('·')[0]}</Chip>)}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-ink/70">
-                  <span>比劫争权</span>
+                  <span>Rivalry for the lead <span className="font-sc text-xs text-ink/35">比劫</span></span>
                   <Chip tone={RIVALRY_TONE[reading.rivalry.level]}>{RIVALRY_LABEL[reading.rivalry.level]}</Chip>
                   <span className="text-xs text-stone">{reading.rivalry.reason}</span>
                 </div>
@@ -309,13 +309,17 @@ export const Compatibility: React.FC<{
 
             {lens === 'marriage' && reading.spousePalace && (
               <div className="mt-1 flex flex-col gap-2 border-t border-ink/5 pt-3 text-sm text-ink/70">
-                {reading.spousePalace.map((sp, i) => (
-                  <p key={i}>
-                    <span className="font-semibold text-ink/80">{sp.from} 配偶宫</span>
-                    {sp.holds.length ? ` 藏 ${sp.holds.map((e) => (ELEMENT_CN[e])).join('')}（对方喜用）` : ' 未藏对方喜用'}
-                    {sp.clashes.length ? `，兼带忌 ${sp.clashes.map((e) => (ELEMENT_CN[e])).join('')}` : ''}
-                  </p>
-                ))}
+                {reading.spousePalace.map((sp, i) => {
+                  const other = i === 0 ? labelB : labelA;
+                  const list = (arr: ElementType[]) => arr.map((e) => (e as string).toLowerCase()).join(' & ');
+                  return (
+                    <p key={i}>
+                      <span className="font-semibold text-ink/80">{sp.from}’s spouse palace <span className="font-sc text-xs font-normal text-ink/35">配偶宫</span></span>
+                      {sp.holds.length ? ` holds ${list(sp.holds)} — just what ${other} thrives on` : ` holds none of what ${other} thrives on`}
+                      {sp.clashes.length ? `, and some ${list(sp.clashes)} they’d rather avoid` : ''}
+                    </p>
+                  );
+                })}
               </div>
             )}
           </div>
