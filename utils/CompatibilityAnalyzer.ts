@@ -193,12 +193,6 @@ export const analyzeCompatibility = (
   const dB = dominantGroup(b);
   const divergentDomains = dA !== dB;
 
-  const els = (arr: ElementType[]) => arr.map((e) => (e as string).toLowerCase()).join(' & ');
-  // Directional supply score; the elements each brings are shown visually in the
-  // SupplyRow above, so the note keeps just the numbers.
-  const feed = (d: SupplyDirection) =>
-    `${d.from} → ${d.to}: ${d.score >= 0 ? '+' : ''}${d.score.toFixed(2)}`;
-
   const reading: CompatibilityReading = {
     lens, aToB, bToA, mutualScore, asymmetry, samePeers,
     domainA: ROLE[dA], domainB: ROLE[dB], divergentDomains,
@@ -206,45 +200,33 @@ export const analyzeCompatibility = (
     note: '',
   };
 
-  let note = `${feed(aToB)}; ${feed(bToA)}.`;
-  if (asymmetry > 0.25) {
-    const s = aToB.score > bToA.score ? aToB : bToA;
-    note += ` It runs uneven — ${s.from} nourishes ${s.to} more than the other way round.`;
-  }
-
+  // The note is a short human SYNTHESIS — the "so what". The scores, role coverage,
+  // rivalry, and spouse-palace elements are all shown in the cards above, so the note
+  // interprets rather than re-lists them.
+  let note = '';
   if (lens === 'partner') {
     const cov = roleCoverage(a, b);
     const riv = rivalryRisk(a, b, samePeers);
     reading.roleCoverage = cov;
     reading.rivalry = riv;
 
-    // 用神互补 = chemistry — for co-founders only the spark, not durability. Staying
-    // power rests on the role split + rivalry axes below (相吸 ≠ 长久有效).
-    note += mutualScore > 0.15
-      ? ' Your energies draw together — real chemistry (用神互补). But a spark is only the start; whether it lasts rests on the split of roles and the pull for control below.'
-      : ' The energy exchange is quiet — less natural draw, more worked out in the doing; it stands or falls on the role split and rivalry below.';
-    note += divergentDomains
-      ? ` Your strengths point different ways (${a.label} toward ${ROLE[dA].split('·')[0]}, ${b.label} toward ${ROLE[dB].split('·')[0]}) — a natural division of labour.`
-      : ` You lead with the same strength (both ${ROLE[dA].split('·')[0]}) — you may reach for the same seat.`;
-    note += ` Key roles covered: ${cov.covered.map((r) => r.split('·')[0]).join(', ') || 'none'}`;
-    if (cov.gaps.length) note += `; blind spots in ${cov.gaps.map((r) => r.split('·')[0]).join(', ')} (worth a third person)`;
-    if (cov.overlaps.length) note += `; both strong in ${cov.overlaps.map((r) => r.split('·')[0]).join(', ')} — risk of collision`;
-    note += `. Rivalry for the lead (比劫): ${riv.level} — ${riv.reason}.`;
+    const spark = mutualScore > 0.15
+      ? 'You’d take to each other quickly — each of you supplies what the other runs short on'
+      : 'There’s no instant spark here; the fit is something you’d build in the work, not feel at the start';
+    const roles = divergentDomains
+      ? 'and you lead from different strengths, so the work splits naturally between you'
+      : `and you’re strongest in the same place (${ROLE[dA].split('·')[0]}), so you’d reach for the same calls and leave the same gaps`;
+    note = `${spark}, ${roles}.`;
+    if (cov.gaps.length) note += ` The gap you’d share is ${cov.gaps.map((r) => r.split('·')[0]).join(' & ')} — worth a third person who lives there.`;
+    if (riv.level === 'high') note += ' And with no natural lead between you, agree early who owns which calls, before the pull for control settles it for you.';
   } else {
-    const sp: [SpousePalace, SpousePalace] = [spousePalace(a, b), spousePalace(b, a)];
-    reading.spousePalace = sp;
+    reading.spousePalace = [spousePalace(a, b), spousePalace(b, a)];
 
-    note += samePeers ? ' Same day-master element — kindred temperaments, more like siblings.' : ' Different day masters — opposites that draw each other in.';
-    // 用神互补 measures chemistry/attraction, NOT longevity — validated inverted on
-    // royal marriages (docs/王室家庭关系边表.csv): 相吸 ≠ 相守.
-    note += mutualScore > 0.15
-      ? ' Your energies attract (用神互补) — strong chemistry. But attraction isn’t endurance; lasting comes down to tending and the spouse palace.'
-      : ' The energy pull is faint — little born-in draw, so the bond leans on tending rather than natural fit.';
-    const desc = (s: SpousePalace, other: string) =>
-      s.holds.length
-        ? `${s.from}’s holds ${els(s.holds)} — just what ${other} thrives on${s.clashes.length ? `, though it also carries ${els(s.clashes)} they’d rather avoid` : ''}`
-        : `${s.from}’s holds none of what ${other} thrives on${s.clashes.length ? `, and carries ${els(s.clashes)} against them` : ''}`;
-    note += ` Spouse palace (配偶宫): ${desc(sp[0], b.label)}; ${desc(sp[1], a.label)}.`;
+    const kin = samePeers ? 'You’re cut from the same cloth — kindred more than opposite' : 'You meet as opposites, each holding what the other doesn’t';
+    const spark = mutualScore > 0.15
+      ? 'and there’s a real, born-in pull between you'
+      : 'and the pull between you is quiet — a bond you’d grow into rather than fall into';
+    note = `${kin}, ${spark}. But a chart only shows the spark; whether it lasts is tending and choice, not fate.`;
   }
 
   reading.note = note;

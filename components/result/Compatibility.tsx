@@ -5,6 +5,9 @@ import {
 } from '../../utils/CompatibilityAnalyzer';
 import { PairResult, teamDailyWeather } from '../../services/compatibilityService';
 import { ELEMENT_HEX, ELEMENT_CN, PERSON, WIND } from '../../utils/tokens';
+import { NatureArt } from '../illustrations/NatureArt';
+import { STEM_PROFILES } from '../../content/xiangfa';
+import { Meter } from './Meter';
 
 const A_HEX = PERSON.a; // person A — sage
 const B_HEX = PERSON.b; // person B — clay
@@ -92,13 +95,10 @@ const SupplyRow: React.FC<{
   brings: { element: ElementType; favor: Favor }[];
 }> = ({ from, to, score, brings }) => {
   const pos = score >= 0;
-  const pct = Math.min(Math.abs(score), 1) * 100;
   return (
     <div className="flex items-center gap-3">
       <span className="w-24 shrink-0 text-right text-sm text-ink/70">{from} <span className="text-ink/30">→</span> {to}</span>
-      <div className="relative h-3 flex-1 rounded-full bg-ink/5">
-        <div className="absolute inset-y-0 rounded-full" style={{ width: `${pct}%`, background: pos ? A_HEX : B_HEX, opacity: 0.75 }} />
-      </div>
+      <Meter value={Math.min(Math.abs(score), 1)} hex={pos ? A_HEX : B_HEX} className="flex-1" />
       <span className="w-10 shrink-0 text-sm font-semibold" style={{ color: pos ? WIND.tailwind : WIND.headwind }}>
         {pos ? '+' : ''}{score.toFixed(2)}
       </span>
@@ -177,9 +177,7 @@ const AxisMeter: React.FC<{
       </span>
       <span className="text-sm font-semibold" style={{ color: hex }}>{verdict}</span>
     </div>
-    <div className="mt-1.5 h-2.5 w-full rounded-full bg-ink/5">
-      <div className="h-full rounded-full" style={{ width: `${pct}%`, background: hex, opacity: 0.82 }} />
-    </div>
+    <div className="mt-1.5"><Meter value={pct / 100} hex={hex} /></div>
     <p className="mt-1.5 text-xs leading-relaxed text-ink/60">{detail}</p>
   </div>
 );
@@ -244,34 +242,38 @@ const TwoAxes: React.FC<{ reading: CompatibilityReading; lens: RelationLens }> =
 export const Compatibility: React.FC<{
   result: PairResult;
   lens: RelationLens;
-  onLensChange: (l: RelationLens) => void;
   onReset: () => void;
-}> = ({ result, lens, onLensChange, onReset }) => {
+}> = ({ result, lens, onReset }) => {
   const { reading, a, b } = result;
   const labelA = a.person.label;
   const labelB = b.person.label;
+  const symA = STEM_PROFILES[a.chart.dayMaster.chinese]?.symbol ?? 'tree';
+  const symB = STEM_PROFILES[b.chart.dayMaster.chinese]?.symbol ?? 'tree';
+  const lensLabel = lens === 'partner' ? 'Business' : 'Marriage';
 
   return (
     <div className="relative min-h-screen">
       <div className="fixed inset-0 -z-10 season-sky" aria-hidden />
+
+      {/* Floating back control — matches the single-nature result page */}
+      <button
+        onClick={onReset}
+        className="fixed top-6 left-6 z-50 flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-ink/70 backdrop-blur-md transition-colors hover:text-ink"
+      >
+        <span>←</span> Read another
+      </button>
+
       <div className="mx-auto max-w-5xl px-6 py-16">
-        <button onClick={onReset} className="mb-8 text-xs font-semibold uppercase tracking-widest text-stone hover:text-sage">
-          ← Start over
-        </button>
-
-        <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">Two natures</p>
-        <h2 className="mt-2 font-display text-4xl font-semibold tracking-tight text-ink md:text-5xl">
-          {labelA} <span className="text-sage">&</span> {labelB}
-        </h2>
-
-        {/* lens toggle */}
-        <div className="mt-6 inline-flex rounded-full border border-ink/10 p-1">
-          {(['partner', 'marriage'] as RelationLens[]).map((l) => (
-            <button key={l} onClick={() => onLensChange(l)}
-              className={`rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${lens === l ? 'bg-sage text-white' : 'text-stone hover:text-sage'}`}>
-              {l === 'partner' ? 'Co-founder' : 'Marriage'}
-            </button>
-          ))}
+        {/* Header — the two natures shown as glyphs, echoing the single reading's hero */}
+        <div className="flex flex-col items-center text-center">
+          <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">Two natures · {lensLabel}</p>
+          <div className="mt-6 flex items-center justify-center gap-4 sm:gap-6">
+            <NatureArt id={symA} accent={PERSON.a} className="h-16 w-16 shrink-0 sm:h-20 sm:w-20" />
+            <h2 className="font-display text-3xl font-semibold tracking-tight text-ink md:text-5xl">
+              {labelA} <span className="text-sage">&</span> {labelB}
+            </h2>
+            <NatureArt id={symB} accent={PERSON.b} className="h-16 w-16 shrink-0 sm:h-20 sm:w-20" />
+          </div>
         </div>
 
         {/* Two-axis headline — 相吸 vs 相守 (chemistry is the spark, not the staying power) */}
@@ -330,9 +332,10 @@ export const Compatibility: React.FC<{
           </div>
         </div>
 
-        {/* Full diagnosis text */}
+        {/* In short — the human synthesis (the cards above carry the detail) */}
         <div className="mt-6 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
-          <p className="text-sm leading-relaxed text-ink/75">{reading.note}</p>
+          <p className="mb-2 font-sans text-[11px] font-semibold uppercase tracking-[0.25em] text-sage-deep">In short</p>
+          <p className="font-display text-lg leading-relaxed text-ink/85 md:text-xl">{reading.note}</p>
         </div>
 
         {/* Team daily weather */}

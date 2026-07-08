@@ -68,7 +68,6 @@ const App: React.FC = () => {
   const [chart, setChart] = useState<BaziChart | null>(null);
   const [mode, setMode] = useState<'single' | 'pair'>('single');
   const [pair, setPair] = useState<PairResult | null>(null);
-  const [births, setBirths] = useState<[Birth, Birth] | null>(null);
   const [lens, setLens] = useState<RelationLens>('partner');
   const [error, setError] = useState<string | null>(null);
 
@@ -88,7 +87,6 @@ const App: React.FC = () => {
   const handleAnalyzePair = (a: Birth, b: Birth, l: RelationLens) => {
     try {
       setError(null);
-      setBirths([a, b]);
       setLens(l);
       setPair(analyzePair(a, b, l));
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -96,11 +94,6 @@ const App: React.FC = () => {
       setError('Could not read one of these birth moments. Please check the dates and try again.');
       console.error(err);
     }
-  };
-
-  const changeLens = (l: RelationLens) => {
-    setLens(l);
-    if (births) setPair(analyzePair(births[0], births[1], l));
   };
 
   const resetApp = () => {
@@ -112,7 +105,7 @@ const App: React.FC = () => {
   if (pair) {
     return (
       <div className="relative min-h-screen text-ink font-sans">
-        <Compatibility result={pair} lens={lens} onLensChange={changeLens} onReset={resetApp} />
+        <Compatibility result={pair} lens={lens} onReset={resetApp} />
         <Footer />
       </div>
     );
@@ -216,7 +209,7 @@ const App: React.FC = () => {
             <p className="mb-8 mt-4 max-w-md text-stone">
               {mode === 'single'
                 ? 'Your date, time, and place in the year reveal the living thing you are — and the seasons of the life ahead.'
-                : 'Two birth moments — a co-founder, a partner, a friend. See what each brings the other, where roles fit, and the days that suit you both.'}
+                : 'Two birth moments — a business partner, a collaborator, a friend. See what each brings the other, where roles fit, and the days that suit you both.'}
             </p>
 
             {/* single / pair toggle */}

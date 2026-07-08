@@ -78,7 +78,7 @@ export const PairInputForm: React.FC<Props> = ({ onAnalyze }) => {
           {(['partner', 'marriage'] as RelationLens[]).map((l) => (
             <button key={l} type="button" onClick={() => setLens(l)}
               className={`rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${lens === l ? 'bg-sage text-white' : 'text-stone hover:text-sage'}`}>
-              {l === 'partner' ? 'Co-founder' : 'Marriage'}
+              {l === 'partner' ? 'Business' : 'Marriage'}
             </button>
           ))}
         </div>
