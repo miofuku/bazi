@@ -79,3 +79,93 @@
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+/* ── Living nature glyphs (NatureArt) ─────────────────────────────────────────
+   Each nature moves as its element does: water flows, rain falls, a jewel glints,
+   a flame breathes. Motion only for users who want it — reduced-motion keeps the
+   calm static art (no stuck mid-fall drops). Transform/opacity only, GPU-friendly. */
+@media (prefers-reduced-motion: no-preference) {
+  /* 壬 river — the current drifts downstream */
+  .na-river { stroke-dasharray: 16 42; animation: na-flow 2.8s linear infinite; }
+  @keyframes na-flow { to { stroke-dashoffset: -58; } }
+
+  /* 癸 rain — drops fall and fade (staggered via inline animation-delay) */
+  .na-drop { transform-box: fill-box; animation: na-rain 1.7s cubic-bezier(0.5, 0, 0.8, 0.4) infinite; }
+  @keyframes na-rain {
+    0% { transform: translateY(-5px); opacity: 0; }
+    25% { opacity: 0.9; }
+    100% { transform: translateY(17px); opacity: 0; }
+  }
+
+  /* 辛 jewel — a facet catches the light */
+  .na-twinkle { transform-box: fill-box; transform-origin: center; animation: na-twinkle 2.6s ease-in-out infinite; }
+  @keyframes na-twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.2) rotate(22deg); }
+  }
+
+  /* 丙 sun — rays turn slowly, the core breathes */
+  .na-rays { transform-box: fill-box; transform-origin: center; animation: na-spin 30s linear infinite; }
+  @keyframes na-spin { to { transform: rotate(360deg); } }
+  .na-breathe { transform-box: fill-box; transform-origin: center; animation: na-breathe 4.2s ease-in-out infinite; }
+  @keyframes na-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+
+  /* 甲 tree / 乙 vine / 己 field — a gentle sway, as in a light wind */
+  .na-sway { transform-box: fill-box; transform-origin: bottom center; animation: na-sway 6.5s ease-in-out infinite; }
+  @keyframes na-sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+
+  /* 丁 flame — a tended fire flickers */
+  .na-flicker { transform-box: fill-box; transform-origin: bottom center; animation: na-flicker 2.3s ease-in-out infinite; }
+  @keyframes na-flicker {
+    0%, 100% { transform: scaleY(1) scaleX(1); opacity: 0.95; }
+    35% { transform: scaleY(1.09) scaleX(0.95); opacity: 1; }
+    65% { transform: scaleY(0.96) scaleX(1.03); opacity: 0.82; }
+  }
+
+  /* 庚 blade / 戊 snowcaps — a quiet glint */
+  .na-glint { animation: na-glint 3.4s ease-in-out infinite; }
+  @keyframes na-glint { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+  /* 甲 tree — now and then a leaf lets go and drifts down */
+  .na-leaf { transform-box: fill-box; opacity: 0; animation: na-leaf 5.6s ease-in infinite; }
+  @keyframes na-leaf {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+    8% { opacity: 0.75; }
+    55% { transform: translate(-10px, 48px) rotate(100deg); opacity: 0.65; }
+    100% { transform: translate(-2px, 88px) rotate(170deg); opacity: 0; }
+  }
+
+  /* 乙 vine — the climber draws itself upward, leaves unfurling as it goes */
+  .na-grow { stroke-dasharray: 1; animation: na-grow 7s ease-in-out infinite; }
+  @keyframes na-grow {
+    0% { stroke-dashoffset: 1; opacity: 1; }
+    55% { stroke-dashoffset: 0; opacity: 1; }
+    94% { stroke-dashoffset: 0; opacity: 1; }
+    100% { stroke-dashoffset: 0; opacity: 0; }
+  }
+  .na-leafin { transform-box: fill-box; transform-origin: center; opacity: 0; animation: na-leafin 7s ease-out infinite; }
+  @keyframes na-leafin {
+    0%, 30% { opacity: 0; transform: scale(0.5); }
+    48% { opacity: 1; transform: scale(1); }
+    94% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1); }
+  }
+
+  /* 戊 mountain — once in a while a pebble comes loose and tumbles */
+  .na-stone { transform-box: fill-box; opacity: 0; animation: na-stone 7s ease-in infinite; }
+  @keyframes na-stone {
+    0%, 55% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+    60% { opacity: 0.75; }
+    80% { transform: translate(-24px, 60px) rotate(150deg); opacity: 0.75; }
+    94%, 100% { transform: translate(-40px, 100px) rotate(280deg); opacity: 0; }
+  }
+
+  /* 己 field — sprouts push up from the tended rows */
+  .na-sproutgrow { transform-box: fill-box; transform-origin: bottom center; animation: na-sproutgrow 6s ease-out infinite; }
+  @keyframes na-sproutgrow {
+    0% { transform: scaleY(0); opacity: 0; }
+    20% { transform: scaleY(1); opacity: 1; }
+    88% { transform: scaleY(1); opacity: 1; }
+    100% { transform: scaleY(1); opacity: 0; }
+  }
+}
