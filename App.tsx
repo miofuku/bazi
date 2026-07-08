@@ -48,8 +48,8 @@ const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (
           <span className="text-[10px] font-sans text-stone tracking-[0.18em] uppercase mt-1">Your nature, by season</span>
         </span>
       </button>
-      <nav className="hidden md:flex items-center gap-10">
-        {[['The ten natures', 'natures'], ['How it reads', 'method'], ['Begin', 'begin']].map(([label, id]) => (
+      <nav className="hidden md:flex items-center gap-8">
+        {[['The ten natures', 'natures'], ['How it reads', 'method']].map(([label, id]) => (
           <button
             key={id}
             type="button"
@@ -59,6 +59,13 @@ const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (
             {label}
           </button>
         ))}
+        <button
+          type="button"
+          onClick={() => document.getElementById('begin')?.scrollIntoView({ behavior: 'smooth' })}
+          className="rounded-full bg-sage px-5 py-2 text-xs font-sans font-semibold uppercase tracking-widest text-white transition-colors hover:bg-sage-deep"
+        >
+          Find your nature
+        </button>
       </nav>
     </div>
   </header>
@@ -204,7 +211,7 @@ const App: React.FC = () => {
           <div className="mx-auto flex w-full max-w-4xl flex-col items-center text-center">
             <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">Begin</p>
             <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink md:text-5xl">
-              {mode === 'single' ? 'When were you born?' : 'How do two natures fit?'}
+              {mode === 'single' ? 'When were you born?' : 'How two natures pair'}
             </h2>
             <p className="mb-8 mt-4 max-w-md text-stone">
               {mode === 'single'
@@ -217,7 +224,7 @@ const App: React.FC = () => {
               {(['single', 'pair'] as const).map((m) => (
                 <button key={m} type="button" onClick={() => { setMode(m); setError(null); }}
                   className={`rounded-full px-6 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${mode === m ? 'bg-sage text-white' : 'text-stone hover:text-sage'}`}>
-                  {m === 'single' ? 'One nature' : 'Two natures'}
+                  {m === 'single' ? 'One nature' : 'Paired'}
                 </button>
               ))}
             </div>

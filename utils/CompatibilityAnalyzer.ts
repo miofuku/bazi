@@ -154,11 +154,11 @@ const rivalryRisk = (a: Person, b: Person, samePeers: boolean): Rivalry => {
 
   let score = 0;
   const reasons: string[] = [];
-  if (samePeers) { score += 1; reasons.push(`both ${(a.strength.dayElement as string).toLowerCase()} day masters (比劫)`); }
-  if (bothSelfDriven) { score += 1; reasons.push('both driven to lead'); }
-  if (overlap) { score += 1; reasons.push('overlapping strengths'); }
-  if (balancedPower) { score += 1; reasons.push('evenly matched, no natural lead'); }
-  else { score -= 1; reasons.push('different weights, a natural lead & second'); }
+  if (samePeers) { score += 1; reasons.push(`you share a ${(a.strength.dayElement as string).toLowerCase()} core`); }
+  if (bothSelfDriven) { score += 1; reasons.push('both built to lead'); }
+  if (overlap) { score += 1; reasons.push('strong in the same places'); }
+  if (balancedPower) { score += 1; reasons.push('evenly matched, with no natural lead'); }
+  else { score -= 1; reasons.push('different weights — a natural lead and second'); }
 
   const level = score <= 0 ? 'low' : score === 1 ? 'medium' : 'high';
   return { level, reason: reasons.join('; ') };

@@ -19,10 +19,10 @@ export const Footer: React.FC = () => (
       <p className="text-[10px] uppercase tracking-[0.5em] text-sage-deep mb-12 font-semibold">Your nature, by season</p>
 
       <p className="text-sm text-stone max-w-md leading-relaxed mb-4">
-        A quiet space for self-reflection — a way to understand your temperament, not a prediction of fortune, luck, or destiny.
+        A quiet space for self-reflection — a way to understand your temperament and grow in tune with it.
       </p>
       <p className="text-xs text-stone/70 italic max-w-md leading-relaxed mb-12">
-        Rooted in 象法 — an old Chinese way of seeing a person as part of nature.
+        Rooted in xiàngfǎ — an old Chinese way of seeing a person as part of nature.
       </p>
 
       <div className="w-full pt-10 border-t border-black/5 flex flex-col md:flex-row justify-between items-center gap-4">

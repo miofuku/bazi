@@ -51,7 +51,7 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
       <p className="font-sans text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: accentDeep }}>
         Day by day
       </p>
-      <h2 className="mt-2 font-display text-3xl font-semibold text-ink md:text-4xl">A calendar of weather, not fortune</h2>
+      <h2 className="mt-2 font-display text-3xl font-semibold text-ink md:text-4xl">Every day has its own weather</h2>
       <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink/70">
         Every day carries its own element. Read against your nature, each one becomes a kind of weather — a day to push out, to gather, to rest. Just the sort of day it is for you, and how to grow with it.
       </p>
@@ -136,9 +136,8 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
               </div>
               <div className="flex items-center gap-2">
                 <ForceArt element={reading.element} className="h-10 w-10" />
-                <span className="font-sc text-2xl" style={{ color: ELEMENT_HEX[reading.element] }}>
-                  {reading.dayPillar.stem.chinese}
-                  {reading.dayPillar.branch.chinese}
+                <span className="text-sm font-semibold uppercase tracking-wider" style={{ color: ELEMENT_HEX[reading.element] }}>
+                  {reading.element}
                 </span>
               </div>
             </div>
@@ -146,9 +145,6 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
             {reading.favor != null && (() => { const w = windOf(reading.favor); return (
               <div className="mb-4 flex flex-wrap items-center gap-2">
                 <span className="rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider" style={{ background: `${w.hex}1f`, color: w.hex }}>{w.label}</span>
-                {reading.structuralEvents?.map((e) => (
-                  <span key={e} className="font-sc rounded-full bg-ink/5 px-2 py-0.5 text-[11px] text-ink/55">{e}</span>
-                ))}
               </div>
             ); })()}
 

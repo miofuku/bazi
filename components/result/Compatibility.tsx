@@ -4,7 +4,7 @@ import {
   CompatibilityReading, RelationLens, ROLE, ROLE_ORDER, GroupProfile,
 } from '../../utils/CompatibilityAnalyzer';
 import { PairResult, teamDailyWeather } from '../../services/compatibilityService';
-import { ELEMENT_HEX, ELEMENT_CN, PERSON, WIND } from '../../utils/tokens';
+import { ELEMENT_HEX, PERSON, WIND } from '../../utils/tokens';
 import { NatureArt } from '../illustrations/NatureArt';
 import { STEM_PROFILES } from '../../content/xiangfa';
 import { Meter } from './Meter';
@@ -89,28 +89,35 @@ const RoleRadar: React.FC<{
   );
 };
 
-// ── Bidirectional supply arrows ──────────────────────────────────────────────
+// ── What each person brings the other, in plain language ─────────────────────
+// The five forces named the way the rest of the reading names them.
+const FORCE_WORD: Record<ElementType, string> = {
+  [ElementType.WOOD]: 'growth', [ElementType.FIRE]: 'warmth', [ElementType.EARTH]: 'grounding',
+  [ElementType.METAL]: 'structure', [ElementType.WATER]: 'flow',
+};
+const joinWords = (w: string[]): string =>
+  w.length <= 1 ? (w[0] ?? '') : `${w.slice(0, -1).join(', ')} and ${w[w.length - 1]}`;
+
 const SupplyRow: React.FC<{
   from: string; to: string; score: number;
   brings: { element: ElementType; favor: Favor }[];
 }> = ({ from, to, score, brings }) => {
-  const pos = score >= 0;
+  const good = joinWords(brings.filter((b) => b.favor === 'favorable').map((b) => FORCE_WORD[b.element]));
+  const heavy = joinWords(brings.filter((b) => b.favor === 'unfavorable').map((b) => FORCE_WORD[b.element]));
+  const toName = <span className="font-medium text-ink/80">{to}</span>;
+
+  let body: React.ReactNode;
+  if (score > 0.1 && good) {
+    body = <>brings {toName} the {good} they thrive on.</>;
+  } else if (score < -0.1 && heavy) {
+    body = <>adds more {heavy} to {toName} — something they already carry in plenty.</>;
+  } else {
+    body = <>neither feeds nor drains {toName} much — a quiet, even exchange.</>;
+  }
   return (
-    <div className="flex items-center gap-3">
-      <span className="w-24 shrink-0 text-right text-sm text-ink/70">{from} <span className="text-ink/30">→</span> {to}</span>
-      <Meter value={Math.min(Math.abs(score), 1)} hex={pos ? A_HEX : B_HEX} className="flex-1" />
-      <span className="w-10 shrink-0 text-sm font-semibold" style={{ color: pos ? WIND.tailwind : WIND.headwind }}>
-        {pos ? '+' : ''}{score.toFixed(2)}
-      </span>
-      <span className="flex w-16 shrink-0 gap-1">
-        {brings.map((x, i) => (
-          <span key={i} className="font-sc text-sm" style={{ color: ELEMENT_HEX[x.element] }} title={x.favor === 'favorable' ? '喜' : '忌'}>
-            {ELEMENT_CN[x.element]}
-            {x.favor === 'favorable' ? '' : '⁻'}
-          </span>
-        ))}
-      </span>
-    </div>
+    <p className="text-sm leading-relaxed text-ink/75">
+      <span className="font-semibold text-ink">{from}</span> {body}
+    </p>
   );
 };
 
@@ -131,7 +138,7 @@ const TeamWeather: React.FC<{ result: PairResult }> = ({ result }) => {
         {days.map((d, i) => (
           <div
             key={i}
-            title={`${d.date.toLocaleDateString()} ${d.chinese} · ${result.a.person.label} ${d.aScore.toFixed(1)} / ${result.b.person.label} ${d.bScore.toFixed(1)}`}
+            title={`${d.date.toLocaleDateString()} · ${result.a.person.label} ${d.aScore.toFixed(1)} / ${result.b.person.label} ${d.bScore.toFixed(1)}`}
             className="flex h-9 w-9 items-center justify-center rounded-lg text-[11px] transition-transform hover:scale-110"
             style={{
               background: d.mutual ? ELEMENT_HEX[d.stemElement] : `${ELEMENT_HEX[d.stemElement]}1a`,
@@ -168,12 +175,12 @@ const RIVALRY_TONE = { low: 'good', medium: 'warn', high: 'bad' } as const;
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 
 const AxisMeter: React.FC<{
-  title: string; cn: string; pct: number; verdict: string; hex: string; detail: string;
-}> = ({ title, cn, pct, verdict, hex, detail }) => (
+  title: string; pct: number; verdict: string; hex: string; detail: string;
+}> = ({ title, pct, verdict, hex, detail }) => (
   <div>
     <div className="flex items-baseline justify-between">
       <span className="font-display text-base font-semibold text-ink">
-        {title} <span className="font-sc text-xs font-normal text-ink/35">{cn}</span>
+        {title}
       </span>
       <span className="text-sm font-semibold" style={{ color: hex }}>{verdict}</span>
     </div>
@@ -208,10 +215,10 @@ const TwoAxes: React.FC<{ reading: CompatibilityReading; lens: RelationLens }> =
       `${cov.gaps.length ? ` · ${cov.gaps.length} blind spot${cov.gaps.length > 1 ? 's' : ''}` : ' · roles covered'}.`;
     return (
       <div className="mt-8 grid gap-5 rounded-2xl bg-white/60 p-6 ring-1 ring-ink/5 shadow-lift sm:grid-cols-2">
-        <AxisMeter title="Chemistry" cn="相吸" pct={spark * 100} verdict={sparkVerdict} hex={sparkHex} detail={sparkDetail} />
-        <AxisMeter title="Built to last" cn="相守" pct={struct * 100} verdict={structVerdict} hex={ELEMENT_HEX[ElementType.EARTH]} detail={structDetail} />
+        <AxisMeter title="Chemistry" pct={spark * 100} verdict={sparkVerdict} hex={sparkHex} detail={sparkDetail} />
+        <AxisMeter title="Built to last" pct={struct * 100} verdict={structVerdict} hex={ELEMENT_HEX[ElementType.EARTH]} detail={structDetail} />
         <p className="border-t border-ink/5 pt-3 text-xs italic text-stone sm:col-span-2">
-          Chemistry <span className="font-sc not-italic">相吸</span> isn’t staying power <span className="font-sc not-italic">相守</span> — a spark is the start; lasting rests on the split of roles and the pull for control.
+          Chemistry isn’t staying power — a spark is the start; lasting rests on the split of roles and the pull for control.
         </p>
       </div>
     );
@@ -220,20 +227,20 @@ const TwoAxes: React.FC<{ reading: CompatibilityReading; lens: RelationLens }> =
   // marriage: the chart reads the spark (相吸); staying power (相守) is tending + choice, not fate.
   return (
     <div className="mt-8 grid gap-5 rounded-2xl bg-white/60 p-6 ring-1 ring-ink/5 shadow-lift sm:grid-cols-2">
-      <AxisMeter title="Chemistry" cn="相吸" pct={spark * 100} verdict={sparkVerdict} hex={sparkHex} detail={sparkDetail} />
+      <AxisMeter title="Chemistry" pct={spark * 100} verdict={sparkVerdict} hex={sparkHex} detail={sparkDetail} />
       <div>
         <div className="flex items-baseline justify-between">
           <span className="font-display text-base font-semibold text-ink">
-            Built to last <span className="font-sc text-xs font-normal text-ink/35">相守</span>
+            Built to last
           </span>
           <span className="text-sm font-semibold text-stone">Yours to write</span>
         </div>
         <p className="mt-3 text-xs leading-relaxed text-ink/60">
-          The chart shows only the spark. Whether it lasts is tending and choice, not fate — the most loving pairing can part, and the plainest can last a lifetime.
+          The chart shows only the spark. Whether it lasts is tending and choice — the most loving pairing can part, and the plainest can last a lifetime.
         </p>
       </div>
       <p className="border-t border-ink/5 pt-3 text-xs italic text-stone sm:col-span-2">
-        Chemistry <span className="font-sc not-italic">相吸</span> we can read; how long it lasts <span className="font-sc not-italic">相守</span>, you write.
+        Chemistry we can read; how long it lasts, you write.
       </p>
     </div>
   );
@@ -266,7 +273,7 @@ export const Compatibility: React.FC<{
       <div className="mx-auto max-w-5xl px-6 py-16">
         {/* Header — the two natures shown as glyphs, echoing the single reading's hero */}
         <div className="flex flex-col items-center text-center">
-          <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">Two natures · {lensLabel}</p>
+          <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">Paired natures · {lensLabel}</p>
           <div className="mt-6 flex items-center justify-center gap-4 sm:gap-6">
             <NatureArt id={symA} accent={PERSON.a} className="h-16 w-16 shrink-0 sm:h-20 sm:w-20" />
             <h2 className="font-display text-3xl font-semibold tracking-tight text-ink md:text-5xl">
@@ -301,13 +308,16 @@ export const Compatibility: React.FC<{
 
             {lens === 'partner' && reading.roleCoverage && reading.rivalry && (
               <div className="mt-1 flex flex-col gap-3 border-t border-ink/5 pt-3">
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-sage-deep">Who covers what</p>
                 <div className="flex flex-wrap gap-2">
-                  {reading.roleCoverage.covered.map((r) => <Chip key={r} tone="good">✓ {r.split('·')[0]}</Chip>)}
+                  {reading.roleCoverage.covered
+                    .filter((r) => !reading.roleCoverage!.overlaps.includes(r))
+                    .map((r) => <Chip key={r} tone="good">✓ {r.split('·')[0]}</Chip>)}
                   {reading.roleCoverage.gaps.map((r) => <Chip key={r} tone="warn">⚠ Gap · {r.split('·')[0]}</Chip>)}
-                  {reading.roleCoverage.overlaps.map((r) => <Chip key={r} tone="bad">↯ Clash · {r.split('·')[0]}</Chip>)}
+                  {reading.roleCoverage.overlaps.map((r) => <Chip key={r} tone="bad">↯ Both · {r.split('·')[0]}</Chip>)}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-ink/70">
-                  <span>Rivalry for the lead <span className="font-sc text-xs text-ink/35">比劫</span></span>
+                <div className="flex flex-wrap items-center gap-2 text-sm text-ink/70">
+                  <span>Rivalry for the lead</span>
                   <Chip tone={RIVALRY_TONE[reading.rivalry.level]}>{RIVALRY_LABEL[reading.rivalry.level]}</Chip>
                   <span className="text-xs text-stone">{reading.rivalry.reason}</span>
                 </div>
@@ -321,7 +331,7 @@ export const Compatibility: React.FC<{
                   const list = (arr: ElementType[]) => arr.map((e) => (e as string).toLowerCase()).join(' & ');
                   return (
                     <p key={i}>
-                      <span className="font-semibold text-ink/80">{sp.from}’s spouse palace <span className="font-sc text-xs font-normal text-ink/35">配偶宫</span></span>
+                      <span className="font-semibold text-ink/80">{sp.from}’s innermost seat</span>
                       {sp.holds.length ? ` holds ${list(sp.holds)} — just what ${other} thrives on` : ` holds none of what ${other} thrives on`}
                       {sp.clashes.length ? `, and some ${list(sp.clashes)} they’d rather avoid` : ''}
                     </p>

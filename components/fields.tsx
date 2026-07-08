@@ -41,20 +41,20 @@ export const GeoControl: React.FC<{ onChange: (s: GeoSpec | undefined) => void }
   return (
     <div className="rounded-lg border border-black/5 bg-black/[0.02] p-4">
       <label className="mb-2 block text-center text-[10px] font-semibold uppercase tracking-[0.15em] text-stone">
-        出生地 · birthplace（真太阳时）
+        Birthplace · true solar time
       </label>
       <select
         value={sel}
         onChange={(e) => { setSel(e.target.value); emit(e.target.value, lon, tz); }}
         className="w-full rounded-md border border-black/10 bg-silk/40 px-3 py-2 text-sm text-ink focus:border-sage focus:outline-none"
       >
-        <option value="none">不校正（用钟表时间）</option>
+        <option value="none">No correction (use clock time)</option>
         {REGIONS.map((r) => (
           <optgroup key={r} label={r}>
             {CITIES.map((c, i) => c.region === r ? <option key={i} value={i}>{c.name}</option> : null)}
           </optgroup>
         ))}
-        <option value="manual">▸ 手动经度 / 时区</option>
+        <option value="manual">▸ Manual longitude / timezone</option>
       </select>
       {sel === 'manual' && (
         <div className="mt-3 grid grid-cols-2 gap-2">

@@ -30,7 +30,6 @@ const ControlFlow: React.FC<{ d: ElementDynamic }> = ({ d }) => {
       />
       <span className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-baseline gap-1.5 rounded-full border border-ink/5 bg-white px-3 py-1 shadow-sm">
         <span className="text-[11px] font-semibold uppercase tracking-widest text-ink/80">{d.verb}</span>
-        <span className="font-sc text-xs text-stone/55" title="controls (克)">{d.relationCn}</span>
       </span>
     </div>
   );

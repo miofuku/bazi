@@ -1,6 +1,6 @@
 import React from 'react';
 import { RelationshipReading } from '../../content/xiangfa/relationships';
-import { ElementIcon } from './icons';
+import { NatureArt } from '../illustrations/NatureArt';
 import { useAccent } from './AtmosphereContext';
 
 const PROMINENCE: Record<RelationshipReading['prominence'], { label: string; dim: boolean }> = {
@@ -29,9 +29,7 @@ export const Relationships: React.FC<{ items: RelationshipReading[] }> = ({ item
               key={r.id}
               className={`flex gap-4 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift ${meta.dim ? 'opacity-70' : ''}`}
             >
-              <span className="mt-0.5 shrink-0" style={{ color: accent }}>
-                <ElementIcon type={r.icon} className="h-8 w-8 stroke-[1.4]" />
-              </span>
+              <NatureArt id={r.icon} accent={accent} className="mt-0.5 h-12 w-12 shrink-0" />
               <div>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                   <h3 className="font-display text-lg font-semibold text-ink">{r.title}</h3>

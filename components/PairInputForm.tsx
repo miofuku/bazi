@@ -76,7 +76,7 @@ export const PairInputForm: React.FC<Props> = ({ onAnalyze }) => {
   return (
     <form
       onSubmit={(e) => { e.preventDefault(); onAnalyze(withGeo(a, geoA), withGeo(b, geoB), lens); }}
-      className="w-full max-w-2xl glass-light p-8 shadow-2xl border-black/5"
+      className="w-full max-w-4xl glass-light p-8 shadow-2xl border-black/5"
     >
       <div className="mb-6 flex justify-center">
         <div className="inline-flex rounded-full border border-ink/10 p-1">
