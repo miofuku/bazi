@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { InputForm } from './components/InputForm';
+import { PairInputForm } from './components/PairInputForm';
 import { NatureResult } from './components/result/NatureResult';
+import { Compatibility } from './components/result/Compatibility';
 import { calculateBazi } from './services/baziService';
+import { analyzePair, PairResult, Birth } from './services/compatibilityService';
+import { RelationLens } from './utils/CompatibilityAnalyzer';
 import { BaziChart, Gender } from './types';
 import { Methodology } from './components/Methodology';
 import { TenNatures, StemMotif } from './components/TenNatures';
@@ -60,6 +64,10 @@ const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (
 
 const App: React.FC = () => {
   const [chart, setChart] = useState<BaziChart | null>(null);
+  const [mode, setMode] = useState<'single' | 'pair'>('single');
+  const [pair, setPair] = useState<PairResult | null>(null);
+  const [births, setBirths] = useState<[Birth, Birth] | null>(null);
+  const [lens, setLens] = useState<RelationLens>('partner');
 
   const handleCalculate = (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender }) => {
     try {
@@ -73,10 +81,37 @@ const App: React.FC = () => {
     }
   };
 
+  const handleAnalyzePair = (a: Birth, b: Birth, l: RelationLens) => {
+    try {
+      setBirths([a, b]);
+      setLens(l);
+      setPair(analyzePair(a, b, l));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      alert('Could not read one of these birth moments. Please check the dates and try again.');
+      console.error(error);
+    }
+  };
+
+  const changeLens = (l: RelationLens) => {
+    setLens(l);
+    if (births) setPair(analyzePair(births[0], births[1], l));
+  };
+
   const resetApp = () => {
     setChart(null);
+    setPair(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  if (pair) {
+    return (
+      <div className="relative min-h-screen text-ink font-sans">
+        <Compatibility result={pair} lens={lens} onLensChange={changeLens} onReset={resetApp} />
+        <Footer />
+      </div>
+    );
+  }
 
   if (chart) {
     return (
@@ -170,11 +205,28 @@ const App: React.FC = () => {
         <section id="begin" className="px-6 py-28">
           <div className="mx-auto flex w-full max-w-4xl flex-col items-center text-center">
             <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">Begin</p>
-            <h3 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink md:text-5xl">When were you born?</h3>
-            <p className="mb-12 mt-4 max-w-md text-stone">
-              Your date, time, and place in the year reveal the living thing you are — and the seasons of the life ahead.
+            <h3 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink md:text-5xl">
+              {mode === 'single' ? 'When were you born?' : 'How do two natures fit?'}
+            </h3>
+            <p className="mb-8 mt-4 max-w-md text-stone">
+              {mode === 'single'
+                ? 'Your date, time, and place in the year reveal the living thing you are — and the seasons of the life ahead.'
+                : 'Two birth moments — a co-founder, a partner, a friend. See what each brings the other, where roles fit, and the days that suit you both.'}
             </p>
-            <InputForm onCalculate={handleCalculate} />
+
+            {/* single / pair toggle */}
+            <div className="mb-12 inline-flex rounded-full border border-ink/10 p-1">
+              {(['single', 'pair'] as const).map((m) => (
+                <button key={m} onClick={() => setMode(m)}
+                  className={`rounded-full px-6 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${mode === m ? 'bg-sage text-white' : 'text-stone hover:text-sage'}`}>
+                  {m === 'single' ? 'One nature' : 'Two natures'}
+                </button>
+              ))}
+            </div>
+
+            {mode === 'single'
+              ? <InputForm onCalculate={handleCalculate} />
+              : <PairInputForm onAnalyze={handleAnalyzePair} />}
           </div>
         </section>
       </main>

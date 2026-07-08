@@ -44,6 +44,8 @@ export interface SpousePalace {
   score: number;
 }
 
+export type GroupProfile = Record<keyof TenGods, number>; // 十神-group shares
+
 export interface CompatibilityReading {
   lens: RelationLens;
   aToB: SupplyDirection;
@@ -54,6 +56,7 @@ export interface CompatibilityReading {
   domainA: string;
   domainB: string;
   divergentDomains: boolean;
+  profiles: { a: GroupProfile; b: GroupProfile }; // for the role radar
   roleCoverage?: RoleCoverage;         // partner
   rivalry?: Rivalry;                   // partner
   spousePalace?: [SpousePalace, SpousePalace]; // marriage
@@ -68,13 +71,15 @@ const NOUN: Record<ElementType, string> = {
 };
 
 // 十神 group → business role label.
-const ROLE: Record<keyof TenGods, string> = {
+export const ROLE: Record<keyof TenGods, string> = {
   output: '产品·创意·愿景',
   wealth: '经营·变现·拓展',
   authority: '执行·管控·纪律',
   resource: '风控·知识·后盾',
   self: '冲劲·自立·带队',
 };
+// Radar axis order (key roles first).
+export const ROLE_ORDER: (keyof TenGods)[] = ['output', 'wealth', 'authority', 'resource', 'self'];
 // The roles a founding team most needs to cover.
 const KEY_ROLES: (keyof TenGods)[] = ['output', 'wealth', 'authority'];
 const STRONG = 0.22; // a 十神 group above this share is a personal strength
@@ -201,7 +206,9 @@ export const analyzeCompatibility = (
 
   const reading: CompatibilityReading = {
     lens, aToB, bToA, mutualScore, asymmetry, samePeers,
-    domainA: ROLE[dA], domainB: ROLE[dB], divergentDomains, note: '',
+    domainA: ROLE[dA], domainB: ROLE[dB], divergentDomains,
+    profiles: { a: groupShares(a), b: groupShares(b) },
+    note: '',
   };
 
   let note = `${feed(aToB)}；${feed(bToA)}。`;
