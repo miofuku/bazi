@@ -45,7 +45,7 @@ export const InnerClimate: React.FC<InnerClimateProps> = ({ elementShare }) => {
       <p className="font-sans text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: accentDeep }}>Your inner weather</p>
       <h2 className="mt-2 font-display text-3xl font-semibold text-ink md:text-4xl">The forces that move through you</h2>
       <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink/70">
-        Five forces shape everything that grows. Each of us carries them in our own proportions — heavy in one, light in another. That blend isn't a flaw; it's simply your weather, the climate other people feel when they're near you.
+        Five forces shape everything that grows. Each of us carries them in our own proportions — heavy in one, light in another. That blend isn't a flaw; it's your inner climate — the atmosphere people feel when they're near you.
       </p>
 
       {/* Proportional strip */}

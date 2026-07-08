@@ -49,11 +49,11 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
   return (
     <section>
       <p className="font-sans text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: accentDeep }}>
-        Your days
+        Day by day
       </p>
       <h2 className="mt-2 font-display text-3xl font-semibold text-ink md:text-4xl">A calendar of weather, not fortune</h2>
       <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink/70">
-        Every day carries its own element. Read against your nature, each one becomes a kind of weather — a day to push out, to gather, to rest. Not luck or destiny; just the sort of day it is for you, and how to grow with it.
+        Every day carries its own element. Read against your nature, each one becomes a kind of weather — a day to push out, to gather, to rest. Just the sort of day it is for you, and how to grow with it.
       </p>
 
       <div className="mt-8 grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">

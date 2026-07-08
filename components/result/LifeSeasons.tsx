@@ -30,7 +30,7 @@ export const LifeSeasons: React.FC<{ seasons: LifeSeason[] }> = ({ seasons }) =>
       <p className="font-sans text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: accentDeep }}>The seasons ahead</p>
       <h2 className="mt-2 font-display text-3xl font-semibold text-ink md:text-4xl">Your life moves through long weathers</h2>
       <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink/70">
-        Beyond the season you were born into, life turns through longer climates — each lasting about a decade, each asking and offering something different. They don't decide your fate; they're the weather you'll be growing in.
+        Beyond the season you were born into, life turns through longer climates — each lasting about a decade, each asking and offering something different. They're simply the weather you'll be growing in.
       </p>
 
       {current && (

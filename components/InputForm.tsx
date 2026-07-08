@@ -79,7 +79,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
           type="submit"
           className="w-full mt-6 bg-sage hover:bg-sage-deep text-white font-display font-semibold py-5 rounded-full transition-all duration-500 tracking-[0.2em] uppercase group relative overflow-hidden"
         >
-          <span className="relative z-10 group-hover:tracking-[0.35em] transition-all duration-500">Reveal my nature</span>
+          <span className="relative z-10 group-hover:tracking-[0.35em] transition-all duration-500">Read my nature</span>
         </button>
       </div>
     </form>

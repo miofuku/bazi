@@ -71,7 +71,7 @@ export const Interactions: React.FC<{ data: InteractionsReading }> = ({ data }) 
   return (
     <section>
       <p className="font-sans text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: accentDeep }}>The push and pull within you</p>
-      <h2 className="mt-2 font-display text-3xl font-semibold text-ink md:text-4xl">Your forces aren't separate — they act on each other</h2>
+      <h2 className="mt-2 font-display text-3xl font-semibold text-ink md:text-4xl">Your strengths pull on one another</h2>
       <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink/70">
         In nature nothing stands alone: roots break ground, rain feeds the tree, the blade prunes new growth. The same is true inside you — your strengths lean on and strain against one another, and that friction is where much of your character is made.
       </p>

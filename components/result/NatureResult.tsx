@@ -110,13 +110,13 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
           weakestElement={reading.weakestElement}
         />
         <Divider accent={atmo.accent} />
-        <DailyCalendar chart={chart} />
-        <Divider accent={atmo.accent} />
         <Interactions data={interactions} />
         <Divider accent={atmo.accent} />
         <Relationships items={relationships} />
         <Divider accent={atmo.accent} />
         <LifeSeasons seasons={lifeSeasons} />
+        <Divider accent={atmo.accent} />
+        <DailyCalendar chart={chart} />
         <Divider accent={atmo.accent} />
         <Storyline beats={storyline} />
 

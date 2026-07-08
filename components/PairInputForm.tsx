@@ -51,6 +51,11 @@ const PersonFields: React.FC<{
       <input type="checkbox" checked={!timeKnown} onChange={(e) => onChange({ ...value, hour: e.target.checked ? undefined : 12 })} className="h-3.5 w-3.5 accent-sage" />
       Birth time unknown
     </label>
+    {!timeKnown && (
+      <p className="text-[11px] leading-relaxed text-stone/70">
+        We'll read year, season & day — the hour only adds the finer grain of later years and inner life.
+      </p>
+    )}
     {timeKnown && <GeoControl onChange={onGeoSpec} />}
   </div>
   );
@@ -78,7 +83,7 @@ export const PairInputForm: React.FC<Props> = ({ onAnalyze }) => {
           {(['partner', 'marriage'] as RelationLens[]).map((l) => (
             <button key={l} type="button" onClick={() => setLens(l)}
               className={`rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${lens === l ? 'bg-sage text-white' : 'text-stone hover:text-sage'}`}>
-              {l === 'partner' ? 'Business' : 'Marriage'}
+              {l === 'partner' ? 'Work' : 'Love'}
             </button>
           ))}
         </div>

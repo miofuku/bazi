@@ -25,7 +25,7 @@ export const SeasonEnvironment: React.FC<{ season: SeasonalModifier }> = ({ seas
           <p className="mt-1 font-display text-base italic text-stone">{season.climate}</p>
           <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-ink/80">{season.reading}</p>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-stone">
-            The world you arrived into — your early home, the people and weather around you — shaped which of your needs feel most urgent. It's why two people of the same nature can grow so differently.
+            The world you arrived into — your early home, the people and conditions around you — leaves a mark that never quite washes out. It's why two people of the same nature can grow so differently.
           </p>
         </div>
       </div>

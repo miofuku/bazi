@@ -169,7 +169,7 @@ const App: React.FC = () => {
         <section className="border-y border-ink/5 bg-mist/40 px-6 py-28 backdrop-blur-sm">
           <div className="mx-auto max-w-4xl">
             <p className="font-display text-3xl leading-snug text-ink md:text-[2.6rem] md:leading-[1.25]">
-              <span className="text-sage">“</span>The same forces that shape a tree, a field, or a river shape a person. Your birth names which living thing you are — and the season you were born into is the climate you first had to grow in.<span className="text-sage">”</span>
+              <span className="text-sage">“</span>You don't grow by becoming something else. You grow by knowing what you are — and giving it what it needs.<span className="text-sage">”</span>
             </p>
           </div>
         </section>

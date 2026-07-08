@@ -65,13 +65,14 @@ export interface CompatibilityReading {
 
 const FAVOR_WEIGHT: Record<Favor, number> = { favorable: 1, neutral: 0, unfavorable: -1 };
 
-// 十神 group → founder-role label (first word is the short radar label).
+// 十神 group → founder-role label, masked as parts of one growing thing (first
+// word is the short radar label; the gloss after it surfaces in the a11y text).
 export const ROLE: Record<keyof TenGods, string> = {
-  output: 'Product·Vision·Craft',
-  wealth: 'Growth·Deals·Ops',
-  authority: 'Execution·Rigor',
-  resource: 'Ballast·Knowledge',
-  self: 'Drive·Leadership',
+  output: 'Fruit·what you make',
+  wealth: 'Harvest·growth & resources',
+  authority: 'Pruning·rigor & follow-through',
+  resource: 'Roots·knowledge & ballast',
+  self: 'Trunk·drive & leadership',
 };
 // Radar axis order (key roles first).
 export const ROLE_ORDER: (keyof TenGods)[] = ['output', 'wealth', 'authority', 'resource', 'self'];
@@ -226,7 +227,7 @@ export const analyzeCompatibility = (
     const spark = mutualScore > 0.15
       ? 'and there’s a real, born-in pull between you'
       : 'and the pull between you is quiet — a bond you’d grow into rather than fall into';
-    note = `${kin}, ${spark}. But a chart only shows the spark; whether it lasts is tending and choice, not fate.`;
+    note = `${kin}, ${spark}.`;
   }
 
   reading.note = note;

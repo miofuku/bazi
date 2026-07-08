@@ -249,7 +249,7 @@ export const Compatibility: React.FC<{
   const labelB = b.person.label;
   const symA = STEM_PROFILES[a.chart.dayMaster.chinese]?.symbol ?? 'tree';
   const symB = STEM_PROFILES[b.chart.dayMaster.chinese]?.symbol ?? 'tree';
-  const lensLabel = lens === 'partner' ? 'Business' : 'Marriage';
+  const lensLabel = lens === 'partner' ? 'Work' : 'Love';
 
   return (
     <div className="relative min-h-screen">
