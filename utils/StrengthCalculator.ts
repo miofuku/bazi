@@ -64,19 +64,23 @@ export const calculateStrength = (
   yearPillar: Pillar,
   monthPillar: Pillar,
   dayPillar: Pillar,
-  hourPillar: Pillar,
+  hourPillar: Pillar | null, // null when the birth hour is unknown → read from 三柱
   rulingStem?: string, // 司令 hidden stem of the month branch (from getRulingStem)
 ): StrengthReading => {
   const monthBranch = monthPillar.branch.chinese;
   const monthFactor = (el: ElementType) => STEM_MONTH_STRENGTH[el][monthBranch] ?? 1.0;
 
-  const pillars = [yearPillar, monthPillar, dayPillar, hourPillar];
+  // Order preserved (year=0, month=1, day=2); hour dropped when unknown.
+  const pillars = [yearPillar, monthPillar, dayPillar, hourPillar].filter(
+    (p): p is Pillar => p !== null,
+  );
+  const n = pillars.length;
   const monthIndex = 1;
 
   // ── pass 1: base power per stem and per hidden stem (with 司令) ──────────────
   const power = emptyScores();
-  const hiddenByBranch: HiddenContribution[][] = [[], [], [], []];
-  const branchPower = [0, 0, 0, 0]; // total hidden power per branch, for 冲 direction
+  const hiddenByBranch: HiddenContribution[][] = Array.from({ length: n }, () => []);
+  const branchPower = new Array(n).fill(0); // total hidden power per branch, for 冲 direction
 
   pillars.forEach((p, i) => {
     power[p.stem.element] += monthFactor(p.stem.element);
@@ -94,10 +98,10 @@ export const calculateStrength = (
   });
 
   // ── pass 2: 六冲 reduces clashed branches; track uprooting ───────────────────
-  const reduction = [0, 0, 0, 0];
-  const passiveClashes = [0, 0, 0, 0]; // times this branch is the 被冲 (heavier) side
-  for (let i = 0; i < 4; i++) {
-    for (let j = i + 1; j < 4; j++) {
+  const reduction = new Array(n).fill(0);
+  const passiveClashes = new Array(n).fill(0); // times this branch is the 被冲 (heavier) side
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
       if (SIX_CHONG[pillars[i].branch.chinese] !== pillars[j].branch.chinese) continue;
       const f = CHONG_FACTORS[j - i];
       const iWeaker = branchPower[i] <= branchPower[j];

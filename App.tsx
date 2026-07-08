@@ -72,7 +72,7 @@ const App: React.FC = () => {
   const [lens, setLens] = useState<RelationLens>('partner');
   const [error, setError] = useState<string | null>(null);
 
-  const handleCalculate = (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender; geo?: ResolvedGeo }) => {
+  const handleCalculate = (data: { year: number; month: number; day: number; hour?: number; minute: number; gender: Gender; geo?: ResolvedGeo }) => {
     try {
       setError(null);
       const result = calculateBazi(data.year, data.month, data.day, data.hour, data.minute, data.gender, data.geo);

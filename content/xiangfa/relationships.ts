@@ -113,7 +113,7 @@ export function buildRelationships(chart: BaziChart): RelationshipReading[] {
     polWeight[cp[0]][cp[1]] += w;
   };
 
-  const pillars = [chart.yearPillar, chart.monthPillar, chart.dayPillar, chart.hourPillar];
+  const pillars = [chart.yearPillar, chart.monthPillar, chart.dayPillar, chart.hourPillar].filter(Boolean);
   pillars.forEach((p) => {
     if (p !== chart.dayPillar) add(p.stem.deity, 3); // day stem is the self
     p.branch.hiddenStems.forEach((hs, i) => add(hs.deity, i === 0 ? 2 : 1));

@@ -133,7 +133,8 @@ const stemKe = (a: ElementType, b: ElementType) => CONTROLS_EL[a] === b || CONTR
 const hit = (pairs: string[][], a: string, b: string) => pairs.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
 
 function branchRelations(chart: BaziChart): BranchRelation[] {
-  const pillars = [chart.yearPillar, chart.monthPillar, chart.dayPillar, chart.hourPillar];
+  // hour dropped when the birth time is unknown; year/month/day keep indices 0/1/2 (宫位).
+  const pillars = [chart.yearPillar, chart.monthPillar, chart.dayPillar, chart.hourPillar].filter(Boolean);
   const bs = pillars.map((p) => p.branch.chinese);
   const stems = pillars.map((p) => p.stem.chinese);
   const stemEls = pillars.map((p) => p.stem.element);
@@ -215,7 +216,9 @@ const STEM_EL: Record<string, ElementType> = {
 };
 
 function stemRelations(chart: BaziChart, reading: XiangfaReading): BranchRelation[] {
-  const ss = [chart.yearPillar, chart.monthPillar, chart.dayPillar, chart.hourPillar].map((p) => p.stem.chinese);
+  const ss = [chart.yearPillar, chart.monthPillar, chart.dayPillar, chart.hourPillar]
+    .filter(Boolean)
+    .map((p) => p.stem.chinese);
   const out: BranchRelation[] = [];
   const combos: { i: number; j: number; hua: ElementType; theme: string }[] = [];
   const combineCount: Record<number, number> = {};

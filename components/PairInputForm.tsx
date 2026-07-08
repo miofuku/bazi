@@ -17,7 +17,9 @@ const PersonFields: React.FC<{
   value: Birth;
   onChange: (b: Birth) => void;
   onGeoSpec: (s: GeoSpec | undefined) => void;
-}> = ({ value, onChange, onGeoSpec }) => (
+}> = ({ value, onChange, onGeoSpec }) => {
+  const timeKnown = value.hour !== undefined; // undefined hour = 三柱 reading
+  return (
   <div className="flex flex-col gap-3 rounded-xl border border-black/5 bg-black/[0.015] p-5">
     <input
       value={value.label}
@@ -29,8 +31,10 @@ const PersonFields: React.FC<{
       <Num label="Year" value={value.year} min={1900} max={2100} onChange={(year) => onChange({ ...value, year })} />
       <Num label="Month" value={value.month} min={1} max={12} onChange={(month) => onChange({ ...value, month })} />
       <Num label="Day" value={value.day} min={1} max={31} onChange={(day) => onChange({ ...value, day })} />
-      <Num label="Hour" value={value.hour} min={0} max={23} onChange={(hour) => onChange({ ...value, hour })} />
-      <Num label="Min" value={value.minute} min={0} max={59} onChange={(minute) => onChange({ ...value, minute })} />
+      {timeKnown && <>
+        <Num label="Hour" value={value.hour ?? 12} min={0} max={23} onChange={(hour) => onChange({ ...value, hour })} />
+        <Num label="Min" value={value.minute} min={0} max={59} onChange={(minute) => onChange({ ...value, minute })} />
+      </>}
       <label className="flex flex-col gap-1">
         <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-sage-deep/70">Sex</span>
         <div className="flex overflow-hidden rounded-md border border-black/10">
@@ -43,12 +47,17 @@ const PersonFields: React.FC<{
         </div>
       </label>
     </div>
-    <GeoControl onChange={onGeoSpec} />
+    <label className="flex cursor-pointer items-center gap-2 text-xs text-stone">
+      <input type="checkbox" checked={!timeKnown} onChange={(e) => onChange({ ...value, hour: e.target.checked ? undefined : 12 })} className="h-3.5 w-3.5 accent-sage" />
+      Birth time unknown
+    </label>
+    {timeKnown && <GeoControl onChange={onGeoSpec} />}
   </div>
-);
+  );
+};
 
 const withGeo = (birth: Birth, spec: GeoSpec | undefined): Birth =>
-  spec
+  spec && birth.hour !== undefined
     ? { ...birth, geo: resolveGeo(spec, birth.year, birth.month, birth.day, birth.hour, birth.minute) }
     : { ...birth, geo: undefined };
 

@@ -17,7 +17,7 @@ export const calculateBazi = (
   year: number,
   month: number,
   day: number,
-  hour: number,
+  hour: number | undefined, // undefined when the birth hour is unknown → 三柱 reading
   minute: number,
   gender: Gender,
   geo?: Geo
@@ -28,11 +28,18 @@ export const calculateBazi = (
   }
 
   try {
+    // When the hour is unknown, read from 年月日 (三柱): anchor at local noon so the
+    // day pillar is stable (away from the 子时 boundary), take no 时柱, and skip
+    // 真太阳时 (which only refines the hour). 起运 age is then approximate.
+    const hourKnown = typeof hour === 'number';
+    const h = hourKnown ? (hour as number) : 12;
+    const mi = hourKnown ? minute : 0;
+
     // 0. Correct clock time to 真太阳时 when a birthplace is given — the hour
     // pillar (and 起运) follow apparent solar time, not the civil clock.
-    const st = geo
-      ? toTrueSolarTime({ year, month, day, hour, minute }, geo.longitude, geo.tzOffsetHours * 15)
-      : { year, month, day, hour, minute };
+    const st = geo && hourKnown
+      ? toTrueSolarTime({ year, month, day, hour: h, minute: mi }, geo.longitude, geo.tzOffsetHours * 15)
+      : { year, month, day, hour: h, minute: mi };
 
     // 1. Initialize SolarTime
     // We use SolarTime as the single source of truth to ensure all pillars (Year, Month, Day, Hour)
@@ -69,7 +76,7 @@ export const calculateBazi = (
     const yearPillar = parseGanZhi(yearObj.getName(), 'Year Pillar');
     const monthPillar = parseGanZhi(monthObj.getName(), 'Month Pillar');
     const dayPillar = parseGanZhi(dayObj.getName(), 'Day Pillar');
-    const hourPillar = parseGanZhi(hourObj.getName(), 'Hour Pillar');
+    const hourPillar = hourKnown ? parseGanZhi(hourObj.getName(), 'Hour Pillar') : null;
 
     // 5. Calculate Da Yun (Major Cycles)
     const tymeGender = gender === Gender.MALE ? TymeGender.MAN : TymeGender.WOMAN;
@@ -127,7 +134,7 @@ const generateChartResult = (
   yearPillar: Pillar,
   monthPillar: Pillar,
   dayPillar: Pillar,
-  hourPillar: Pillar,
+  hourPillar: Pillar | null,
   daYun: DaYun[],
   rulingStem?: string
 ): BaziChart => {
@@ -166,7 +173,10 @@ const generateChartResult = (
     }
   };
 
-  [yearPillar, monthPillar, dayPillar, hourPillar].forEach(p => {
+  const presentPillars = [yearPillar, monthPillar, dayPillar, hourPillar].filter(
+    (p): p is Pillar => p !== null,
+  );
+  presentPillars.forEach(p => {
     enrichPillar(p);
 
     // Element Counting
@@ -178,7 +188,7 @@ const generateChartResult = (
     yearPillar.stem, yearPillar.branch,
     monthPillar.stem, monthPillar.branch,
     dayPillar.stem, dayPillar.branch,
-    hourPillar.stem, hourPillar.branch
+    hourPillar?.stem, hourPillar?.branch
   );
 
   const strength = calculateStrength(yearPillar, monthPillar, dayPillar, hourPillar, rulingStem);

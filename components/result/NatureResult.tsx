@@ -69,6 +69,11 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
               {chart.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           )}
+          {!chart.hourPillar && (
+            <p className="mt-4 rounded-full px-4 py-1.5 text-[11px] tracking-wide" style={{ background: `${atmo.accent}22`, color: atmo.heroTextSoft }}>
+              Read from your year, season & day — birth time unknown, so your later years and inner life stay lightly drawn.
+            </p>
+          )}
 
           <NatureArt id={reading.stem.symbol} accent={atmo.accent} className="my-8 h-52 w-52 md:h-60 md:w-60" />
 

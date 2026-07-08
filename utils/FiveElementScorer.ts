@@ -25,7 +25,7 @@ export const calculateFiveElementScores = (
     yearStem: Stem, yearBranch: Branch,
     monthStem: Stem, monthBranch: Branch,
     dayStem: Stem, dayBranch: Branch,
-    hourStem: Stem, hourBranch: Branch
+    hourStem?: Stem, hourBranch?: Branch // omitted when the birth hour is unknown
 ): Record<ElementType, number> => {
     const scores: Record<ElementType, number> = {
         [ElementType.WOOD]: 0,
@@ -35,8 +35,8 @@ export const calculateFiveElementScores = (
         [ElementType.WATER]: 0,
     };
 
-    const stems = [yearStem, monthStem, dayStem, hourStem];
-    const branches = [yearBranch, monthBranch, dayBranch, hourBranch];
+    const stems = [yearStem, monthStem, dayStem, hourStem].filter((s): s is Stem => !!s);
+    const branches = [yearBranch, monthBranch, dayBranch, hourBranch].filter((b): b is Branch => !!b);
 
     // 1. Calculate Stem Scores
     stems.forEach(stem => {

@@ -99,7 +99,7 @@ export interface BaziChart {
   yearPillar: Pillar;
   monthPillar: Pillar;
   dayPillar: Pillar;
-  hourPillar: Pillar;
+  hourPillar: Pillar | null; // null when the birth hour is unknown (三柱 reading)
   dayMaster: Stem; // The Day Stem
   daYun: DaYun[];
   elementCounts: ElementCounts;

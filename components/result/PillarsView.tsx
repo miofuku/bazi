@@ -53,11 +53,23 @@ const PillarColumn: React.FC<{ pillar: Pillar; label: string; isSelf?: boolean }
   );
 };
 
+// When the birth hour is unknown, the fourth pillar is left open rather than guessed.
+const UnknownHourColumn: React.FC = () => (
+  <div
+    className="flex flex-col items-center justify-center rounded-2xl p-5 ring-1 ring-dashed text-center"
+    style={{ background: 'rgba(255,255,255,0.25)', '--tw-ring-color': 'rgba(38,48,43,0.12)' } as React.CSSProperties}
+  >
+    <div className="mb-3 text-[10px] font-sans font-semibold uppercase tracking-[0.25em] text-stone/60">Hour</div>
+    <span className="font-sc text-4xl font-semibold text-stone/30 md:text-5xl">?</span>
+    <p className="mt-3 text-[11px] leading-relaxed text-stone/60">Birth time unknown — read from your year, season, and day.</p>
+  </div>
+);
+
 export const PillarsView: React.FC<{ chart: BaziChart }> = ({ chart }) => (
   <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
     <PillarColumn pillar={chart.yearPillar} label="Year" />
     <PillarColumn pillar={chart.monthPillar} label="Season" />
     <PillarColumn pillar={chart.dayPillar} label="Day" isSelf />
-    <PillarColumn pillar={chart.hourPillar} label="Hour" />
+    {chart.hourPillar ? <PillarColumn pillar={chart.hourPillar} label="Hour" /> : <UnknownHourColumn />}
   </div>
 );

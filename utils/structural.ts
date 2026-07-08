@@ -99,7 +99,7 @@ export const structuralFavor = (
     { pillar: chart.monthPillar, label: '月柱(提纲)', weight: 0.35 },
     { pillar: chart.dayPillar, label: '日柱', weight: 0.35 },
     { pillar: chart.hourPillar, label: '时柱', weight: 0.15 },
-  ];
+  ].filter((n) => n.pillar); // hour absent when the birth time is unknown
 
   const natalBranches = natal.map((n) => n.pillar.branch.chinese);
 

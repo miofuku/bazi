@@ -4,12 +4,13 @@ import { Num, GeoControl } from './fields';
 import { GeoSpec, resolveGeo, ResolvedGeo } from '../utils/cities';
 
 interface InputFormProps {
-  onCalculate: (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender; geo?: ResolvedGeo }) => void;
+  onCalculate: (data: { year: number; month: number; day: number; hour?: number; minute: number; gender: Gender; geo?: ResolvedGeo }) => void;
 }
 
 export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
   const [dateValue, setDateValue] = useState({ year: 2000, month: 6, day: 15 });
   const [timeValue, setTimeValue] = useState({ hour: 12, minute: 30 });
+  const [timeKnown, setTimeKnown] = useState(true);
   const [gender, setGender] = useState<Gender>(Gender.MALE);
   const [geoSpec, setGeoSpec] = useState<GeoSpec | undefined>(undefined);
 
@@ -17,8 +18,9 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
     e.preventDefault();
     const { year, month, day } = dateValue;
     const { hour, minute } = timeValue;
-    const geo = geoSpec ? resolveGeo(geoSpec, year, month, day, hour, minute) : undefined;
-    onCalculate({ year, month, day, hour, minute, gender, geo });
+    // No hour → a 三柱 (year·month·day) reading; 真太阳时/birthplace only refine the hour.
+    const geo = timeKnown && geoSpec ? resolveGeo(geoSpec, year, month, day, hour, minute) : undefined;
+    onCalculate({ year, month, day, hour: timeKnown ? hour : undefined, minute: timeKnown ? minute : 0, gender, geo });
   };
 
   return (
@@ -36,11 +38,21 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
           <Num label="Year" value={dateValue.year} min={1900} max={2100} onChange={(year) => setDateValue({ ...dateValue, year })} />
           <Num label="Month" value={dateValue.month} min={1} max={12} onChange={(month) => setDateValue({ ...dateValue, month })} />
           <Num label="Day" value={dateValue.day} min={1} max={31} onChange={(day) => setDateValue({ ...dateValue, day })} />
-          <Num label="Hour" value={timeValue.hour} min={0} max={23} onChange={(hour) => setTimeValue({ ...timeValue, hour })} />
-          <Num label="Min" value={timeValue.minute} min={0} max={59} onChange={(minute) => setTimeValue({ ...timeValue, minute })} />
+          {timeKnown && <>
+            <Num label="Hour" value={timeValue.hour} min={0} max={23} onChange={(hour) => setTimeValue({ ...timeValue, hour })} />
+            <Num label="Min" value={timeValue.minute} min={0} max={59} onChange={(minute) => setTimeValue({ ...timeValue, minute })} />
+          </>}
         </div>
 
-        <GeoControl onChange={setGeoSpec} />
+        <label className="flex cursor-pointer items-start gap-3 text-left">
+          <input type="checkbox" checked={!timeKnown} onChange={(e) => setTimeKnown(!e.target.checked)} className="mt-0.5 h-4 w-4 accent-sage" />
+          <span className="text-xs leading-relaxed text-stone">
+            I don't know my birth hour.
+            {!timeKnown && <span className="mt-1 block text-stone/70">We'll read your year, season, and day — a fuller reading than most give. The hour would only add the finer grain of your later years and inner life.</span>}
+          </span>
+        </label>
+
+        {timeKnown && <GeoControl onChange={setGeoSpec} />}
 
         {/* Sex (sets the direction of the life seasons) */}
         <div className="bg-black/[0.02] p-6 border border-black/5 rounded-lg">

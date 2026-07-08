@@ -13,7 +13,7 @@ export interface Birth {
   year: number;
   month: number;
   day: number;
-  hour: number;
+  hour?: number; // undefined when the birth time is unknown → 三柱 reading
   minute: number;
   gender: Gender;
   geo?: Geo;
