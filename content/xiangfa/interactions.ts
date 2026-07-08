@@ -114,16 +114,33 @@ const CLASH_PAIRS = [['子', '午'], ['丑', '未'], ['寅', '申'], ['卯', '�
 const SELF_PUNISH = ['辰', '午', '酉', '亥'];
 const DOMAIN = ['your early life', 'your everyday nature', 'your inner core', 'your later years'];
 
+// Which palaces the pair sits between (局内 宫位): 年=roots/origins, 月=family &
+// outer life, 日=self & closest bond, 时=later years & what you leave. This turns a
+// bare 冲/刑 into a reading located in a real part of life (年月冲=离祖白手起家, etc.).
+const PALACE_WHERE: Record<string, string> = {
+  '01': 'It sits between where you come from and the family and work around you — early on, a pull to break from your origins and make your own ground.',
+  '02': 'It sits between your early life and your own centre — the past keeps a hand on who you are.',
+  '03': 'It sits between your beginnings and your later years — the two ends of your life ask for different things.',
+  '12': 'It sits between your outer life — family and work — and your closest bond at the centre of you.',
+  '13': 'It sits between your prime years and what you build for the end — the mid-to-late arc carries some turbulence.',
+  '23': 'It sits between your closest bond and your later years — home and the long horizon pull apart.',
+};
+const palaceWhere = (i: number, j: number) => PALACE_WHERE[`${i}${j}`] ?? `Felt between ${DOMAIN[i]} and ${DOMAIN[j]}.`;
+
+const CONTROLS_EL: Record<ElementType, ElementType> = { [WOOD]: EARTH, [EARTH]: WATER, [WATER]: FIRE, [FIRE]: METAL, [METAL]: WOOD };
+const stemKe = (a: ElementType, b: ElementType) => CONTROLS_EL[a] === b || CONTROLS_EL[b] === a;
+
 const hit = (pairs: string[][], a: string, b: string) => pairs.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
 
 function branchRelations(chart: BaziChart): BranchRelation[] {
-  const bs = [
-    chart.yearPillar.branch.chinese, chart.monthPillar.branch.chinese,
-    chart.dayPillar.branch.chinese, chart.hourPillar.branch.chinese,
-  ];
+  const pillars = [chart.yearPillar, chart.monthPillar, chart.dayPillar, chart.hourPillar];
+  const bs = pillars.map((p) => p.branch.chinese);
+  const stems = pillars.map((p) => p.stem.chinese);
+  const stemEls = pillars.map((p) => p.stem.element);
   const out: BranchRelation[] = [];
   const has = (c: string) => bs.includes(c);
   const claimedHarm = new Set<string>();
+  const fuyinBranches = new Set<string>();
 
   // strong three-part currents (三合)
   for (const t of TRINES) {
@@ -145,30 +162,126 @@ function branchRelations(chart: BaziChart): BranchRelation[] {
   for (let i = 0; i < bs.length; i++) {
     for (let j = i + 1; j < bs.length; j++) {
       const a = bs[i], b = bs[j], key = k(a, b);
-      const where = `Felt between ${DOMAIN[i]} and ${DOMAIN[j]}.`;
-      if (hit(CLASH_PAIRS, a, b) && CLASH[key]) out.push({ kind: 'clash', title: 'A clash', poleA: CLASH[key].a, poleB: CLASH[key].b, theme: CLASH[key].theme, where });
+      const where = palaceWhere(i, j);
+
+      // 伏吟 — the whole pillar repeated (stem AND branch), a note struck twice.
+      if (stems[i] === stems[j] && a === b) {
+        fuyinBranches.add(a);
+        out.push({ kind: 'punish', title: 'An echo', poleA: 'Again', poleB: 'Again', theme: 'the same note struck twice — a part of your life repeats rather than moves on. It can harden into constancy, or settle into brooding over the same ground.', where });
+        continue;
+      }
+      if (hit(CLASH_PAIRS, a, b) && CLASH[key]) {
+        // 反吟 — 天克地冲: stem 克 on top of branch 冲, the whole season opposed.
+        if (stemKe(stemEls[i], stemEls[j])) {
+          out.push({ kind: 'clash', title: 'A reversal', poleA: CLASH[key].a, poleB: CLASH[key].b, theme: `${CLASH[key].theme} Here it runs deep — stem and branch both stand opposed — so it recurs: a part of your life that keeps overturning and rebuilding rather than settling.`, where });
+        } else {
+          out.push({ kind: 'clash', title: 'A clash', poleA: CLASH[key].a, poleB: CLASH[key].b, theme: CLASH[key].theme, where });
+        }
+      }
       else if (k(a, b) === k('子', '卯')) out.push({ kind: 'punish', title: 'Raw nerves', poleA: 'Closeness', poleB: 'Friction', theme: 'raw nerves with the people closest to you — impatience and sharp words where there should be ease.', where });
       else if (HARM[key] && !(claimedHarm.has(a) && claimedHarm.has(b))) out.push({ kind: 'harm', title: 'A quiet harm', poleA: HARM[key].a, poleB: HARM[key].b, theme: HARM[key].theme + ' Small and unseen, it asks for honesty before it festers.', where });
       else if (COMBINE[key]) out.push({ kind: 'combine', title: 'A bond', poleA: COMBINE[key].a, poleB: COMBINE[key].b, theme: COMBINE[key].theme, where });
     }
   }
 
-  // self-punishment (a branch repeated)
+  // self-punishment (a branch repeated) — but not when it's already an 伏吟 echo.
   const counts: Record<string, number> = {};
   bs.forEach((b) => { counts[b] = (counts[b] || 0) + 1; });
   for (const s of SELF_PUNISH) {
-    if (counts[s] >= 2) out.push({ kind: 'punish', title: 'An inner knot', poleA: 'Self', poleB: 'Self', theme: 'a knot you tie and untie within yourself — the friction is mostly internal, a fight you have with no one but you.', where: 'It lives largely inside you.' });
+    if (counts[s] >= 2 && !fuyinBranches.has(s)) out.push({ kind: 'punish', title: 'An inner knot', poleA: 'Self', poleB: 'Self', theme: 'a knot you tie and untie within yourself — the friction is mostly internal, a fight you have with no one but you.', where: 'It lives largely inside you.' });
   }
 
-  const rank = { clash: 0, punish: 1, bond: 2, harm: 3, combine: 4 };
-  // de-duplicate by theme, prioritise, cap at 3
-  const seen = new Set<string>();
-  return out
-    .filter((r) => (seen.has(r.theme) ? false : (seen.add(r.theme), true)))
-    .sort((x, y) => rank[x.kind] - rank[y.kind])
-    .slice(0, 3);
+  return out;
 }
 
+// ── heavenly-stem relations (天干五合 / 相冲) — the outward, visible drives ──────
+// Stems are the parts of you that show on the surface; a 合 bonds two of them, a 冲
+// sets them head-to-head. Data: docs/ganzhi-hekebiao.md.
+const STEM_HE: Record<string, { with: string; hua: ElementType; theme: string }> = {
+  甲: { with: '己', hua: EARTH, theme: 'a steadying bond — a part of you seeks fairness and a sensible middle, holding two drives to centre.' },
+  己: { with: '甲', hua: EARTH, theme: 'a steadying bond — a part of you seeks fairness and a sensible middle, holding two drives to centre.' },
+  乙: { with: '庚', hua: METAL, theme: 'a bond of principle — softness and resolve marry into a quiet sense of duty.' },
+  庚: { with: '乙', hua: METAL, theme: 'a bond of principle — softness and resolve marry into a quiet sense of duty.' },
+  丙: { with: '辛', hua: WATER, theme: 'a bond of poise — warmth reined into composure, presence held under a cool surface.' },
+  辛: { with: '丙', hua: WATER, theme: 'a bond of poise — warmth reined into composure, presence held under a cool surface.' },
+  丁: { with: '壬', hua: WOOD, theme: 'a tender, romantic bond — feeling and imagination entwine, drawn toward connection.' },
+  壬: { with: '丁', hua: WOOD, theme: 'a tender, romantic bond — feeling and imagination entwine, drawn toward connection.' },
+  戊: { with: '癸', hua: FIRE, theme: 'a cool, pragmatic bond — steadiness and depth pair without much heat; measured rather than sentimental.' },
+  癸: { with: '戊', hua: FIRE, theme: 'a cool, pragmatic bond — steadiness and depth pair without much heat; measured rather than sentimental.' },
+};
+const STEM_CLASH: Record<string, string> = { 甲: '庚', 庚: '甲', 乙: '辛', 辛: '乙', 丙: '壬', 壬: '丙', 丁: '癸', 癸: '丁' };
+const STEM_EL: Record<string, ElementType> = {
+  甲: WOOD, 乙: WOOD, 丙: FIRE, 丁: FIRE, 戊: EARTH, 己: EARTH, 庚: METAL, 辛: METAL, 壬: WATER, 癸: WATER,
+};
+
+function stemRelations(chart: BaziChart, reading: XiangfaReading): BranchRelation[] {
+  const ss = [chart.yearPillar, chart.monthPillar, chart.dayPillar, chart.hourPillar].map((p) => p.stem.chinese);
+  const out: BranchRelation[] = [];
+  const combos: { i: number; j: number; hua: ElementType; theme: string }[] = [];
+  const combineCount: Record<number, number> = {};
+
+  // Pass 1 — 五合. Count how many bonds each stem is in (for 争合 and 贪合忘冲).
+  for (let i = 0; i < ss.length; i++) {
+    for (let j = i + 1; j < ss.length; j++) {
+      if (STEM_HE[ss[i]]?.with === ss[j]) {
+        combineCount[i] = (combineCount[i] || 0) + 1;
+        combineCount[j] = (combineCount[j] || 0) + 1;
+        combos.push({ i, j, hua: STEM_HE[ss[i]].hua, theme: STEM_HE[ss[i]].theme });
+      }
+    }
+  }
+
+  // 贪合忘冲: a stem held in a clean 1-1 五合 lets go of its 冲 (same principle as
+  // the branch layer). A 争合 (contended, never settles) does NOT bind, so its 冲 stays.
+  const bound = new Set<number>();
+  for (const c of combos) {
+    if (combineCount[c.i] < 2 && combineCount[c.j] < 2) { bound.add(c.i); bound.add(c.j); }
+  }
+
+  // Pass 2 — 相冲, released when either pole is 合-bound (贪合忘冲).
+  for (let i = 0; i < ss.length; i++) {
+    for (let j = i + 1; j < ss.length; j++) {
+      const a = ss[i], b = ss[j];
+      if (STEM_CLASH[a] === b && !bound.has(i) && !bound.has(j)) {
+        const mw = '甲乙庚辛'.includes(a); // 金木冲 vs 水火冲
+        out.push({
+          kind: 'clash', title: 'An open clash',
+          poleA: FORCE[STEM_EL[a]], poleB: FORCE[STEM_EL[b]],
+          theme: mw
+            ? 'resolve against growth — an urge to cut and refine warring openly with the urge to expand; quick to spark on the surface.'
+            : 'heat against depth — bright outward expression against cool reflection; a visible push-pull in how you meet the world.',
+          where: palaceWhere(i, j),
+        });
+      }
+    }
+  }
+
+  for (const c of combos) {
+    // 化 (a supported 化神 element) vs 绊 (合而不化, mutual drag).
+    const fused = (reading.elementShare[c.hua] ?? 0) >= 0.22;
+    const contended = combineCount[c.i] >= 2 || combineCount[c.j] >= 2; // 争合/妒合
+    const tail = contended
+      ? ' But more than one part of you reaches for this same bond — a quiet rivalry over one connection, so it never fully settles (争合).'
+      : fused
+      ? ` These settle into ${FORCE[c.hua].toLowerCase()} — a productive union that makes something.`
+      : ' Yet nothing quite forms from it — more a mutual holding-back, each drive quietly draining the other (合而不化，成绊).';
+    out.push({
+      kind: 'combine', title: 'An outward bond',
+      poleA: FORCE[STEM_EL[ss[c.i]]], poleB: FORCE[STEM_EL[ss[c.j]]],
+      theme: c.theme + tail, where: palaceWhere(c.i, c.j),
+    });
+  }
+  return out;
+}
+
+const REL_RANK = { clash: 0, punish: 1, bond: 2, harm: 3, combine: 4 };
+
 export function buildInteractions(chart: BaziChart, reading: XiangfaReading): InteractionsReading {
-  return { dynamics: elementDynamics(reading), relations: branchRelations(chart) };
+  const raw = [...branchRelations(chart), ...stemRelations(chart, reading)];
+  const seen = new Set<string>();
+  const relations = raw
+    .filter((r) => (seen.has(r.theme) ? false : (seen.add(r.theme), true)))
+    .sort((x, y) => REL_RANK[x.kind] - REL_RANK[y.kind])
+    .slice(0, 4);
+  return { dynamics: elementDynamics(reading), relations };
 }

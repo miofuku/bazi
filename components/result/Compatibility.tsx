@@ -153,6 +153,87 @@ const Chip: React.FC<{ children: React.ReactNode; tone: 'good' | 'warn' | 'bad' 
 const RIVALRY_LABEL = { low: '低', medium: '中', high: '高' } as const;
 const RIVALRY_TONE = { low: 'good', medium: 'warn', high: 'bad' } as const;
 
+// ── Two-axis headline: 相吸 (chemistry) vs 相守 (built to last) ────────────────
+// The royal-marriage validation showed 用神互补 = chemistry/attraction, NOT
+// durability. So we split the read into two axes instead of one score: spark is
+// the starting energy; whether it lasts rests on structure (role split + 争权 for
+// co-founders; tending + 配偶宫 for marriage, which 八字 can't decide).
+const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
+
+const AxisMeter: React.FC<{
+  title: string; en: string; pct: number; verdict: string; hex: string; detail: string;
+}> = ({ title, en, pct, verdict, hex, detail }) => (
+  <div>
+    <div className="flex items-baseline justify-between">
+      <span className="font-display text-base font-semibold text-ink">
+        {title} <span className="font-sans text-xs font-normal uppercase tracking-wider text-ink/40">{en}</span>
+      </span>
+      <span className="text-sm font-semibold" style={{ color: hex }}>{verdict}</span>
+    </div>
+    <div className="mt-1.5 h-2.5 w-full rounded-full bg-ink/5">
+      <div className="h-full rounded-full" style={{ width: `${pct}%`, background: hex, opacity: 0.82 }} />
+    </div>
+    <p className="mt-1.5 text-xs leading-relaxed text-ink/60">{detail}</p>
+  </div>
+);
+
+const TwoAxes: React.FC<{ reading: CompatibilityReading; lens: RelationLens }> = ({ reading, lens }) => {
+  // 相吸 (chemistry) from mutual 用神 supply, mapped [-0.6,0.6] → [0,1].
+  const spark = clamp01((reading.mutualScore + 0.6) / 1.2);
+  const sparkVerdict =
+    reading.mutualScore > 0.3 ? '火花强' : reading.mutualScore > 0.1 ? '有来电' : reading.mutualScore > -0.2 ? '平淡' : '相斥';
+  const sparkDetail =
+    reading.mutualScore > 0.1
+      ? '用神互补、能量相吸——天生投合的化学反应。'
+      : '能量供需平淡——少了天生的牵引，更靠事上磨合。';
+  const sparkHex = lens === 'partner' ? '#4A6741' : '#C4664A';
+
+  if (lens === 'partner' && reading.roleCoverage && reading.rivalry) {
+    const cov = reading.roleCoverage;
+    const riv = reading.rivalry;
+    // 相守 (durability) for co-founders = role split + 争权 + coverage — the axes the
+    // analyzer already computes, aggregated into one scannable read.
+    let d = reading.divergentDomains ? 0.5 : -0.3;
+    d += { low: 0.4, medium: 0, high: -0.5 }[riv.level];
+    d -= cov.gaps.length * 0.1 + cov.overlaps.length * 0.1;
+    const struct = clamp01((d + 0.6) / 1.2);
+    const structVerdict = d > 0.4 ? '结构稳' : d > 0 ? '可打磨' : '易散伙';
+    const structDetail =
+      `${reading.divergentDomains ? '分工天然' : '争同一角色'} · 比劫争权${RIVALRY_LABEL[riv.level]}` +
+      `${cov.gaps.length ? ` · 盲区${cov.gaps.length}处` : ' · 职能覆盖全'}。`;
+    return (
+      <div className="mt-8 grid gap-5 rounded-2xl bg-white/60 p-6 ring-1 ring-ink/5 sm:grid-cols-2">
+        <AxisMeter title="相吸" en="chemistry" pct={spark * 100} verdict={sparkVerdict} hex={sparkHex} detail={sparkDetail} />
+        <AxisMeter title="相守" en="built to last" pct={struct * 100} verdict={structVerdict} hex="#8C7051" detail={structDetail} />
+        <p className="border-t border-ink/5 pt-3 text-xs italic text-stone sm:col-span-2">
+          相吸 ≠ 相守 —— 火花是起点；能不能长久有效，靠的是分工与争权这一轴。
+        </p>
+      </div>
+    );
+  }
+
+  // marriage: 八字 reads 相吸; 相守 is tending + choices, not fate.
+  return (
+    <div className="mt-8 grid gap-5 rounded-2xl bg-white/60 p-6 ring-1 ring-ink/5 sm:grid-cols-2">
+      <AxisMeter title="相吸" en="chemistry" pct={spark * 100} verdict={sparkVerdict} hex={sparkHex} detail={sparkDetail} />
+      <div>
+        <div className="flex items-baseline justify-between">
+          <span className="font-display text-base font-semibold text-ink">
+            相守 <span className="font-sans text-xs font-normal uppercase tracking-wider text-ink/40">built to last</span>
+          </span>
+          <span className="text-sm font-semibold text-stone">看经营</span>
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-ink/60">
+          八字只照见相吸；能否长久是经营与选择，非命中注定——最恩爱的盘也可能离散，最平淡的盘却能白头。
+        </p>
+      </div>
+      <p className="border-t border-ink/5 pt-3 text-xs italic text-stone sm:col-span-2">
+        相吸 ≠ 相守 —— 化学反应我们能读，长久与否由你们书写。
+      </p>
+    </div>
+  );
+};
+
 export const Compatibility: React.FC<{
   result: PairResult;
   lens: RelationLens;
@@ -186,7 +267,10 @@ export const Compatibility: React.FC<{
           ))}
         </div>
 
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
+        {/* Two-axis headline — 相吸 vs 相守 (chemistry is the spark, not the staying power) */}
+        <TwoAxes reading={reading} lens={lens} />
+
+        <div className="mt-6 grid gap-6 md:grid-cols-2">
           {/* Role radar */}
           <div className="rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5">
             <h4 className="mb-3 font-display text-lg font-semibold text-ink">Where each of you is strong</h4>
