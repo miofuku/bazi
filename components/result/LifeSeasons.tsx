@@ -1,6 +1,6 @@
 import React from 'react';
 import { LifeSeason } from '../../content/xiangfa/relationships';
-import { ELEMENT_HEX } from '../illustrations/ForceArt';
+import { ELEMENT_HEX, WIND } from '../../utils/tokens';
 import { useAccent } from './AtmosphereContext';
 
 const TONE_DOT: Record<LifeSeason['tone'], string> = {
@@ -14,10 +14,10 @@ const TONE_DOT: Record<LifeSeason['tone'], string> = {
 type Wind = { label: string; hex: string; blurb: string };
 const windOf = (favor: number): Wind =>
   favor > 0.15
-    ? { label: 'Tailwind', hex: '#4A6741', blurb: 'the weather leans your way — energy comes cheaper here' }
+    ? { label: 'Tailwind', hex: WIND.tailwind, blurb: 'the weather leans your way — energy comes cheaper here' }
     : favor < -0.15
-    ? { label: 'Headwind', hex: '#C4664A', blurb: 'the weather tests you — a decade to conserve and root, not force' }
-    : { label: 'Even wind', hex: '#8A8C84', blurb: 'neither with you nor against you — a decade of steady tending' };
+    ? { label: 'Headwind', hex: WIND.headwind, blurb: 'the weather tests you — a decade to conserve and root, not force' }
+    : { label: 'Even wind', hex: WIND.even, blurb: 'neither with you nor against you — a decade of steady tending' };
 
 // "The seasons ahead" — the decade-long climates of a life (Da Yun), with the
 // season you're living in now marked.

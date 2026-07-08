@@ -4,14 +4,10 @@ import {
   CompatibilityReading, RelationLens, ROLE, ROLE_ORDER, GroupProfile,
 } from '../../utils/CompatibilityAnalyzer';
 import { PairResult, teamDailyWeather } from '../../services/compatibilityService';
+import { ELEMENT_HEX, ELEMENT_CN, PERSON, WIND } from '../../utils/tokens';
 
-const ELEMENT_HEX: Record<ElementType, string> = {
-  [ElementType.WOOD]: '#4A6741', [ElementType.FIRE]: '#C4664A',
-  [ElementType.EARTH]: '#8C7051', [ElementType.METAL]: '#8A8C84',
-  [ElementType.WATER]: '#3D5A6C',
-};
-const A_HEX = '#6E8B6A'; // person A — sage
-const B_HEX = '#C4664A'; // person B — clay
+const A_HEX = PERSON.a; // person A — sage
+const B_HEX = PERSON.b; // person B — clay
 
 // ── Role-coverage radar ──────────────────────────────────────────────────────
 const RADAR = 260;
@@ -36,9 +32,15 @@ const RoleRadar: React.FC<{
 }> = ({ profiles, labelA, labelB, gaps }) => {
   const cx = RADAR / 2;
   const cy = RADAR / 2;
+  const roleNames = ROLE_ORDER.map((r) => ROLE[r].split('·')[0]).join('、');
   return (
     <div className="flex flex-col items-center">
-      <svg viewBox={`0 0 ${RADAR} ${RADAR}`} className="w-full max-w-[300px]">
+      <svg
+        viewBox={`0 0 ${RADAR} ${RADAR}`}
+        className="w-full max-w-[300px]"
+        role="img"
+        aria-label={`Role coverage radar across ${roleNames}, comparing ${labelA} and ${labelB}.${gaps.length ? ` Blind spots neither covers: ${gaps.join('、')}.` : ''}`}
+      >
         {/* grid rings */}
         {[0.5, 1].map((f) => (
           <polygon
@@ -62,7 +64,7 @@ const RoleRadar: React.FC<{
             <g key={role}>
               <line x1={cx} y1={cy} x2={cx + RADAR_R * Math.cos(ang)} y2={cy + RADAR_R * Math.sin(ang)} stroke="#26302B" strokeOpacity={0.08} />
               <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" className="font-sc"
-                fontSize="11" fill={isGap ? '#C4664A' : '#5A6A5A'} fontWeight={isGap ? 700 : 500}>
+                fontSize="11" fill={isGap ? WIND.headwind : '#5A6A5A'} fontWeight={isGap ? 700 : 500}>
                 {label}{isGap ? '⚠' : ''}
               </text>
             </g>
@@ -92,13 +94,13 @@ const SupplyRow: React.FC<{
       <div className="relative h-3 flex-1 rounded-full bg-ink/5">
         <div className="absolute inset-y-0 rounded-full" style={{ width: `${pct}%`, background: pos ? A_HEX : B_HEX, opacity: 0.75 }} />
       </div>
-      <span className="w-10 shrink-0 text-sm font-semibold" style={{ color: pos ? '#4A6741' : '#C4664A' }}>
+      <span className="w-10 shrink-0 text-sm font-semibold" style={{ color: pos ? WIND.tailwind : WIND.headwind }}>
         {pos ? '+' : ''}{score.toFixed(2)}
       </span>
       <span className="flex w-16 shrink-0 gap-1">
         {brings.map((x, i) => (
           <span key={i} className="font-sc text-sm" style={{ color: ELEMENT_HEX[x.element] }} title={x.favor === 'favorable' ? '喜' : '忌'}>
-            {{ [ElementType.WOOD]: '木', [ElementType.FIRE]: '火', [ElementType.EARTH]: '土', [ElementType.METAL]: '金', [ElementType.WATER]: '水' }[x.element]}
+            {ELEMENT_CN[x.element]}
             {x.favor === 'favorable' ? '' : '⁻'}
           </span>
         ))}
@@ -186,7 +188,7 @@ const TwoAxes: React.FC<{ reading: CompatibilityReading; lens: RelationLens }> =
     reading.mutualScore > 0.1
       ? '用神互补、能量相吸——天生投合的化学反应。'
       : '能量供需平淡——少了天生的牵引，更靠事上磨合。';
-  const sparkHex = lens === 'partner' ? '#4A6741' : '#C4664A';
+  const sparkHex = lens === 'partner' ? WIND.tailwind : WIND.headwind;
 
   if (lens === 'partner' && reading.roleCoverage && reading.rivalry) {
     const cov = reading.roleCoverage;
@@ -204,7 +206,7 @@ const TwoAxes: React.FC<{ reading: CompatibilityReading; lens: RelationLens }> =
     return (
       <div className="mt-8 grid gap-5 rounded-2xl bg-white/60 p-6 ring-1 ring-ink/5 sm:grid-cols-2">
         <AxisMeter title="相吸" en="chemistry" pct={spark * 100} verdict={sparkVerdict} hex={sparkHex} detail={sparkDetail} />
-        <AxisMeter title="相守" en="built to last" pct={struct * 100} verdict={structVerdict} hex="#8C7051" detail={structDetail} />
+        <AxisMeter title="相守" en="built to last" pct={struct * 100} verdict={structVerdict} hex={ELEMENT_HEX[ElementType.EARTH]} detail={structDetail} />
         <p className="border-t border-ink/5 pt-3 text-xs italic text-stone sm:col-span-2">
           相吸 ≠ 相守 —— 火花是起点；能不能长久有效，靠的是分工与争权这一轴。
         </p>
@@ -310,8 +312,8 @@ export const Compatibility: React.FC<{
                 {reading.spousePalace.map((sp, i) => (
                   <p key={i}>
                     <span className="font-semibold text-ink/80">{sp.from} 配偶宫</span>
-                    {sp.holds.length ? ` 藏 ${sp.holds.map((e) => ({ [ElementType.WOOD]: '木', [ElementType.FIRE]: '火', [ElementType.EARTH]: '土', [ElementType.METAL]: '金', [ElementType.WATER]: '水' }[e])).join('')}（对方喜用）` : ' 未藏对方喜用'}
-                    {sp.clashes.length ? `，兼带忌 ${sp.clashes.map((e) => ({ [ElementType.WOOD]: '木', [ElementType.FIRE]: '火', [ElementType.EARTH]: '土', [ElementType.METAL]: '金', [ElementType.WATER]: '水' }[e])).join('')}` : ''}
+                    {sp.holds.length ? ` 藏 ${sp.holds.map((e) => (ELEMENT_CN[e])).join('')}（对方喜用）` : ' 未藏对方喜用'}
+                    {sp.clashes.length ? `，兼带忌 ${sp.clashes.map((e) => (ELEMENT_CN[e])).join('')}` : ''}
                   </p>
                 ))}
               </div>

@@ -1,12 +1,9 @@
 import React from 'react';
 import { InteractionsReading, BranchRelation, ElementDynamic } from '../../content/xiangfa/interactions';
-import { ForceArt, ELEMENT_HEX } from '../illustrations/ForceArt';
+import { ForceArt } from '../illustrations/ForceArt';
+import { ELEMENT_HEX, REL_TONE } from '../../utils/tokens';
 import { ELEMENT_NATURE } from './icons';
 import { useAccent } from './AtmosphereContext';
-
-const REL_TONE: Record<BranchRelation['kind'], string> = {
-  clash: '#C4664A', punish: '#9a6a44', harm: '#8A6638', combine: '#4F6B4C', bond: '#4F6B4C',
-};
 
 // a force emblem in a defined, colour-ringed disc, with its name beneath
 const Disc: React.FC<{ element: ElementDynamic['from']; dim?: boolean }> = ({ element, dim }) => {

@@ -41,22 +41,23 @@ const Sprig: React.FC<{ className?: string }> = ({ className }) => (
 const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (
   <header className="fixed top-0 left-0 w-full z-50 bg-canvas/80 backdrop-blur-md border-b border-black/5">
     <div className="max-w-5xl mx-auto px-6 h-20 flex justify-between items-center">
-      <div className="flex items-center gap-3 group cursor-pointer" onClick={onHome}>
+      <button type="button" onClick={onHome} aria-label="Rootwise — back to start" className="flex items-center gap-3 rounded-lg">
         <span className="text-sage"><Sprig className="w-7 h-7" /></span>
-        <div className="flex flex-col leading-none">
-          <h1 className="text-lg font-display font-semibold tracking-tight text-ink">Rootwise</h1>
+        <span className="flex flex-col items-start leading-none">
+          <span className="text-lg font-display font-semibold tracking-tight text-ink">Rootwise</span>
           <span className="text-[10px] font-sans text-stone tracking-[0.18em] uppercase mt-1">Your nature, by season</span>
-        </div>
-      </div>
+        </span>
+      </button>
       <nav className="hidden md:flex items-center gap-10">
         {[['The ten natures', 'natures'], ['How it reads', 'method'], ['Begin', 'begin']].map(([label, id]) => (
-          <span
+          <button
             key={id}
+            type="button"
             onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })}
-            className="text-xs font-sans font-medium uppercase tracking-widest text-stone hover:text-sage cursor-pointer transition-colors"
+            className="rounded text-xs font-sans font-medium uppercase tracking-widest text-stone hover:text-sage transition-colors"
           >
             {label}
-          </span>
+          </button>
         ))}
       </nav>
     </div>
@@ -69,28 +70,31 @@ const App: React.FC = () => {
   const [pair, setPair] = useState<PairResult | null>(null);
   const [births, setBirths] = useState<[Birth, Birth] | null>(null);
   const [lens, setLens] = useState<RelationLens>('partner');
+  const [error, setError] = useState<string | null>(null);
 
   const handleCalculate = (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender; geo?: ResolvedGeo }) => {
     try {
+      setError(null);
       const result = calculateBazi(data.year, data.month, data.day, data.hour, data.minute, data.gender, data.geo);
       result.date = new Date(data.year, data.month - 1, data.day, data.hour, data.minute);
       setChart(result);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (error) {
-      alert('Could not read this birth moment. Please check the date and try again.');
-      console.error(error);
+    } catch (err) {
+      setError('Could not read this birth moment. Please check the date and try again.');
+      console.error(err);
     }
   };
 
   const handleAnalyzePair = (a: Birth, b: Birth, l: RelationLens) => {
     try {
+      setError(null);
       setBirths([a, b]);
       setLens(l);
       setPair(analyzePair(a, b, l));
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (error) {
-      alert('Could not read one of these birth moments. Please check the dates and try again.');
-      console.error(error);
+    } catch (err) {
+      setError('Could not read one of these birth moments. Please check the dates and try again.');
+      console.error(err);
     }
   };
 
@@ -137,11 +141,11 @@ const App: React.FC = () => {
               <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">
                 You are a part of nature
               </p>
-              <h2 className="mt-7 font-display text-5xl font-semibold leading-[1.0] tracking-tight text-ink md:text-7xl">
+              <h1 className="mt-7 font-display text-5xl font-semibold leading-[1.0] tracking-tight text-ink md:text-7xl">
                 You're not a sign.
                 <br />
                 <span className="italic text-sage">You're a living thing.</span>
-              </h2>
+              </h1>
               <p className="mt-8 max-w-xl text-lg font-sans leading-relaxed text-stone">
                 A tree grows toward light; a river finds its channel; a seed waits for its season. People grow by the same rules. Rootwise shows you the living thing you are, the climate you grew up in, and the conditions that help you flourish.
               </p>
@@ -183,9 +187,9 @@ const App: React.FC = () => {
             <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">The ten natures</p>
-                <h3 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink md:text-5xl">
+                <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink md:text-5xl">
                   Everyone is one of ten living things
-                </h3>
+                </h2>
               </div>
               <p className="max-w-xs text-sm leading-relaxed text-stone">
                 Your day of birth decides which — then the season you arrived in colours everything. Find yours below.
@@ -206,9 +210,9 @@ const App: React.FC = () => {
         <section id="begin" className="px-6 py-28">
           <div className="mx-auto flex w-full max-w-4xl flex-col items-center text-center">
             <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">Begin</p>
-            <h3 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink md:text-5xl">
+            <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink md:text-5xl">
               {mode === 'single' ? 'When were you born?' : 'How do two natures fit?'}
-            </h3>
+            </h2>
             <p className="mb-8 mt-4 max-w-md text-stone">
               {mode === 'single'
                 ? 'Your date, time, and place in the year reveal the living thing you are — and the seasons of the life ahead.'
@@ -218,12 +222,18 @@ const App: React.FC = () => {
             {/* single / pair toggle */}
             <div className="mb-12 inline-flex rounded-full border border-ink/10 p-1">
               {(['single', 'pair'] as const).map((m) => (
-                <button key={m} onClick={() => setMode(m)}
+                <button key={m} type="button" onClick={() => { setMode(m); setError(null); }}
                   className={`rounded-full px-6 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${mode === m ? 'bg-sage text-white' : 'text-stone hover:text-sage'}`}>
                   {m === 'single' ? 'One nature' : 'Two natures'}
                 </button>
               ))}
             </div>
+
+            {error && (
+              <p role="alert" className="mb-8 w-full max-w-md rounded-xl border border-fire/20 bg-fire/10 px-4 py-3 text-sm text-fire">
+                {error}
+              </p>
+            )}
 
             {mode === 'single'
               ? <InputForm onCalculate={handleCalculate} />

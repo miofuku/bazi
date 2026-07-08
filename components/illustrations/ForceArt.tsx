@@ -1,14 +1,10 @@
 import React from 'react';
 import { ElementType } from '../../types';
+import { ELEMENT_HEX } from '../../utils/tokens';
 
 // Plain-English natural forces, drawn as small emblems in each element's hue.
-export const ELEMENT_HEX: Record<ElementType, string> = {
-  [ElementType.WOOD]: '#4A6741',
-  [ElementType.FIRE]: '#C4664A',
-  [ElementType.EARTH]: '#8C7051',
-  [ElementType.METAL]: '#8A8C84',
-  [ElementType.WATER]: '#3D5A6C',
-};
+// Colours live in utils/tokens.ts; re-exported here for existing importers.
+export { ELEMENT_HEX };
 
 interface ForceArtProps {
   element: ElementType;

@@ -2,16 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { BaziChart, ElementType } from '../../types';
 import { buildDailyReading, getDayPillar, computeDayFavor } from '../../services/dailyService';
 import { ForceArt } from '../illustrations/ForceArt';
+import { ELEMENT_HEX, WIND, windTone, windHex } from '../../utils/tokens';
 import { useAccent } from './AtmosphereContext';
-
-// Element colours from the Tailwind palette (index.html), used to tint each day.
-const ELEMENT_HEX: Record<ElementType, string> = {
-  [ElementType.WOOD]: '#4A6741',
-  [ElementType.FIRE]: '#C4664A',
-  [ElementType.EARTH]: '#8C7051',
-  [ElementType.METAL]: '#8A8C84',
-  [ElementType.WATER]: '#3D5A6C',
-};
 
 const sameDay = (a: Date, b: Date) =>
   a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
@@ -20,26 +12,11 @@ const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 // A day's 顺涩 (climate-bounded: 流日 weather within the 大运/流年 climate) → a wind.
 // Same voice as the life-seasons, pointed at the day. Not luck; the sort of day it is.
-type Wind = { label: string; hex: string };
-const windOf = (favor: number): Wind =>
-  favor > 0.15
-    ? { label: 'Tailwind', hex: '#4A6741' }
-    : favor < -0.15
-    ? { label: 'Headwind', hex: '#C4664A' }
-    : { label: 'Even', hex: '#8A8C84' };
-
-// Continuous colour so that even inside a rough month the "less bad" days read
-// lighter — you can still rank days the climate has pushed into the same bucket.
-const HEAD = '#C4664A', EVEN = '#8A8C84', TAIL = '#4A6741';
-const mix = (h1: string, h2: string, t: number): string => {
-  const p = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-  const [r1, g1, b1] = p(h1), [r2, g2, b2] = p(h2);
-  const c = (a: number, b: number) => Math.round(a + (b - a) * t).toString(16).padStart(2, '0');
-  return `#${c(r1, r2)}${c(g1, g2)}${c(b1, b2)}`;
+const WIND_LABEL: Record<ReturnType<typeof windTone>, string> = { tailwind: 'Tailwind', even: 'Even', headwind: 'Headwind' };
+const windOf = (favor: number) => {
+  const t = windTone(favor);
+  return { label: WIND_LABEL[t], hex: WIND[t] };
 };
-// saturate around ±0.6 — blended favor rarely reaches ±1.
-const windHex = (f: number): string =>
-  f >= 0 ? mix(EVEN, TAIL, Math.min(f / 0.6, 1)) : mix(EVEN, HEAD, Math.min(-f / 0.6, 1));
 
 // A daily "weather" calendar — what kind of day today is for this nature, and a
 // month you can click through. Not fortune; the same ecological framing as the
@@ -131,8 +108,8 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
             ))}
           </div>
           <div className="mt-2 flex flex-wrap gap-3">
-            {['Tailwind', 'Even', 'Headwind'].map((label) => {
-              const hex = label === 'Tailwind' ? '#4A6741' : label === 'Headwind' ? '#C4664A' : '#8A8C84';
+            {(['Tailwind', 'Even', 'Headwind'] as const).map((label) => {
+              const hex = label === 'Tailwind' ? WIND.tailwind : label === 'Headwind' ? WIND.headwind : WIND.even;
               return (
                 <span key={label} className="flex items-center gap-1.5 text-[11px] text-ink/50">
                   <span className="h-1.5 w-1.5 rounded-full" style={{ background: hex }} />
