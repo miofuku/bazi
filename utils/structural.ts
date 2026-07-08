@@ -138,8 +138,9 @@ export const structuralFavor = (
       if (chong && ke) { delta -= n.weight; events.push(`天克地冲${n.label}`); }
     }
 
-    // Branch 冲 with each natal branch.
-    for (const nb of natalBranches) {
+    // Branch 冲 with each natal branch (unique — a repeated branch is one root,
+    // not two; the per-pillar jolt is already counted in 天克地冲 above).
+    for (const nb of [...new Set(natalBranches)]) {
       if (SIX_CHONG[tBranch] === nb) {
         const el = mainQi(nb);
         if (favor[el] === 'favorable') { delta -= 0.2; events.push(`冲动${nb}中用神根`); }

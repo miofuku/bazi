@@ -223,6 +223,11 @@ export const analyzeCompatibility = (
     reading.roleCoverage = cov;
     reading.rivalry = riv;
 
+    // 用神互补 = 能量相吸 (chemistry) — for co-founders only the spark, not durability.
+    // 长久有效 rests on the 角色分工 + 比劫争权 axes below (相吸 ≠ 长久有效).
+    note += mutualScore > 0.15
+      ? ' 用神互补、能量相吸——合作有火花；但相吸只是「来电」，能否长久有效更看下面的分工与争权。'
+      : ' 用神供需平淡——少了天然火花，更靠事上磨合；成败仍取决于下面的分工与争权。';
     note += divergentDomains
       ? ` 主导领域相异（${a.label}偏${ROLE[dA]}，${b.label}偏${ROLE[dB]}）→ 天然分工。`
       : ` 主导领域相同（皆${ROLE[dA]}）→ 易争同一角色。`;
@@ -235,7 +240,11 @@ export const analyzeCompatibility = (
     reading.spousePalace = sp;
 
     note += samePeers ? ' 同类日主，性情相近、如手足。' : ' 日主相异，异性相吸。';
-    note += mutualScore > 0.15 ? ' 用神互补，相互滋养。' : ' 供需平淡，靠经营。';
+    // 用神互补 measures 能量化学反应 (chemistry/attraction), NOT longevity — validated
+    // inverted on royal marriages (docs/王室家庭关系边表.csv): 相吸 ≠ 相守.
+    note += mutualScore > 0.15
+      ? ' 用神互补、能量相吸——化学反应强；但相吸非相守，能否长久更看经营与配偶宫。'
+      : ' 用神供需平淡——少了自然的能量牵引，感情更靠共同经营，而非天生投合。';
     const desc = (s: SpousePalace, other: string) =>
       s.holds.length
         ? `${s.from}配偶宫藏${s.holds.map((e) => NOUN[e]).join('')}（正是${other}喜用${s.clashes.length ? '，惟兼带忌' + s.clashes.map((e) => NOUN[e]).join('') : ''}）`

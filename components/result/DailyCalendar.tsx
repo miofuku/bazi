@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { BaziChart, ElementType } from '../../types';
-import { buildDailyReading, getDayPillar } from '../../services/dailyService';
+import { buildDailyReading, getDayPillar, computeDayFavor } from '../../services/dailyService';
 import { ForceArt } from '../illustrations/ForceArt';
 import { useAccent } from './AtmosphereContext';
 
@@ -18,6 +18,29 @@ const sameDay = (a: Date, b: Date) =>
 
 const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
+// A day's 顺涩 (climate-bounded: 流日 weather within the 大运/流年 climate) → a wind.
+// Same voice as the life-seasons, pointed at the day. Not luck; the sort of day it is.
+type Wind = { label: string; hex: string };
+const windOf = (favor: number): Wind =>
+  favor > 0.15
+    ? { label: 'Tailwind', hex: '#4A6741' }
+    : favor < -0.15
+    ? { label: 'Headwind', hex: '#C4664A' }
+    : { label: 'Even', hex: '#8A8C84' };
+
+// Continuous colour so that even inside a rough month the "less bad" days read
+// lighter — you can still rank days the climate has pushed into the same bucket.
+const HEAD = '#C4664A', EVEN = '#8A8C84', TAIL = '#4A6741';
+const mix = (h1: string, h2: string, t: number): string => {
+  const p = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const [r1, g1, b1] = p(h1), [r2, g2, b2] = p(h2);
+  const c = (a: number, b: number) => Math.round(a + (b - a) * t).toString(16).padStart(2, '0');
+  return `#${c(r1, r2)}${c(g1, g2)}${c(b1, b2)}`;
+};
+// saturate around ±0.6 — blended favor rarely reaches ±1.
+const windHex = (f: number): string =>
+  f >= 0 ? mix(EVEN, TAIL, Math.min(f / 0.6, 1)) : mix(EVEN, HEAD, Math.min(-f / 0.6, 1));
+
 // A daily "weather" calendar — what kind of day today is for this nature, and a
 // month you can click through. Not fortune; the same ecological framing as the
 // rest of the reading, pointed at the day instead of the birth.
@@ -34,15 +57,15 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
     const month = today.getMonth();
     const firstWeekday = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const out: { date: Date; element: ElementType | null }[] = [];
-    for (let i = 0; i < firstWeekday; i++) out.push({ date: null as unknown as Date, element: null });
+    const out: { date: Date; element: ElementType | null; favor: number | null }[] = [];
+    for (let i = 0; i < firstWeekday; i++) out.push({ date: null as unknown as Date, element: null, favor: null });
     for (let d = 1; d <= daysInMonth; d++) {
       const date = new Date(year, month, d);
       const pillar = getDayPillar(date);
-      out.push({ date, element: pillar ? pillar.stem.element : null });
+      out.push({ date, element: pillar ? pillar.stem.element : null, favor: computeDayFavor(chart, date)?.favor ?? null });
     }
     return out;
-  }, [today]);
+  }, [today, chart]);
 
   const monthLabel = today.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
@@ -87,12 +110,18 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
                   }}
                 >
                   {cell.date.getDate()}
+                  {cell.favor != null && (
+                    <span
+                      className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full"
+                      style={{ background: windHex(cell.favor), boxShadow: isSelected ? '0 0 0 1px #ffffffaa' : undefined }}
+                    />
+                  )}
                 </button>
               );
             })}
           </div>
 
-          {/* Legend */}
+          {/* Legend — element fill (kind of day) + the corner dot (its weather) */}
           <div className="mt-4 flex flex-wrap gap-3 border-t border-ink/5 pt-3">
             {(Object.keys(ELEMENT_HEX) as ElementType[]).map((el) => (
               <span key={el} className="flex items-center gap-1.5 text-[11px] text-ink/60">
@@ -100,6 +129,17 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
                 {el}
               </span>
             ))}
+          </div>
+          <div className="mt-2 flex flex-wrap gap-3">
+            {['Tailwind', 'Even', 'Headwind'].map((label) => {
+              const hex = label === 'Tailwind' ? '#4A6741' : label === 'Headwind' ? '#C4664A' : '#8A8C84';
+              return (
+                <span key={label} className="flex items-center gap-1.5 text-[11px] text-ink/50">
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ background: hex }} />
+                  {label}
+                </span>
+              );
+            })}
           </div>
         </div>
 
@@ -125,6 +165,15 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
                 </span>
               </div>
             </div>
+
+            {reading.favor != null && (() => { const w = windOf(reading.favor); return (
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                <span className="rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider" style={{ background: `${w.hex}1f`, color: w.hex }}>{w.label}</span>
+                {reading.structuralEvents?.map((e) => (
+                  <span key={e} className="font-sc rounded-full bg-ink/5 px-2 py-0.5 text-[11px] text-ink/55">{e}</span>
+                ))}
+              </div>
+            ); })()}
 
             <h3 className="font-display text-xl font-semibold text-ink">{reading.content.title}</h3>
             <p className="mt-2 text-sm leading-relaxed text-ink/75">{reading.content.body}</p>
@@ -152,6 +201,12 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
             <p className="mt-4 border-t border-ink/5 pt-3 text-xs italic leading-relaxed text-stone">
               {reading.balanceNote}
             </p>
+
+            {reading.layers && (
+              <p className="mt-2 text-[11px] leading-relaxed text-stone/70">
+                Set against a {windOf(reading.layers.year).label.toLowerCase()} year and a {windOf(reading.layers.daYun).label.toLowerCase()} decade.
+              </p>
+            )}
           </div>
         )}
       </div>
