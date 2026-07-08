@@ -34,7 +34,7 @@ export const ThriveNeeds: React.FC<{ needStatus: NeedStatus[]; natureName: strin
         {needStatus.map(({ need, status }) => {
           const meta = statusMeta(status);
           return (
-            <div key={need.id} className="flex flex-col rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5">
+            <div key={need.id} className="flex flex-col rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
               <div className="mb-4 flex items-center justify-between">
                 <ForceArt element={need.element} className="h-11 w-11" />
                 <span className="rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wider" style={meta.style}>{meta.label}</span>

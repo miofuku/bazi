@@ -79,7 +79,7 @@ export const Interactions: React.FC<{ data: InteractionsReading }> = ({ data }) 
       {/* element dynamics (生克) — who bends whom */}
       <div className="mt-8 space-y-4">
         {data.dynamics.map((d, i) => (
-          <div key={i} className="rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5">
+          <div key={i} className="rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
             <div className="flex items-center gap-3 sm:gap-5">
               <Disc element={d.from} />
               <ControlFlow d={d} />
@@ -95,7 +95,7 @@ export const Interactions: React.FC<{ data: InteractionsReading }> = ({ data }) 
       {data.relations.length > 0 && (
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           {data.relations.map((r, i) => (
-            <div key={i} className="overflow-hidden rounded-2xl bg-white/55 ring-1 ring-ink/5">
+            <div key={i} className="overflow-hidden rounded-2xl bg-white/55 ring-1 ring-ink/5 shadow-lift">
               <div className="h-1 w-full" style={{ background: REL_TONE[r.kind], opacity: 0.85 }} />
               <div className="p-6">
                 <h3 className="mb-4 font-sans text-[11px] font-semibold uppercase tracking-widest" style={{ color: REL_TONE[r.kind] }}>{r.title}</h3>

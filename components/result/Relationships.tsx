@@ -27,7 +27,7 @@ export const Relationships: React.FC<{ items: RelationshipReading[] }> = ({ item
           return (
             <div
               key={r.id}
-              className={`flex gap-4 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 ${meta.dim ? 'opacity-70' : ''}`}
+              className={`flex gap-4 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift ${meta.dim ? 'opacity-70' : ''}`}
             >
               <span className="mt-0.5 shrink-0" style={{ color: accent }}>
                 <ElementIcon type={r.icon} className="h-8 w-8 stroke-[1.4]" />

@@ -49,7 +49,7 @@ export const InnerClimate: React.FC<InnerClimateProps> = ({ elementShare }) => {
       </p>
 
       {/* Proportional strip */}
-      <div className="mt-8 flex h-4 w-full overflow-hidden rounded-full ring-1 ring-ink/5">
+      <div className="mt-8 flex h-4 w-full overflow-hidden rounded-full ring-1 ring-ink/5 shadow-lift">
         {ORDER.map((el) => (
           <div
             key={el}
@@ -63,7 +63,7 @@ export const InnerClimate: React.FC<InnerClimateProps> = ({ elementShare }) => {
       {/* Legend with force emblems */}
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {ORDER.map((el) => (
-          <div key={el} className="rounded-xl bg-white/50 p-4 ring-1 ring-ink/5">
+          <div key={el} className="rounded-xl bg-white/50 p-4 ring-1 ring-ink/5 shadow-lift">
             <div className="flex items-center gap-2">
               <ForceArt element={el} className="h-8 w-8 shrink-0" />
               <span className={`font-display font-semibold ${ELEMENT_COLORS[el]}`}>{ELEMENT_NATURE[el].label}</span>

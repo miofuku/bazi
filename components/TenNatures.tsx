@@ -22,7 +22,7 @@ const NatureCard: React.FC<{ c: StemChar }> = ({ c }) => {
     <div className="group relative">
       <button
         type="button"
-        className="flex w-full flex-col items-center rounded-2xl bg-white/50 p-5 text-center ring-1 ring-ink/5 transition-all duration-500 hover:-translate-y-1 hover:bg-white/75 focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
+        className="flex w-full flex-col items-center rounded-2xl bg-white/50 p-5 text-center ring-1 ring-ink/5 shadow-lift transition-all duration-500 hover:-translate-y-1 hover:bg-white/75 focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
       >
         <NatureArt id={p.symbol} accent={accent} className="h-20 w-20 transition-transform duration-500 group-hover:scale-105" />
         <h4 className="mt-4 font-display text-lg font-semibold text-ink">{p.archetypeName}</h4>

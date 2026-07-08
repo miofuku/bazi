@@ -27,7 +27,7 @@ const NodeArt: React.FC<{ art: StoryArt; accent: string }> = ({ art, accent }) =
 export const Storyline: React.FC<{ beats: StoryBeat[] }> = ({ beats }) => {
   const { accent, accentDeep } = useAccent();
   return (
-    <section className="rounded-3xl bg-white/45 p-8 ring-1 ring-ink/5 md:p-12">
+    <section className="rounded-3xl bg-white/45 p-8 ring-1 ring-ink/5 shadow-lift md:p-12">
       <p className="font-sans text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: accentDeep }}>Your story</p>
       <h2 className="mt-2 font-display text-3xl font-semibold text-ink md:text-4xl">One line, from root to canopy</h2>
       <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink/60">

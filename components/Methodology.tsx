@@ -36,7 +36,7 @@ export const Methodology: React.FC = () => (
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {cards.map((c) => (
-        <div key={c.title} className="bg-white/45 ring-1 ring-ink/5 p-10 rounded-2xl group hover:ring-sage/30 transition-all duration-500">
+        <div key={c.title} className="bg-white/45 ring-1 ring-ink/5 shadow-lift p-10 rounded-2xl group hover:ring-sage/30 transition-all duration-500">
           <div className="text-sage mb-8 opacity-80 group-hover:opacity-100 transition-opacity">
             <svg className="w-9 h-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">{c.icon}</svg>
           </div>

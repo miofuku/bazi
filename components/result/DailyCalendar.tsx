@@ -58,7 +58,7 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
 
       <div className="mt-8 grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         {/* ---- Month grid ---- */}
-        <div className="rounded-2xl bg-white/55 p-5 ring-1 ring-ink/5">
+        <div className="rounded-2xl bg-white/55 p-5 ring-1 ring-ink/5 shadow-lift">
           <div className="mb-4 text-center">
             <span className="font-display text-lg font-semibold text-ink">{monthLabel}</span>
           </div>
@@ -122,7 +122,7 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
 
         {/* ---- Selected-day card ---- */}
         {reading && (
-          <div className="flex flex-col rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5">
+          <div className="flex flex-col rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
             <div className="mb-4 flex items-center justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: accentDeep }}>

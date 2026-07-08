@@ -14,15 +14,15 @@ const RADAR = 260;
 const RADAR_R = 92;
 const MAX_SHARE = 0.5;
 
-const polygon = (profile: GroupProfile) => {
-  const cx = RADAR / 2;
-  const cy = RADAR / 2;
+const radarPoints = (profile: GroupProfile): [number, number][] => {
+  const cx = RADAR / 2, cy = RADAR / 2;
   return ROLE_ORDER.map((role, i) => {
     const ang = -Math.PI / 2 + (i * 2 * Math.PI) / ROLE_ORDER.length;
     const r = RADAR_R * Math.min(profile[role] / MAX_SHARE, 1);
-    return `${cx + r * Math.cos(ang)},${cy + r * Math.sin(ang)}`;
-  }).join(' ');
+    return [cx + r * Math.cos(ang), cy + r * Math.sin(ang)];
+  });
 };
+const polygon = (profile: GroupProfile) => radarPoints(profile).map(([x, y]) => `${x},${y}`).join(' ');
 
 const RoleRadar: React.FC<{
   profiles: { a: GroupProfile; b: GroupProfile };
@@ -41,8 +41,8 @@ const RoleRadar: React.FC<{
         role="img"
         aria-label={`Role coverage radar across ${roleNames}, comparing ${labelA} and ${labelB}.${gaps.length ? ` Blind spots neither covers: ${gaps.join('、')}.` : ''}`}
       >
-        {/* grid rings */}
-        {[0.5, 1].map((f) => (
+        {/* reference rings — finer, so magnitude reads at a glance */}
+        {[0.25, 0.5, 0.75, 1].map((f) => (
           <polygon
             key={f}
             points={ROLE_ORDER.map((_, i) => {
@@ -51,27 +51,32 @@ const RoleRadar: React.FC<{
             }).join(' ')}
             fill="none"
             stroke="#26302B"
-            strokeOpacity={0.08}
+            strokeOpacity={f === 1 ? 0.1 : 0.055}
           />
         ))}
         {ROLE_ORDER.map((role, i) => {
           const ang = -Math.PI / 2 + (i * 2 * Math.PI) / ROLE_ORDER.length;
-          const lx = cx + (RADAR_R + 20) * Math.cos(ang);
-          const ly = cy + (RADAR_R + 20) * Math.sin(ang);
+          const lx = cx + (RADAR_R + 22) * Math.cos(ang);
+          const ly = cy + (RADAR_R + 22) * Math.sin(ang);
           const label = ROLE[role].split('·')[0];
           const isGap = gaps.includes(ROLE[role]);
           return (
             <g key={role}>
-              <line x1={cx} y1={cy} x2={cx + RADAR_R * Math.cos(ang)} y2={cy + RADAR_R * Math.sin(ang)} stroke="#26302B" strokeOpacity={0.08} />
-              <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" className="font-sc"
-                fontSize="11" fill={isGap ? WIND.headwind : '#5A6A5A'} fontWeight={isGap ? 700 : 500}>
-                {label}{isGap ? '⚠' : ''}
+              <line x1={cx} y1={cy} x2={cx + RADAR_R * Math.cos(ang)} y2={cy + RADAR_R * Math.sin(ang)} stroke="#26302B" strokeOpacity={0.055} />
+              <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" className="font-sans"
+                fontSize="9.5" letterSpacing="0.03em" fill={isGap ? WIND.headwind : '#5A6A5A'} fontWeight={isGap ? 700 : 500}>
+                {label}{isGap ? ' ⚠' : ''}
               </text>
             </g>
           );
         })}
-        <polygon points={polygon(profiles.a)} fill={A_HEX} fillOpacity={0.18} stroke={A_HEX} strokeWidth={1.5} />
-        <polygon points={polygon(profiles.b)} fill={B_HEX} fillOpacity={0.18} stroke={B_HEX} strokeWidth={1.5} />
+        {/* each person's shape + vertex dots */}
+        {([['a', A_HEX], ['b', B_HEX]] as const).map(([k, hex]) => (
+          <g key={k}>
+            <polygon points={polygon(profiles[k])} fill={hex} fillOpacity={0.15} stroke={hex} strokeWidth={1.75} strokeLinejoin="round" />
+            {radarPoints(profiles[k]).map(([x, y], i) => <circle key={i} cx={x} cy={y} r={2.4} fill={hex} />)}
+          </g>
+        ))}
       </svg>
       <div className="mt-1 flex gap-4 text-xs">
         <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full" style={{ background: A_HEX }} />{labelA}</span>
@@ -204,7 +209,7 @@ const TwoAxes: React.FC<{ reading: CompatibilityReading; lens: RelationLens }> =
       `${reading.divergentDomains ? 'Natural role split' : 'Same role contested'} · rivalry ${RIVALRY_LABEL[riv.level].toLowerCase()}` +
       `${cov.gaps.length ? ` · ${cov.gaps.length} blind spot${cov.gaps.length > 1 ? 's' : ''}` : ' · roles covered'}.`;
     return (
-      <div className="mt-8 grid gap-5 rounded-2xl bg-white/60 p-6 ring-1 ring-ink/5 sm:grid-cols-2">
+      <div className="mt-8 grid gap-5 rounded-2xl bg-white/60 p-6 ring-1 ring-ink/5 shadow-lift sm:grid-cols-2">
         <AxisMeter title="Chemistry" cn="相吸" pct={spark * 100} verdict={sparkVerdict} hex={sparkHex} detail={sparkDetail} />
         <AxisMeter title="Built to last" cn="相守" pct={struct * 100} verdict={structVerdict} hex={ELEMENT_HEX[ElementType.EARTH]} detail={structDetail} />
         <p className="border-t border-ink/5 pt-3 text-xs italic text-stone sm:col-span-2">
@@ -216,7 +221,7 @@ const TwoAxes: React.FC<{ reading: CompatibilityReading; lens: RelationLens }> =
 
   // marriage: the chart reads the spark (相吸); staying power (相守) is tending + choice, not fate.
   return (
-    <div className="mt-8 grid gap-5 rounded-2xl bg-white/60 p-6 ring-1 ring-ink/5 sm:grid-cols-2">
+    <div className="mt-8 grid gap-5 rounded-2xl bg-white/60 p-6 ring-1 ring-ink/5 shadow-lift sm:grid-cols-2">
       <AxisMeter title="Chemistry" cn="相吸" pct={spark * 100} verdict={sparkVerdict} hex={sparkHex} detail={sparkDetail} />
       <div>
         <div className="flex items-baseline justify-between">
@@ -274,13 +279,13 @@ export const Compatibility: React.FC<{
 
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           {/* Role radar */}
-          <div className="rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5">
+          <div className="rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
             <h4 className="mb-3 font-display text-lg font-semibold text-ink">Where each of you is strong</h4>
             <RoleRadar profiles={reading.profiles} labelA={labelA} labelB={labelB} gaps={reading.roleCoverage?.gaps ?? []} />
           </div>
 
           {/* Supply + diagnosis */}
-          <div className="flex flex-col gap-4 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5">
+          <div className="flex flex-col gap-4 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
             <h4 className="font-display text-lg font-semibold text-ink">What you bring each other</h4>
             <div className="flex flex-col gap-2">
               <SupplyRow from={labelA} to={labelB} score={reading.aToB.score} brings={reading.aToB.brings} />
@@ -326,12 +331,12 @@ export const Compatibility: React.FC<{
         </div>
 
         {/* Full diagnosis text */}
-        <div className="mt-6 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5">
+        <div className="mt-6 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
           <p className="text-sm leading-relaxed text-ink/75">{reading.note}</p>
         </div>
 
         {/* Team daily weather */}
-        <div className="mt-6 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5">
+        <div className="mt-6 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
           <TeamWeather result={result} />
         </div>
       </div>

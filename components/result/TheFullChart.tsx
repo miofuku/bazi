@@ -26,7 +26,7 @@ export const TheFullChart: React.FC<{ chart: BaziChart }> = ({ chart }) => (
       <p className="mb-4 mt-10 text-sm font-medium text-stone">The ten-year cycles (大运)</p>
       <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
         {chart.daYun.map((yun) => (
-          <div key={yun.startAge} className="min-w-[64px] flex-1 rounded-lg bg-white/50 p-2 text-center ring-1 ring-ink/5">
+          <div key={yun.startAge} className="min-w-[64px] flex-1 rounded-lg bg-white/50 p-2 text-center ring-1 ring-ink/5 shadow-lift">
             <div className="text-[10px] uppercase tracking-wider text-stone/60">{yun.startAge}–{yun.endAge}</div>
             <div className="mt-1 font-sc text-lg font-semibold">
               <span className={ELEMENT_COLORS[yun.pillar.stem.element]}>{yun.pillar.stem.chinese}</span>

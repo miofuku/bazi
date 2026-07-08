@@ -14,7 +14,7 @@ const SEASON_TINT: Record<SeasonalModifier['season'], string> = {
 export const SeasonEnvironment: React.FC<{ season: SeasonalModifier }> = ({ season }) => {
   const { accent, accentDeep } = useAccent();
   return (
-    <section className={`overflow-hidden rounded-2xl bg-gradient-to-br ${SEASON_TINT[season.season]} to-transparent p-8 ring-1 ring-ink/5 md:p-10`}>
+    <section className={`overflow-hidden rounded-2xl bg-gradient-to-br ${SEASON_TINT[season.season]} to-transparent p-8 ring-1 ring-ink/5 shadow-lift md:p-10`}>
       <div className="flex items-start gap-6">
         <SeasonArt season={season.season} accent={accent} className="hidden h-16 w-16 shrink-0 sm:block" />
         <div>
