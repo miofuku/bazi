@@ -1,6 +1,13 @@
 import { SolarTime, ChildLimit, Gender as TymeGender } from 'tyme4ts';
 import { BaziChart, Gender, Pillar, ElementType, DaYun } from '../types';
 import { STEMS, BRANCHES } from '../utils/constants';
+import { toTrueSolarTime } from '../utils/trueSolarTime';
+
+// Optional birthplace, to correct clock time to 真太阳时 (see trueSolarTime.ts).
+export interface Geo {
+  longitude: number;    // east-positive degrees
+  tzOffsetHours: number; // clock's UTC offset (e.g. -8 for PST); LMT → longitude/15
+}
 
 // Safe access to library classes in case of load failure
 const SafeSolarTime = typeof SolarTime !== 'undefined' ? SolarTime : null;
@@ -12,7 +19,8 @@ export const calculateBazi = (
   day: number,
   hour: number,
   minute: number,
-  gender: Gender
+  gender: Gender,
+  geo?: Geo
 ): BaziChart => {
 
   if (!SafeSolarTime || !SafeChildLimit) {
@@ -20,10 +28,16 @@ export const calculateBazi = (
   }
 
   try {
+    // 0. Correct clock time to 真太阳时 when a birthplace is given — the hour
+    // pillar (and 起运) follow apparent solar time, not the civil clock.
+    const st = geo
+      ? toTrueSolarTime({ year, month, day, hour, minute }, geo.longitude, geo.tzOffsetHours * 15)
+      : { year, month, day, hour, minute };
+
     // 1. Initialize SolarTime
     // We use SolarTime as the single source of truth to ensure all pillars (Year, Month, Day, Hour)
     // are consistent with the exact solar term (Jie Qi) timestamp.
-    const t = SafeSolarTime.fromYmdHms(year, month, day, hour, minute, 0);
+    const t = SafeSolarTime.fromYmdHms(st.year, st.month, st.day, st.hour, st.minute, 0);
 
     // 2. Retrieve GanZhi (Pillars) via chaining
     // In the tyme4ts library, we traverse up from the Hour pillar to ensure context is preserved.

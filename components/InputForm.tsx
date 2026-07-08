@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { Gender } from '../types';
-import { Num } from './fields';
+import { Num, GeoControl, GeoValue } from './fields';
 
 interface InputFormProps {
-  onCalculate: (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender }) => void;
+  onCalculate: (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender; geo?: GeoValue }) => void;
 }
 
 export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
   const [dateValue, setDateValue] = useState({ year: 2000, month: 6, day: 15 });
   const [timeValue, setTimeValue] = useState({ hour: 12, minute: 30 });
   const [gender, setGender] = useState<Gender>(Gender.MALE);
+  const [geo, setGeo] = useState<GeoValue | undefined>(undefined);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,6 +21,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
       hour: timeValue.hour,
       minute: timeValue.minute,
       gender,
+      geo,
     });
   };
 
@@ -41,6 +43,8 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
           <Num label="Hour" value={timeValue.hour} min={0} max={23} onChange={(hour) => setTimeValue({ ...timeValue, hour })} />
           <Num label="Min" value={timeValue.minute} min={0} max={59} onChange={(minute) => setTimeValue({ ...timeValue, minute })} />
         </div>
+
+        <GeoControl onChange={setGeo} />
 
         {/* Sex (sets the direction of the life seasons) */}
         <div className="bg-black/[0.02] p-6 border border-black/5 rounded-lg">

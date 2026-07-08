@@ -1,4 +1,4 @@
-import { calculateBazi } from './baziService';
+import { calculateBazi, Geo } from './baziService';
 import { getDayPillar } from './dailyService';
 import { BaziChart, Gender, ElementType, Favor } from '../types';
 import {
@@ -16,6 +16,7 @@ export interface Birth {
   hour: number;
   minute: number;
   gender: Gender;
+  geo?: Geo;
 }
 
 export interface PersonBundle {
@@ -24,7 +25,7 @@ export interface PersonBundle {
 }
 
 export const buildPerson = (b: Birth): PersonBundle => {
-  const chart = calculateBazi(b.year, b.month, b.day, b.hour, b.minute, b.gender);
+  const chart = calculateBazi(b.year, b.month, b.day, b.hour, b.minute, b.gender, b.geo);
   const person: Person = {
     label: b.label,
     strength: chart.strength!,

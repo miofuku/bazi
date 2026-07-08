@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Gender } from '../types';
 import { Birth } from '../services/compatibilityService';
 import { RelationLens } from '../utils/CompatibilityAnalyzer';
-import { Num } from './fields';
+import { Num, GeoControl } from './fields';
 
 interface Props {
   onAnalyze: (a: Birth, b: Birth, lens: RelationLens) => void;
@@ -38,6 +38,7 @@ const PersonFields: React.FC<{ value: Birth; onChange: (b: Birth) => void }> = (
         </div>
       </label>
     </div>
+    <GeoControl onChange={(geo) => onChange({ ...value, geo })} />
   </div>
 );
 

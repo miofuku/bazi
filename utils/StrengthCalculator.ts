@@ -38,6 +38,7 @@ const CHONG_FACTORS: Record<number, { active: number; passive: number }> = {
 
 const UPROOT_REDUCTION = 0.85; // a root reduced this much (≈ two clashes) is 拔
 const FOLLOW_WEAK_SHARE = 0.3; // rootless day master under this 同党 share 从弱
+const PENG_CHONG_SCALE = 0.35; // 辰戌丑未 朋冲 — same-earth clash stirs, not destroys
 
 const emptyScores = (): Record<ElementType, number> => ({
   [ElementType.WOOD]: 0,
@@ -100,10 +101,17 @@ export const calculateStrength = (
       if (SIX_CHONG[pillars[i].branch.chinese] !== pillars[j].branch.chinese) continue;
       const f = CHONG_FACTORS[j - i];
       const iWeaker = branchPower[i] <= branchPower[j];
-      reduction[i] += iWeaker ? f.passive : f.active;
-      reduction[j] += iWeaker ? f.active : f.passive;
-      if (iWeaker) passiveClashes[i]++;
-      else passiveClashes[j]++;
+      // 辰戌丑未 同为土 = 朋冲: 同气相激、开库不摧根，削力远小于正冲，且不拔根。
+      const pengChong =
+        pillars[i].branch.element === ElementType.EARTH &&
+        pillars[j].branch.element === ElementType.EARTH;
+      const scale = pengChong ? PENG_CHONG_SCALE : 1;
+      reduction[i] += (iWeaker ? f.passive : f.active) * scale;
+      reduction[j] += (iWeaker ? f.active : f.passive) * scale;
+      if (!pengChong) {
+        if (iWeaker) passiveClashes[i]++;
+        else passiveClashes[j]++;
+      }
     }
   }
 
