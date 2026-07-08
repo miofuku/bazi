@@ -106,11 +106,18 @@ const SupplyRow: React.FC<{
   const heavy = joinWords(brings.filter((b) => b.favor === 'unfavorable').map((b) => FORCE_WORD[b.element]));
   const toName = <span className="font-medium text-ink/80">{to}</span>;
 
+  // Score is the source of truth for direction; the element list is only used
+  // when it's non-empty (favorable/unfavorable forces can be too thinly spread
+  // to survive the analyzer's share filter, leaving good/heavy empty).
   let body: React.ReactNode;
-  if (score > 0.1 && good) {
-    body = <>brings {toName} the {good} they thrive on.</>;
-  } else if (score < -0.1 && heavy) {
-    body = <>adds more {heavy} to {toName} — something they already carry in plenty.</>;
+  if (score > 0.1) {
+    body = good
+      ? <>brings {toName} the {good} they thrive on.</>
+      : <>quietly feeds {toName} — a little of what they need.</>;
+  } else if (score < -0.1) {
+    body = heavy
+      ? <>adds more {heavy} to {toName} — something they already carry in plenty.</>
+      : <>presses lightly on {toName} — a touch of what they’d rather have less of.</>;
   } else {
     body = <>neither feeds nor drains {toName} much — a quiet, even exchange.</>;
   }

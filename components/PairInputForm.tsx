@@ -10,7 +10,7 @@ interface Props {
 }
 
 const blank = (label: string): Birth => ({
-  label, year: 1990, month: 6, day: 15, hour: 12, minute: 0, gender: Gender.MALE,
+  label, year: 2000, month: 6, day: 15, hour: 12, minute: 0, gender: Gender.MALE,
 });
 
 const PersonFields: React.FC<{

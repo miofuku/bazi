@@ -84,7 +84,7 @@ const App: React.FC = () => {
       const result = calculateBazi(data.year, data.month, data.day, data.hour, data.minute, data.gender, data.geo);
       result.date = new Date(data.year, data.month - 1, data.day, data.hour, data.minute);
       setChart(result);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0 });
     } catch (err) {
       setError('Could not read this birth moment. Please check the date and try again.');
       console.error(err);
@@ -96,7 +96,7 @@ const App: React.FC = () => {
       setError(null);
       setLens(l);
       setPair(analyzePair(a, b, l));
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0 });
     } catch (err) {
       setError('Could not read one of these birth moments. Please check the dates and try again.');
       console.error(err);
@@ -106,7 +106,7 @@ const App: React.FC = () => {
   const resetApp = () => {
     setChart(null);
     setPair(null);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0 });
   };
 
   if (pair) {

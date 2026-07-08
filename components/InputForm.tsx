@@ -9,7 +9,7 @@ interface InputFormProps {
 
 export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
   const [dateValue, setDateValue] = useState({ year: 2000, month: 6, day: 15 });
-  const [timeValue, setTimeValue] = useState({ hour: 12, minute: 30 });
+  const [timeValue, setTimeValue] = useState({ hour: 12, minute: 0 });
   const [timeKnown, setTimeKnown] = useState(true);
   const [gender, setGender] = useState<Gender>(Gender.MALE);
   const [geoSpec, setGeoSpec] = useState<GeoSpec | undefined>(undefined);
