@@ -191,8 +191,9 @@ const App: React.FC = () => {
                   Everyone is one of ten living things
                 </h2>
               </div>
-              <p className="max-w-xs text-sm leading-relaxed text-stone">
-                Your day of birth decides which — then the season you arrived in colours everything. Find yours below.
+              <p className="max-w-xs text-sm leading-relaxed text-stone text-pretty">
+                Your day of birth sets which of the ten; the season you arrived in colours how it grows.
+                <span className="mt-1 block">Find yours below.</span>
               </p>
             </div>
             <TenNatures />

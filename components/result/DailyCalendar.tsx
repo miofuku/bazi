@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { BaziChart, ElementType } from '../../types';
 import { buildDailyReading, getDayPillar, computeDayFavor } from '../../services/dailyService';
-import { ForceArt } from '../illustrations/ForceArt';
+import { NatureArt } from '../illustrations/NatureArt';
+import { STEM_PROFILES } from '../../content/xiangfa';
 import { ELEMENT_HEX, WIND, windTone, windHex } from '../../utils/tokens';
 import { useAccent } from './AtmosphereContext';
 
@@ -27,6 +28,9 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
   const [selected, setSelected] = useState<Date>(today);
 
   const reading = useMemo(() => buildDailyReading(chart, selected), [chart, selected]);
+  // The day's own nature (丙 = Sun, 丁 = Flame …) — keyed on the stem, not just
+  // the element, so consecutive Yang/Yin days read distinctly.
+  const dayNature = reading ? STEM_PROFILES[reading.dayPillar.stem.chinese as keyof typeof STEM_PROFILES] : null;
 
   // Cells for the current month, padded so the 1st lands on its weekday.
   const cells = useMemo(() => {
@@ -135,9 +139,9 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <ForceArt element={reading.element} className="h-10 w-10" />
+                <NatureArt id={dayNature?.symbol ?? 'sun'} accent={ELEMENT_HEX[reading.element]} className="h-11 w-11" />
                 <span className="text-sm font-semibold uppercase tracking-wider" style={{ color: ELEMENT_HEX[reading.element] }}>
-                  {reading.element}
+                  {dayNature?.archetypeName.replace(/^The\s+/i, '')}
                 </span>
               </div>
             </div>
