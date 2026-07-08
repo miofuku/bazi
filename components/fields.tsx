@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-
-export interface GeoValue { longitude: number; tzOffsetHours: number }
+import { CITIES, GeoSpec } from '../utils/cities';
 
 // Shared numeric birth field, used by both the single and pair input forms.
 export const Num: React.FC<{
@@ -23,26 +22,44 @@ export const Num: React.FC<{
   </label>
 );
 
-// Optional 真太阳时 (true solar time) correction. When on, the hour pillar is
-// computed from apparent solar time using birthplace longitude + timezone.
-export const GeoControl: React.FC<{ onChange: (g: GeoValue | undefined) => void }> = ({ onChange }) => {
-  const [on, setOn] = useState(false);
-  const [lon, setLon] = useState(0);
-  const [tz, setTz] = useState(0);
+const REGIONS = [...new Set(CITIES.map((c) => c.region))];
 
-  const push = (o: boolean, l: number, t: number) =>
-    onChange(o ? { longitude: l, tzOffsetHours: t } : undefined);
+// Birthplace → 真太阳时 correction. Pick a city and the timezone offset (incl.
+// historical DST / 战时) is resolved automatically at the birth moment; the
+// longitude gives the local-meridian correction. "Manual" is an escape hatch.
+export const GeoControl: React.FC<{ onChange: (s: GeoSpec | undefined) => void }> = ({ onChange }) => {
+  const [sel, setSel] = useState('none'); // 'none' | 'manual' | city index
+  const [lon, setLon] = useState(120);
+  const [tz, setTz] = useState(8);
+
+  const emit = (s: string, l: number, t: number) => {
+    if (s === 'none') onChange(undefined);
+    else if (s === 'manual') onChange({ kind: 'manual', lon: l, tzOffsetHours: t });
+    else { const c = CITIES[Number(s)]; onChange({ kind: 'city', lon: c.lon, tz: c.tz }); }
+  };
 
   return (
     <div className="rounded-lg border border-black/5 bg-black/[0.02] p-4">
-      <label className="flex cursor-pointer items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-stone">
-        <input type="checkbox" checked={on} onChange={(e) => { setOn(e.target.checked); push(e.target.checked, lon, tz); }} />
-        真太阳时校正 · true solar time
+      <label className="mb-2 block text-center text-[10px] font-semibold uppercase tracking-[0.15em] text-stone">
+        出生地 · birthplace（真太阳时）
       </label>
-      {on && (
+      <select
+        value={sel}
+        onChange={(e) => { setSel(e.target.value); emit(e.target.value, lon, tz); }}
+        className="w-full rounded-md border border-black/10 bg-silk/40 px-3 py-2 text-sm text-ink focus:border-sage focus:outline-none"
+      >
+        <option value="none">不校正（用钟表时间）</option>
+        {REGIONS.map((r) => (
+          <optgroup key={r} label={r}>
+            {CITIES.map((c, i) => c.region === r ? <option key={i} value={i}>{c.name}</option> : null)}
+          </optgroup>
+        ))}
+        <option value="manual">▸ 手动经度 / 时区</option>
+      </select>
+      {sel === 'manual' && (
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <Num label="Longitude °E" value={lon} min={-180} max={180} onChange={(l) => { setLon(l); push(on, l, tz); }} />
-          <Num label="UTC offset" value={tz} min={-12} max={14} onChange={(t) => { setTz(t); push(on, lon, t); }} />
+          <Num label="Longitude °E" value={lon} min={-180} max={180} onChange={(l) => { setLon(l); emit(sel, l, tz); }} />
+          <Num label="UTC offset" value={tz} min={-12} max={14} onChange={(t) => { setTz(t); emit(sel, lon, t); }} />
         </div>
       )}
     </div>

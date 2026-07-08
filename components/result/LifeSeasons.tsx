@@ -9,6 +9,16 @@ const TONE_DOT: Record<LifeSeason['tone'], string> = {
   demanding: 'a demanding season',
 };
 
+// 用神 favorability of a decade → a wind (weather voice, not fortune): does the
+// 大运's 干支 bring what this nature needs, or test it?
+type Wind = { label: string; hex: string; blurb: string };
+const windOf = (favor: number): Wind =>
+  favor > 0.15
+    ? { label: 'Tailwind', hex: '#4A6741', blurb: 'the weather leans your way — energy comes cheaper here' }
+    : favor < -0.15
+    ? { label: 'Headwind', hex: '#C4664A', blurb: 'the weather tests you — a decade to conserve and root, not force' }
+    : { label: 'Even wind', hex: '#8A8C84', blurb: 'neither with you nor against you — a decade of steady tending' };
+
 // "The seasons ahead" — the decade-long climates of a life (Da Yun), with the
 // season you're living in now marked.
 export const LifeSeasons: React.FC<{ seasons: LifeSeason[] }> = ({ seasons }) => {
@@ -32,6 +42,12 @@ export const LifeSeasons: React.FC<{ seasons: LifeSeason[] }> = ({ seasons }) =>
             <span className="font-display font-semibold text-ink">{current.label.toLowerCase()} years — {TONE_DOT[current.tone]}.</span>{' '}
             {current.theme}{current.note ? ` ${current.note}` : ''}
           </p>
+          {(() => { const w = windOf(current.favor); return (
+            <p className="mt-3 flex items-center gap-2 text-sm">
+              <span className="rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider" style={{ background: `${w.hex}1f`, color: w.hex }}>{w.label}</span>
+              <span className="text-ink/70">{w.blurb}.</span>
+            </p>
+          ); })()}
         </div>
       )}
 
@@ -39,6 +55,7 @@ export const LifeSeasons: React.FC<{ seasons: LifeSeason[] }> = ({ seasons }) =>
       <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {seasons.map((s) => {
           const hex = ELEMENT_HEX[s.element];
+          const w = windOf(s.favor);
           return (
             <div
               key={s.startAge}
@@ -46,7 +63,10 @@ export const LifeSeasons: React.FC<{ seasons: LifeSeason[] }> = ({ seasons }) =>
               style={s.current ? ({ ['--tw-ring-color' as any]: `${accent}66`, boxShadow: `0 0 0 1.5px ${accent}88` }) : undefined}
             >
               <div className="h-1.5 w-full rounded-full" style={{ background: hex, opacity: 0.8 }} />
-              <p className="mt-3 font-display text-lg font-semibold text-ink">{s.startAge}–{s.endAge}</p>
+              <div className="mt-3 flex items-baseline justify-between">
+                <p className="font-display text-lg font-semibold text-ink">{s.startAge}–{s.endAge}</p>
+                <span className="rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider" style={{ background: `${w.hex}1f`, color: w.hex }}>{w.label}</span>
+              </div>
               <p className="text-[11px] uppercase tracking-wider text-stone/70">from {s.startYear}</p>
               <p className="mt-3 text-sm font-semibold" style={{ color: hex }}>{s.label}</p>
               <p className="mt-1 text-xs leading-relaxed text-ink/65">{s.blurb}</p>

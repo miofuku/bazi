@@ -1,28 +1,24 @@
 import React, { useState } from 'react';
 import { Gender } from '../types';
-import { Num, GeoControl, GeoValue } from './fields';
+import { Num, GeoControl } from './fields';
+import { GeoSpec, resolveGeo, ResolvedGeo } from '../utils/cities';
 
 interface InputFormProps {
-  onCalculate: (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender; geo?: GeoValue }) => void;
+  onCalculate: (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender; geo?: ResolvedGeo }) => void;
 }
 
 export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
   const [dateValue, setDateValue] = useState({ year: 2000, month: 6, day: 15 });
   const [timeValue, setTimeValue] = useState({ hour: 12, minute: 30 });
   const [gender, setGender] = useState<Gender>(Gender.MALE);
-  const [geo, setGeo] = useState<GeoValue | undefined>(undefined);
+  const [geoSpec, setGeoSpec] = useState<GeoSpec | undefined>(undefined);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onCalculate({
-      year: dateValue.year,
-      month: dateValue.month,
-      day: dateValue.day,
-      hour: timeValue.hour,
-      minute: timeValue.minute,
-      gender,
-      geo,
-    });
+    const { year, month, day } = dateValue;
+    const { hour, minute } = timeValue;
+    const geo = geoSpec ? resolveGeo(geoSpec, year, month, day, hour, minute) : undefined;
+    onCalculate({ year, month, day, hour, minute, gender, geo });
   };
 
   return (
@@ -44,7 +40,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
           <Num label="Min" value={timeValue.minute} min={0} max={59} onChange={(minute) => setTimeValue({ ...timeValue, minute })} />
         </div>
 
-        <GeoControl onChange={setGeo} />
+        <GeoControl onChange={setGeoSpec} />
 
         {/* Sex (sets the direction of the life seasons) */}
         <div className="bg-black/[0.02] p-6 border border-black/5 rounded-lg">

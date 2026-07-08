@@ -1,6 +1,7 @@
 import { BaziChart, ElementType } from '../../types';
 import { STEMS } from '../../utils/constants';
 import { calculateDeity, DEITY_FULL_NAMES } from '../../utils/baziCalculator';
+import { pillarFavor } from '../../utils/timeFavor';
 import { XiangfaReading } from './index';
 
 // ── The five relationships (the Ten Gods 十神, masked as nature) ──────────────
@@ -175,6 +176,7 @@ export interface LifeSeason {
   blurb: string;
   theme: string;
   tone: 'kind' | 'steady' | 'demanding';
+  favor: number; // 用神 favorability of this 大运's 干支, −1..1 (Tailwind/Headwind)
   note?: string;
   current: boolean;
 }
@@ -198,6 +200,8 @@ export function buildLifeSeasons(chart: BaziChart, reading: XiangfaReading, nowY
     if (scarce.has(element)) { tone = 'kind'; note = 'It brings a kind of force you have been short on.'; }
     else if (element === dominant) { tone = tone === 'kind' ? 'steady' : 'demanding'; note = 'It adds more of what you already carry in plenty.'; }
 
+    const favor = chart.yongshen ? pillarFavor(chart.yongshen.favor, cyc.pillar) : 0;
+
     return {
       startAge: cyc.startAge,
       endAge: cyc.endAge,
@@ -207,6 +211,7 @@ export function buildLifeSeasons(chart: BaziChart, reading: XiangfaReading, nowY
       blurb: SEASON_BLURB_BY_DEITY[short] ?? '',
       theme: SEASON_THEME[cat],
       tone,
+      favor,
       note,
       current,
     };

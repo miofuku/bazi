@@ -3,6 +3,7 @@ import { Gender } from '../types';
 import { Birth } from '../services/compatibilityService';
 import { RelationLens } from '../utils/CompatibilityAnalyzer';
 import { Num, GeoControl } from './fields';
+import { GeoSpec, resolveGeo } from '../utils/cities';
 
 interface Props {
   onAnalyze: (a: Birth, b: Birth, lens: RelationLens) => void;
@@ -12,7 +13,11 @@ const blank = (label: string): Birth => ({
   label, year: 1990, month: 6, day: 15, hour: 12, minute: 0, gender: Gender.MALE,
 });
 
-const PersonFields: React.FC<{ value: Birth; onChange: (b: Birth) => void }> = ({ value, onChange }) => (
+const PersonFields: React.FC<{
+  value: Birth;
+  onChange: (b: Birth) => void;
+  onGeoSpec: (s: GeoSpec | undefined) => void;
+}> = ({ value, onChange, onGeoSpec }) => (
   <div className="flex flex-col gap-3 rounded-xl border border-black/5 bg-black/[0.015] p-5">
     <input
       value={value.label}
@@ -38,18 +43,25 @@ const PersonFields: React.FC<{ value: Birth; onChange: (b: Birth) => void }> = (
         </div>
       </label>
     </div>
-    <GeoControl onChange={(geo) => onChange({ ...value, geo })} />
+    <GeoControl onChange={onGeoSpec} />
   </div>
 );
+
+const withGeo = (birth: Birth, spec: GeoSpec | undefined): Birth =>
+  spec
+    ? { ...birth, geo: resolveGeo(spec, birth.year, birth.month, birth.day, birth.hour, birth.minute) }
+    : { ...birth, geo: undefined };
 
 export const PairInputForm: React.FC<Props> = ({ onAnalyze }) => {
   const [a, setA] = useState<Birth>(blank('Person A'));
   const [b, setB] = useState<Birth>(blank('Person B'));
+  const [geoA, setGeoA] = useState<GeoSpec | undefined>(undefined);
+  const [geoB, setGeoB] = useState<GeoSpec | undefined>(undefined);
   const [lens, setLens] = useState<RelationLens>('partner');
 
   return (
     <form
-      onSubmit={(e) => { e.preventDefault(); onAnalyze(a, b, lens); }}
+      onSubmit={(e) => { e.preventDefault(); onAnalyze(withGeo(a, geoA), withGeo(b, geoB), lens); }}
       className="w-full max-w-2xl glass-light p-8 shadow-2xl border-black/5"
     >
       <div className="mb-6 flex justify-center">
@@ -64,8 +76,8 @@ export const PairInputForm: React.FC<Props> = ({ onAnalyze }) => {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
-        <PersonFields value={a} onChange={setA} />
-        <PersonFields value={b} onChange={setB} />
+        <PersonFields value={a} onChange={setA} onGeoSpec={setGeoA} />
+        <PersonFields value={b} onChange={setB} onGeoSpec={setGeoB} />
       </div>
 
       <button type="submit"

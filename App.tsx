@@ -6,7 +6,7 @@ import { Compatibility } from './components/result/Compatibility';
 import { calculateBazi } from './services/baziService';
 import { analyzePair, PairResult, Birth } from './services/compatibilityService';
 import { RelationLens } from './utils/CompatibilityAnalyzer';
-import { GeoValue } from './components/fields';
+import { ResolvedGeo } from './utils/cities';
 import { BaziChart, Gender } from './types';
 import { Methodology } from './components/Methodology';
 import { TenNatures, StemMotif } from './components/TenNatures';
@@ -70,7 +70,7 @@ const App: React.FC = () => {
   const [births, setBirths] = useState<[Birth, Birth] | null>(null);
   const [lens, setLens] = useState<RelationLens>('partner');
 
-  const handleCalculate = (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender; geo?: GeoValue }) => {
+  const handleCalculate = (data: { year: number; month: number; day: number; hour: number; minute: number; gender: Gender; geo?: ResolvedGeo }) => {
     try {
       const result = calculateBazi(data.year, data.month, data.day, data.hour, data.minute, data.gender, data.geo);
       result.date = new Date(data.year, data.month - 1, data.day, data.hour, data.minute);
