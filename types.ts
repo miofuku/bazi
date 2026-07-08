@@ -75,6 +75,25 @@ export interface StrengthReading {
   category: StrengthCategory;
 }
 
+// 用神选取 (Phase 2). Per-element favorability + the primary 用/忌.
+export type Favor = 'favorable' | 'neutral' | 'unfavorable'; // 喜用 / 闲 / 忌
+
+export type YongshenMethod =
+  | 'fuyi-weak'      // 扶抑·身弱 → 扶
+  | 'fuyi-strong'    // 扶抑·身强 → 抑
+  | 'binyao'         // 中和 → 病药
+  | 'follow-weak'    // 从弱 → 顺势
+  | 'follow-strong'; // 从强 → 顺势
+
+export interface YongshenReading {
+  method: YongshenMethod;
+  primaryYong: ElementType; // 用神
+  primaryJi: ElementType;   // 忌神
+  favor: Record<ElementType, Favor>;
+  tiaohou: ElementType[];   // 调候用神 elements for this day-master × month (穷通宝鉴)
+  note: string;
+}
+
 export interface BaziChart {
   date?: Date;
   yearPillar: Pillar;
@@ -86,4 +105,5 @@ export interface BaziChart {
   elementCounts: ElementCounts;
   elementScores?: ElementScore; // Detailed strength scores
   strength?: StrengthReading;   // Day-master strength (日干旺衰)
+  yongshen?: YongshenReading;   // 用神 (favorable elements)
 }

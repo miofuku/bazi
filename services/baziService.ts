@@ -106,6 +106,7 @@ import { calculateDeity, getHiddenStemsForBranch, DEITY_FULL_NAMES } from '../ut
 import { calculateFiveElementScores } from '../utils/FiveElementScorer';
 import { calculateStrength } from '../utils/StrengthCalculator';
 import { getRulingStem } from '../utils/qiLing';
+import { selectYongshen } from '../utils/YongshenSelector';
 
 // Helper to aggregate counts and return final chart structure
 const generateChartResult = (
@@ -167,6 +168,7 @@ const generateChartResult = (
   );
 
   const strength = calculateStrength(yearPillar, monthPillar, dayPillar, hourPillar, rulingStem);
+  const yongshen = selectYongshen(strength, monthPillar.branch.chinese, dayPillar.stem.chinese);
 
   return {
     yearPillar,
@@ -179,5 +181,6 @@ const generateChartResult = (
     elementCounts,
     elementScores: scores,
     strength,
+    yongshen,
   };
 };
