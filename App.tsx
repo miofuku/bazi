@@ -135,13 +135,13 @@ const App: React.FC = () => {
 
       <main className="relative z-10">
         {/* HERO — editorial, asymmetric */}
-        <section className="relative flex min-h-screen items-center px-6 pt-24 pb-16">
+        <section className="relative flex min-h-dvh items-center px-6 pt-24 pb-16">
           <div className="mx-auto grid w-full max-w-5xl items-center gap-14 md:grid-cols-[1.45fr_1fr]">
             <div className="animate-slide-up">
               <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">
                 You are a part of nature
               </p>
-              <h1 className="mt-7 font-display text-5xl font-semibold leading-[1.0] tracking-tight text-ink md:text-7xl">
+              <h1 className="mt-7 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-5xl sm:leading-[1.0] md:text-7xl">
                 You're not a sign.
                 <br />
                 <span className="italic text-sage">You're a living thing.</span>

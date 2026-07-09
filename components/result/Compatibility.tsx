@@ -281,12 +281,12 @@ export const Compatibility: React.FC<{
         {/* Header — the two natures shown as glyphs, echoing the single reading's hero */}
         <div className="flex flex-col items-center text-center">
           <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">Paired natures · {lensLabel}</p>
-          <div className="mt-6 flex items-center justify-center gap-4 sm:gap-6">
-            <NatureArt id={symA} accent={PERSON.a} className="h-16 w-16 shrink-0 sm:h-20 sm:w-20" />
-            <h2 className="font-display text-3xl font-semibold tracking-tight text-ink md:text-5xl">
+          <div className="mt-6 flex items-center justify-center gap-3 sm:gap-6">
+            <NatureArt id={symA} accent={PERSON.a} className="h-12 w-12 shrink-0 sm:h-16 sm:w-16 md:h-20 md:w-20" />
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl md:text-5xl">
               {labelA} <span className="text-sage">&</span> {labelB}
             </h2>
-            <NatureArt id={symB} accent={PERSON.b} className="h-16 w-16 shrink-0 sm:h-20 sm:w-20" />
+            <NatureArt id={symB} accent={PERSON.b} className="h-12 w-12 shrink-0 sm:h-16 sm:w-16 md:h-20 md:w-20" />
           </div>
         </div>
 

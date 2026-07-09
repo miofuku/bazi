@@ -60,7 +60,7 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
 
       {/* ---- HERO: immersive, themed to element + season ---- */}
       <section
-        className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-24 text-center"
+        className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 py-24 text-center"
         style={{ background: atmo.hero, color: atmo.heroText }}
       >
         <div className="relative z-10 flex max-w-2xl flex-col items-center">
@@ -77,7 +77,7 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
 
           <NatureArt id={reading.stem.symbol} accent={atmo.accent} className="my-8 h-52 w-52 md:h-60 md:w-60" />
 
-          <h1 className="font-display text-5xl font-medium leading-[1.05] md:text-7xl">
+          <h1 className="font-display text-4xl font-medium leading-[1.05] sm:text-5xl md:text-7xl">
             You are {reading.stem.archetypeName}.
           </h1>
           <p className="mt-4 font-display text-2xl italic md:text-3xl" style={{ color: atmo.heroTextSoft }}>
