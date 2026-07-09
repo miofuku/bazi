@@ -17,7 +17,7 @@ const cards = [
   },
   {
     title: 'Conditions to flourish',
-    body: 'Every living thing needs certain things to thrive — ground to root in, water, light, room to be seen. Reading these against your makeup shows what already runs strong in you and what is worth seeking out. Self-understanding, plain and simple.',
+    body: 'Every living thing needs certain things to thrive — ground to root in, water, light, room to be seen. Reading these against your makeup shows what already runs strong in you and what is worth seeking out — the first move in growing with your nature instead of against it.',
     icon: (
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M3 12h4l2 6 4-12 2 6h4" />
     ),
@@ -30,7 +30,7 @@ export const Methodology: React.FC = () => (
       <span className="inline-block px-3 py-1 bg-sage text-white text-[11px] uppercase tracking-[0.3em] font-semibold mb-8 rounded-full">How it works</span>
       <h3 className="text-4xl md:text-5xl font-display font-semibold text-ink mb-6 tracking-tight">Reading a life the way you read a landscape</h3>
       <p className="text-stone max-w-2xl mx-auto leading-relaxed">
-        We grow the way living things grow. Rootwise looks at you as a part of the natural world — the living thing you most resemble, the season it took root in, and the conditions it needs to thrive. It's ecology and psychology: the quiet harmony between you and nature.
+        We grow the way living things grow. Rootwise reads you as a part of the natural world — the living thing you most resemble, the season that shaped you, and the conditions it needs to thrive. Once you can see them clearly, you can grow on purpose: with your nature, not against it.
       </p>
     </div>
 

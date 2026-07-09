@@ -139,15 +139,15 @@ const App: React.FC = () => {
           <div className="mx-auto grid w-full max-w-5xl items-center gap-14 md:grid-cols-[1.45fr_1fr]">
             <div className="animate-slide-up">
               <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-sage-deep">
-                You are a part of nature
+                A field guide to your nature
               </p>
               <h1 className="mt-7 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-5xl sm:leading-[1.0] md:text-7xl">
-                You're not a sign.
+                You are a living thing.
                 <br />
-                <span className="italic text-sage">You're a living thing.</span>
+                <span className="italic text-sage">Learn to grow on purpose.</span>
               </h1>
               <p className="mt-8 max-w-xl text-lg font-sans leading-relaxed text-stone">
-                A tree grows toward light; a river finds its channel; a seed waits for its season. People grow by the same rules. Rootwise shows you the living thing you are, the climate you grew up in, and the conditions that help you flourish.
+                A tree grows toward light; a river finds its channel; a seed waits for its season. You grow by the same rules — and once you can read them, you can tend your growth, not just weather it. Rootwise shows you the living thing you are, the season that shaped you, and the conditions you need to flourish.
               </p>
               <div className="mt-10 flex flex-wrap gap-4">
                 <button
