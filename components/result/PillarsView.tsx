@@ -26,7 +26,7 @@ const PillarColumn: React.FC<{ pillar: Pillar; label: string; isSelf?: boolean }
         <ElementIcon type={STEM_SYMBOLS[pillar.stem.chinese]} className="w-6 h-6 stroke-[1.4]" />
       </span>
       <span className="font-sans text-[10px] uppercase tracking-widest text-stone/60">{pillar.stem.name}</span>
-      <span className="font-sans text-[9px] text-stone/50 text-center leading-tight">{isSelf ? 'Day Master' : pillar.stem.deity}</span>
+      {isSelf && <span className="font-sans text-[9px] text-stone/50 text-center leading-tight">Day Master</span>}
     </div>
 
     <div className="my-4 h-px w-10 bg-ink/10" />
@@ -38,7 +38,6 @@ const PillarColumn: React.FC<{ pillar: Pillar; label: string; isSelf?: boolean }
         <ElementIcon type={BRANCH_SYMBOLS[pillar.branch.chinese]} className="w-6 h-6 stroke-[1.4]" />
       </span>
       <span className="font-sans text-[10px] uppercase tracking-widest text-stone/60">{pillar.branch.zodiac}</span>
-      {pillar.branch.deity && <span className="font-sans text-[9px] text-stone/50 text-center leading-tight">{pillar.branch.deity}</span>}
     </div>
 
     {/* Hidden stems, quiet */}

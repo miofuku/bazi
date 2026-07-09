@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ElementType, Favor } from '../../types';
 import {
   CompatibilityReading, RelationLens, ROLE, ROLE_ORDER, GroupProfile,
@@ -135,31 +135,55 @@ const TeamWeather: React.FC<{ result: PairResult }> = ({ result }) => {
     [result],
   );
   const mutualCount = days.filter((d) => d.mutual).length;
+  const [active, setActive] = useState<number | null>(null);
+  const labelA = result.a.person.label;
+  const labelB = result.b.person.label;
   return (
     <div>
-      <div className="mb-3 flex items-baseline justify-between">
-        <h4 className="font-display text-lg font-semibold text-ink">Days that suit you both</h4>
-        <span className="text-sm text-ink/50">{mutualCount} of the next 45 days</span>
+      <div className="mb-2 flex items-baseline justify-between">
+        <h4 className="font-sans text-[11px] font-semibold uppercase tracking-widest text-sage-deep">Shared weather · next 45 days</h4>
+        <span className="text-xs text-ink/45">{mutualCount} lean your way</span>
       </div>
-      <div className="flex flex-wrap gap-1.5">
-        {days.map((d, i) => (
-          <div
-            key={i}
-            title={`${d.date.toLocaleDateString()} · ${result.a.person.label} ${d.aScore.toFixed(1)} / ${result.b.person.label} ${d.bScore.toFixed(1)}`}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-[11px] transition-transform hover:scale-110"
-            style={{
-              background: d.mutual ? ELEMENT_HEX[d.stemElement] : `${ELEMENT_HEX[d.stemElement]}1a`,
-              color: d.mutual ? '#fff' : '#26302B99',
-              boxShadow: d.mutual ? 'inset 0 0 0 1.5px #ffffff55' : undefined,
-              fontWeight: d.mutual ? 700 : 400,
-            }}
-          >
-            {d.date.getDate()}
-          </div>
-        ))}
+      <div className="flex flex-wrap gap-1" onMouseLeave={() => setActive(null)}>
+        {days.map((d, i) => {
+          const isActive = active === i;
+          return (
+            <div
+              key={i}
+              onMouseEnter={() => setActive(i)}
+              onClick={() => setActive(isActive ? null : i)}
+              className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md text-[10px] transition-shadow"
+              style={{
+                background: d.mutual ? ELEMENT_HEX[d.stemElement] : `${ELEMENT_HEX[d.stemElement]}14`,
+                color: d.mutual ? '#fff' : '#26302B80',
+                fontWeight: d.mutual ? 600 : 400,
+                boxShadow: isActive ? `0 0 0 1.5px ${ELEMENT_HEX[d.stemElement]}` : undefined,
+              }}
+            >
+              {d.date.getDate()}
+            </div>
+          );
+        })}
       </div>
-      <p className="mt-3 text-xs leading-relaxed text-stone">
-        Filled days feed <em>both</em> your natures — the calm windows for a hard conversation, a launch, a decision made together.
+      <p className="mt-3 min-h-[2.75em] text-xs leading-relaxed text-stone/80">
+        {active != null ? (() => {
+          const d = days[active];
+          const lean = d.mutual
+            ? 'leans toward you both'
+            : d.aScore > 0 ? `leans toward ${labelA}`
+            : d.bScore > 0 ? `leans toward ${labelB}`
+            : 'quiet for both';
+          return (
+            <span>
+              <span className="font-semibold text-ink/75">
+                {d.date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+              </span>
+              {' — '}{lean}.
+            </span>
+          );
+        })() : (
+          <>Filled days lean gently toward you both — a soft shared tailwind, not a day to plan around. What any single day actually asks of you shows up in each of your own daily readings.</>
+        )}
       </p>
     </div>
   );
@@ -355,8 +379,8 @@ export const Compatibility: React.FC<{
           <p className="font-display text-lg leading-relaxed text-ink/85 md:text-xl">{reading.note}</p>
         </div>
 
-        {/* Team daily weather */}
-        <div className="mt-6 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
+        {/* Shared weather — a low-key footnote, not decision support */}
+        <div className="mt-6 rounded-2xl bg-white/35 p-5 ring-1 ring-ink/5">
           <TeamWeather result={result} />
         </div>
       </div>

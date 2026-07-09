@@ -31,22 +31,24 @@ const PersonFields: React.FC<{
       <Num label="Year" value={value.year} min={1900} max={2100} onChange={(year) => onChange({ ...value, year })} />
       <Num label="Month" value={value.month} min={1} max={12} onChange={(month) => onChange({ ...value, month })} />
       <Num label="Day" value={value.day} min={1} max={31} onChange={(day) => onChange({ ...value, day })} />
-      {timeKnown && <>
+    </div>
+    {timeKnown && (
+      <div className="grid grid-cols-2 gap-2">
         <Num label="Hour" value={value.hour ?? 12} min={0} max={23} onChange={(hour) => onChange({ ...value, hour })} />
         <Num label="Min" value={value.minute} min={0} max={59} onChange={(minute) => onChange({ ...value, minute })} />
-      </>}
-      <label className="flex flex-col gap-1">
-        <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-sage-deep/70">Sex</span>
-        <div className="flex overflow-hidden rounded-md border border-black/10">
-          {[Gender.MALE, Gender.FEMALE].map((g) => (
-            <button key={g} type="button" onClick={() => onChange({ ...value, gender: g })}
-              className={`flex-1 py-1.5 text-xs transition-colors ${value.gender === g ? 'bg-sage text-white' : 'bg-silk/40 text-stone'}`}>
-              {g === Gender.MALE ? 'M' : 'F'}
-            </button>
-          ))}
-        </div>
-      </label>
-    </div>
+      </div>
+    )}
+    <label className="flex flex-col gap-1">
+      <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-sage-deep/70">Sex at birth</span>
+      <div className="flex overflow-hidden rounded-md border border-black/10">
+        {[Gender.MALE, Gender.FEMALE].map((g) => (
+          <button key={g} type="button" onClick={() => onChange({ ...value, gender: g })}
+            className={`flex-1 py-2 text-xs transition-colors ${value.gender === g ? 'bg-sage text-white' : 'bg-silk/40 text-stone'}`}>
+            {g === Gender.MALE ? 'Male' : 'Female'}
+          </button>
+        ))}
+      </div>
+    </label>
     <label className="flex cursor-pointer items-center gap-2 text-xs text-stone">
       <input type="checkbox" checked={!timeKnown} onChange={(e) => onChange({ ...value, hour: e.target.checked ? undefined : 12 })} className="h-3.5 w-3.5 accent-sage" />
       Birth time unknown
