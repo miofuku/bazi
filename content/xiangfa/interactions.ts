@@ -277,6 +277,44 @@ function stemRelations(chart: BaziChart, reading: XiangfaReading): BranchRelatio
   return out;
 }
 
+// ── cross-chart relations (合婚 layer) — the same palaces, facing each other ──
+// Set two charts side by side and compare like palace with like palace:
+// year↔year (origins), month↔month (outer lives), day↔day (innermost seats),
+// hour↔hour (later years). Reuses the same clash/harm/combine tables.
+const CROSS_WHERE = [
+  'It sits between where you each come from — family, origins, first ground.',
+  'It sits between your outer lives — the everyday worlds you each move in.',
+  'It sits between your two innermost seats — the private core each of you keeps.',
+  'It sits between your later years — where your two long horizons meet.',
+];
+// Day palace first: it is the seat the relationship actually lives in.
+const CROSS_ORDER = [2, 1, 0, 3];
+
+export function buildCrossRelations(chartA: BaziChart, chartB: BaziChart): BranchRelation[] {
+  const pa = [chartA.yearPillar, chartA.monthPillar, chartA.dayPillar, chartA.hourPillar];
+  const pb = [chartB.yearPillar, chartB.monthPillar, chartB.dayPillar, chartB.hourPillar];
+  const out: BranchRelation[] = [];
+
+  for (const i of CROSS_ORDER) {
+    if (!pa[i] || !pb[i]) continue;
+    const a = pa[i].branch.chinese;
+    const b = pb[i].branch.chinese;
+    const key = k(a, b);
+    const where = CROSS_WHERE[i];
+
+    if (hit(CLASH_PAIRS, a, b) && CLASH[key]) {
+      out.push({ kind: 'clash', title: 'A clash between you', poleA: CLASH[key].a, poleB: CLASH[key].b, theme: `${CLASH[key].theme} Between two people it is the friction that keeps returning — familiar ground you circle back to.`, where });
+    } else if (k(a, b) === k('子', '卯')) {
+      out.push({ kind: 'punish', title: 'Raw nerves between you', poleA: 'Closeness', poleB: 'Friction', theme: 'raw nerves where you are closest — impatience and sharp words where there should be ease.', where });
+    } else if (HARM[key]) {
+      out.push({ kind: 'harm', title: 'A quiet strain', poleA: HARM[key].a, poleB: HARM[key].b, theme: HARM[key].theme + ' Small and easy to miss between two people — it asks for honesty before it festers.', where });
+    } else if (COMBINE[key]) {
+      out.push({ kind: 'combine', title: 'A lock between you', poleA: COMBINE[key].a, poleB: COMBINE[key].b, theme: `${COMBINE[key].theme} Where charts lock like this, being together simply feels easier than being apart.`, where });
+    }
+  }
+  return out.slice(0, 4);
+}
+
 const REL_RANK = { clash: 0, punish: 1, bond: 2, harm: 3, combine: 4 };
 
 export function buildInteractions(chart: BaziChart, reading: XiangfaReading): InteractionsReading {

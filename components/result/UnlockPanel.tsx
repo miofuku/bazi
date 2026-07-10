@@ -7,15 +7,21 @@ import { PRICE_LABEL, checkoutUrl, unlockWithLicense } from '../../services/enti
 
 const CONTENTS: Record<RelationLens, string[]> = {
   partner: [
-    'Where each of you is strong — the role radar',
-    'What you bring each other, in both directions',
-    'Who covers what, and the rivalry for the lead',
+    'What you are to each other — read in both directions',
+    'What you each need — and whether the other holds it',
+    'Where your charts rub, and where they lock',
+    'The role radar — who covers what, and the rivalry for the lead',
+    'Your decades, in step — the years that carry you both',
+    'One line, two natures — your story, woven together',
     'Shared weather for the next 45 days',
   ],
   marriage: [
-    'Where each of you is strong — the role radar',
-    'What you bring each other, in both directions',
+    'What you are to each other — read in both directions',
+    'What you each need — and whether the other holds it',
+    'Where your charts rub, and where they lock',
     'What each of your innermost seats holds for the other',
+    'Your decades, in step — the years that carry you both',
+    'One line, two natures — your story, woven together',
     'Shared weather for the next 45 days',
   ],
 };

@@ -41,11 +41,11 @@ export interface PairResult {
   b: PersonBundle;
 }
 
-export const analyzePair = (a: Birth, b: Birth, lens: RelationLens): PairResult => ({
-  reading: analyzeCompatibility(buildPerson(a).person, buildPerson(b).person, lens),
-  a: buildPerson(a),
-  b: buildPerson(b),
-});
+export const analyzePair = (a: Birth, b: Birth, lens: RelationLens): PairResult => {
+  const pa = buildPerson(a);
+  const pb = buildPerson(b);
+  return { reading: analyzeCompatibility(pa.person, pb.person, lens), a: pa, b: pb };
+};
 
 // ── Team daily weather (d) ───────────────────────────────────────────────────
 const FAVOR_WEIGHT: Record<Favor, number> = { favorable: 1, neutral: 0, unfavorable: -1 };

@@ -85,6 +85,14 @@ const CAT_POL_BY_ENGLISH: Record<string, [RelationshipId, Polarity]> = Object.fr
   Object.entries(DEITY_FULL_NAMES).map(([short, eng]) => [eng, CAT_POL_BY_SHORT[short]]),
 );
 
+// What one day master IS to another, through the same five-mode mask — the
+// heart of the paired reading ("to Ana, Ben is the rain that feeds a growing
+// thing"). Direction matters: this is what `other` is to `self`.
+export function relationBetween(selfDm: string, otherDm: string): RelationshipId {
+  const short = calculateDeity(selfDm, otherDm);
+  return (CAT_POL_BY_SHORT[short]?.[0]) ?? 'kin';
+}
+
 export interface RelationshipReading {
   id: RelationshipId;
   title: string;

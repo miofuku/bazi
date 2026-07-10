@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { ElementType, Favor } from '../../types';
+import { ElementType } from '../../types';
 import {
   CompatibilityReading, RelationLens, ROLE, ROLE_ORDER, GroupProfile,
 } from '../../utils/CompatibilityAnalyzer';
@@ -10,6 +10,8 @@ import { STEM_PROFILES } from '../../content/xiangfa';
 import { Meter } from './Meter';
 import { UnlockPanel } from './UnlockPanel';
 import { paymentConfigured, hasEntitlement } from '../../services/entitlementService';
+import { buildPairNarrative } from '../../content/xiangfa/pair';
+import { PairDepth, PairStoryline } from './PairDepth';
 
 const A_HEX = PERSON.a; // person A — sage
 const B_HEX = PERSON.b; // person B — clay
@@ -88,45 +90,6 @@ const RoleRadar: React.FC<{
         <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full" style={{ background: B_HEX }} />{labelB}</span>
       </div>
     </div>
-  );
-};
-
-// ── What each person brings the other, in plain language ─────────────────────
-// The five forces named the way the rest of the reading names them.
-const FORCE_WORD: Record<ElementType, string> = {
-  [ElementType.WOOD]: 'growth', [ElementType.FIRE]: 'warmth', [ElementType.EARTH]: 'grounding',
-  [ElementType.METAL]: 'structure', [ElementType.WATER]: 'flow',
-};
-const joinWords = (w: string[]): string =>
-  w.length <= 1 ? (w[0] ?? '') : `${w.slice(0, -1).join(', ')} and ${w[w.length - 1]}`;
-
-const SupplyRow: React.FC<{
-  from: string; to: string; score: number;
-  brings: { element: ElementType; favor: Favor }[];
-}> = ({ from, to, score, brings }) => {
-  const good = joinWords(brings.filter((b) => b.favor === 'favorable').map((b) => FORCE_WORD[b.element]));
-  const heavy = joinWords(brings.filter((b) => b.favor === 'unfavorable').map((b) => FORCE_WORD[b.element]));
-  const toName = <span className="font-medium text-ink/80">{to}</span>;
-
-  // Score is the source of truth for direction; the element list is only used
-  // when it's non-empty (favorable/unfavorable forces can be too thinly spread
-  // to survive the analyzer's share filter, leaving good/heavy empty).
-  let body: React.ReactNode;
-  if (score > 0.1) {
-    body = good
-      ? <>brings {toName} the {good} they thrive on.</>
-      : <>quietly feeds {toName} — a little of what they need.</>;
-  } else if (score < -0.1) {
-    body = heavy
-      ? <>adds more {heavy} to {toName} — something they already carry in plenty.</>
-      : <>presses lightly on {toName} — a touch of what they’d rather have less of.</>;
-  } else {
-    body = <>neither feeds nor drains {toName} much — a quiet, even exchange.</>;
-  }
-  return (
-    <p className="text-sm leading-relaxed text-ink/75">
-      <span className="font-semibold text-ink">{from}</span> {body}
-    </p>
   );
 };
 
@@ -288,6 +251,16 @@ export const Compatibility: React.FC<{
   // Free tier: header + two axes + In short. The detail cards unlock with a
   // one-time purchase; until payment is configured, everything stays free.
   const [unlocked, setUnlocked] = useState(() => !paymentConfigured || hasEntitlement());
+  // The depth sections: two full readings woven into one relational narrative.
+  const narrative = useMemo(
+    () => buildPairNarrative(
+      { label: a.person.label, chart: a.chart },
+      { label: b.person.label, chart: b.chart },
+      lens,
+      new Date().getFullYear(),
+    ),
+    [a, b, lens],
+  );
   const labelA = a.person.label;
   const labelB = b.person.label;
   const symA = STEM_PROFILES[a.chart.dayMaster.chinese]?.symbol ?? 'tree';
@@ -331,6 +304,9 @@ export const Compatibility: React.FC<{
         {!unlocked && <UnlockPanel lens={lens} onUnlocked={() => setUnlocked(true)} />}
 
         {unlocked && (<>
+        {/* A1 what you are to each other · A2 needs · C cross-chart · B decades */}
+        <PairDepth narrative={narrative} />
+
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           {/* Role radar */}
           <div className="rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
@@ -338,22 +314,14 @@ export const Compatibility: React.FC<{
             <RoleRadar profiles={reading.profiles} labelA={labelA} labelB={labelB} gaps={reading.roleCoverage?.gaps ?? []} />
           </div>
 
-          {/* Supply + diagnosis */}
+          {/* Coverage / palaces — the structural read beside the radar */}
           <div className="flex flex-col gap-4 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
-            <h4 className="font-display text-lg font-semibold text-ink">What you bring each other</h4>
-            <div className="flex flex-col gap-2">
-              <SupplyRow from={labelA} to={labelB} score={reading.aToB.score} brings={reading.aToB.brings} />
-              <SupplyRow from={labelB} to={labelA} score={reading.bToA.score} brings={reading.bToA.brings} />
-            </div>
-            {reading.asymmetry > 0.25 && (
-              <p className="text-xs italic text-stone">
-                Uneven: {reading.aToB.score > reading.bToA.score ? labelA : labelB} nourishes the other more.
-              </p>
-            )}
+            <h4 className="font-display text-lg font-semibold text-ink">
+              {lens === 'partner' ? 'Who covers what' : 'Your innermost seats'}
+            </h4>
 
             {lens === 'partner' && reading.roleCoverage && reading.rivalry && (
-              <div className="mt-1 flex flex-col gap-3 border-t border-ink/5 pt-3">
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-sage-deep">Who covers what</p>
+              <div className="flex flex-col gap-3">
                 <div className="flex flex-wrap gap-2">
                   {reading.roleCoverage.covered
                     .filter((r) => !reading.roleCoverage!.overlaps.includes(r))
@@ -370,7 +338,7 @@ export const Compatibility: React.FC<{
             )}
 
             {lens === 'marriage' && reading.spousePalace && (
-              <div className="mt-1 flex flex-col gap-2 border-t border-ink/5 pt-3 text-sm text-ink/70">
+              <div className="flex flex-col gap-2 text-sm text-ink/70">
                 {reading.spousePalace.map((sp, i) => {
                   const other = i === 0 ? labelB : labelA;
                   const list = (arr: ElementType[]) => arr.map((e) => (e as string).toLowerCase()).join(' & ');
@@ -386,6 +354,9 @@ export const Compatibility: React.FC<{
             )}
           </div>
         </div>
+
+        {/* D · the joint storyline closes the reading */}
+        <PairStoryline narrative={narrative} />
 
         {/* Shared weather — a low-key footnote, not decision support */}
         <div className="mt-6 rounded-2xl bg-white/35 p-5 ring-1 ring-ink/5">
