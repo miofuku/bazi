@@ -7,6 +7,8 @@ import { Season } from './types';
 export interface Atmosphere {
   hero: string;        // rich, immersive background for the result hero
   wash: string;        // soft, tinted light background behind the reading
+  deepTop: string;     // hero gradient stops as raw hex (canvas share card)
+  deepBottom: string;
   accent: string;      // element accent (bright) — used on the dark hero
   accentDeep: string;  // darkened accent — used on the light wash for contrast
   heroText: string;    // primary text colour on the hero
@@ -63,6 +65,8 @@ export function getAtmosphere(element: ElementType, season: Season): Atmosphere 
   return {
     hero,
     wash,
+    deepTop: p.deepTop,
+    deepBottom: p.deepBottom,
     accent: p.accent,
     accentDeep: p.accentDeep,
     heroText: '#F4F0E8',

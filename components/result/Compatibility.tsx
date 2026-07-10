@@ -8,6 +8,8 @@ import { ELEMENT_HEX, PERSON, WIND } from '../../utils/tokens';
 import { NatureArt } from '../illustrations/NatureArt';
 import { STEM_PROFILES } from '../../content/xiangfa';
 import { Meter } from './Meter';
+import { UnlockPanel } from './UnlockPanel';
+import { paymentConfigured, hasEntitlement } from '../../services/entitlementService';
 
 const A_HEX = PERSON.a; // person A — sage
 const B_HEX = PERSON.b; // person B — clay
@@ -283,6 +285,9 @@ export const Compatibility: React.FC<{
   onReset: () => void;
 }> = ({ result, lens, onReset }) => {
   const { reading, a, b } = result;
+  // Free tier: header + two axes + In short. The detail cards unlock with a
+  // one-time purchase; until payment is configured, everything stays free.
+  const [unlocked, setUnlocked] = useState(() => !paymentConfigured || hasEntitlement());
   const labelA = a.person.label;
   const labelB = b.person.label;
   const symA = STEM_PROFILES[a.chart.dayMaster.chinese]?.symbol ?? 'tree';
@@ -317,6 +322,15 @@ export const Compatibility: React.FC<{
         {/* Two-axis headline — 相吸 vs 相守 (chemistry is the spark, not the staying power) */}
         <TwoAxes reading={reading} lens={lens} />
 
+        {/* In short — the human synthesis; free, like the axes above */}
+        <div className="mt-6 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
+          <p className="mb-2 font-sans text-[11px] font-semibold uppercase tracking-[0.25em] text-sage-deep">In short</p>
+          <p className="font-display text-lg leading-relaxed text-ink/85 md:text-xl">{reading.note}</p>
+        </div>
+
+        {!unlocked && <UnlockPanel lens={lens} onUnlocked={() => setUnlocked(true)} />}
+
+        {unlocked && (<>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           {/* Role radar */}
           <div className="rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
@@ -373,16 +387,11 @@ export const Compatibility: React.FC<{
           </div>
         </div>
 
-        {/* In short — the human synthesis (the cards above carry the detail) */}
-        <div className="mt-6 rounded-2xl bg-white/55 p-6 ring-1 ring-ink/5 shadow-lift">
-          <p className="mb-2 font-sans text-[11px] font-semibold uppercase tracking-[0.25em] text-sage-deep">In short</p>
-          <p className="font-display text-lg leading-relaxed text-ink/85 md:text-xl">{reading.note}</p>
-        </div>
-
         {/* Shared weather — a low-key footnote, not decision support */}
         <div className="mt-6 rounded-2xl bg-white/35 p-5 ring-1 ring-ink/5">
           <TeamWeather result={result} />
         </div>
+        </>)}
       </div>
     </div>
   );

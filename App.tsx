@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InputForm } from './components/InputForm';
 import { PairInputForm } from './components/PairInputForm';
 import { NatureResult } from './components/result/NatureResult';
@@ -11,6 +11,7 @@ import { BaziChart, Gender } from './types';
 import { Methodology } from './components/Methodology';
 import { TenNatures, StemMotif } from './components/TenNatures';
 import { Footer } from './components/Footer';
+import { encodeBirth, decodeBirth, encodePair, decodePair, SharedBirth } from './utils/shareUrl';
 
 // A quiet, growing-vine line that drifts across the background.
 const GrowthFlow = () => (
@@ -82,8 +83,13 @@ const App: React.FC = () => {
     try {
       setError(null);
       const result = calculateBazi(data.year, data.month, data.day, data.hour, data.minute, data.gender, data.geo);
-      result.date = new Date(data.year, data.month - 1, data.day, data.hour, data.minute);
+      result.date = new Date(data.year, data.month - 1, data.day, data.hour ?? 12, data.minute);
       setChart(result);
+      // The reading is deterministic from its birth data, so give it a URL —
+      // this is what "Copy link" / "Email me my reading" share.
+      history.replaceState(null, '', window.location.pathname + encodeBirth({
+        ...data, lon: data.geo?.longitude, tzOffsetHours: data.geo?.tzOffsetHours,
+      }));
       window.scrollTo({ top: 0 });
     } catch (err) {
       setError('Could not read this birth moment. Please check the date and try again.');
@@ -96,6 +102,8 @@ const App: React.FC = () => {
       setError(null);
       setLens(l);
       setPair(analyzePair(a, b, l));
+      const share = (x: Birth) => ({ ...x, lon: x.geo?.longitude, tzOffsetHours: x.geo?.tzOffsetHours });
+      history.replaceState(null, '', window.location.pathname + encodePair(share(a), share(b), l));
       window.scrollTo({ top: 0 });
     } catch (err) {
       setError('Could not read one of these birth moments. Please check the dates and try again.');
@@ -106,8 +114,28 @@ const App: React.FC = () => {
   const resetApp = () => {
     setChart(null);
     setPair(null);
+    history.replaceState(null, '', window.location.pathname);
     window.scrollTo({ top: 0 });
   };
+
+  // A shared link opens straight onto the reading it encodes — pair or single.
+  useEffect(() => {
+    const search = window.location.search;
+    const withGeo = <T extends SharedBirth>(x: T) => ({
+      ...x,
+      geo: x.lon !== undefined && x.tzOffsetHours !== undefined
+        ? { longitude: x.lon, tzOffsetHours: x.tzOffsetHours }
+        : undefined,
+    });
+    const p = decodePair(search);
+    if (p) {
+      handleAnalyzePair(withGeo(p.a), withGeo(p.b), p.lens);
+      return;
+    }
+    const b = decodeBirth(search);
+    if (b) handleCalculate(withGeo(b));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (pair) {
     return (

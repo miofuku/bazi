@@ -16,6 +16,8 @@ import { Relationships } from './Relationships';
 import { LifeSeasons } from './LifeSeasons';
 import { Storyline } from './Storyline';
 import { DailyCalendar } from './DailyCalendar';
+import { KeepYourReading } from './KeepYourReading';
+import { ShareControl } from './ShareControl';
 import { TheFullChart } from './TheFullChart';
 
 const Divider: React.FC<{ accent: string }> = ({ accent }) => (
@@ -57,6 +59,9 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
       >
         <span>←</span> Read another
       </button>
+
+      {/* Floating share control — card + link in one action */}
+      <ShareControl reading={reading} atmo={atmo} />
 
       {/* ---- HERO: immersive, themed to element + season ---- */}
       <section
@@ -123,6 +128,8 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
         <p className="pt-4 text-center font-display text-lg italic text-stone">
           You are one small, particular part of the living world — and it has a place for exactly your kind.
         </p>
+
+        <KeepYourReading />
 
         <TheFullChart chart={chart} />
       </div>
