@@ -13,6 +13,12 @@ import { STEM_MONTH_STRENGTH, STRENGTH_HIDDEN_WEIGHTS } from './strengthTables';
 // wangshuai.md §一, 从弱 requires the day master's roots to be uprooted
 // (猛冲二次以上). 六冲 between branches weakens them, and a root clashed twice
 // is treated as uprooted; a rootless, unsupported day master then follows.
+// 从强 mirrors it: a dominant, 得令 day master whose 克(官杀)/耗(财) opposition
+// has no living root follows its own camp (§一.2 判从强 — else merely 偏旺).
+// NOTE: natal 三会/三合/半合 in strength were tried (2026-07-11) and REVERTED —
+// net negative on the 134-case set (docs/命理分析.csv): full bureaus regressed
+// validated charts (Obama 中和→弱 via 巳酉丑) and 半合 shifted many borderline
+// charts without label support. Revisit with 化神得令 gating + 遥合力减.
 
 const GENERATED_BY: Record<ElementType, ElementType> = {
   [ElementType.WOOD]: ElementType.WATER,
@@ -20,6 +26,21 @@ const GENERATED_BY: Record<ElementType, ElementType> = {
   [ElementType.EARTH]: ElementType.FIRE,
   [ElementType.METAL]: ElementType.EARTH,
   [ElementType.WATER]: ElementType.METAL,
+};
+
+const CONTROLS: Record<ElementType, ElementType> = {
+  [ElementType.WOOD]: ElementType.EARTH,
+  [ElementType.EARTH]: ElementType.WATER,
+  [ElementType.WATER]: ElementType.FIRE,
+  [ElementType.FIRE]: ElementType.METAL,
+  [ElementType.METAL]: ElementType.WOOD,
+};
+const CONTROLLED_BY: Record<ElementType, ElementType> = {
+  [ElementType.WOOD]: ElementType.METAL,
+  [ElementType.FIRE]: ElementType.WATER,
+  [ElementType.EARTH]: ElementType.WOOD,
+  [ElementType.METAL]: ElementType.FIRE,
+  [ElementType.WATER]: ElementType.EARTH,
 };
 
 // 地支六冲.
@@ -38,6 +59,8 @@ const CHONG_FACTORS: Record<number, { active: number; passive: number }> = {
 
 const UPROOT_REDUCTION = 0.85; // a root reduced this much (≈ two clashes) is 拔
 const FOLLOW_WEAK_SHARE = 0.3; // rootless day master under this 同党 share 从弱
+const FOLLOW_STRONG_SHARE = 0.6; // structural 从强 needs 同党 well above the 强 line (0.52)
+const FOLLOW_STRONG_DOMINANCE = 0.75; // and 克耗 negligible: 同党/(同党+克耗) — 泄 doesn't oppose
 const PENG_CHONG_SCALE = 0.35; // 辰戌丑未 朋冲 — same-earth clash stirs, not destroys
 
 // 天干五合 + 化神 — used for the 合绊破从 gate below.
@@ -147,15 +170,15 @@ export const calculateStrength = (
   const resourceElement = GENERATED_BY[dayElement];
   const supportShare = (power[dayElement] + power[resourceElement]) / total;
 
-  // A root = branch hidden stem of 比劫/印 (day or resource element). It is
-  // living unless its branch is 拔 (clashed twice, or reduced past UPROOT).
-  const rooted = hiddenByBranch.some((contribs, i) => {
-    const uprooted = passiveClashes[i] >= 2 || reduction[i] >= UPROOT_REDUCTION;
-    if (uprooted) return false;
-    return contribs.some(
-      (c) => c.power > 0 && (c.element === dayElement || c.element === resourceElement),
-    );
-  });
+  // A living root = branch hidden stem of the given elements whose branch is
+  // not 拔 (clashed twice, or reduced past UPROOT).
+  const livingRoot = (els: ElementType[]) =>
+    hiddenByBranch.some((contribs, i) => {
+      const uprooted = passiveClashes[i] >= 2 || reduction[i] >= UPROOT_REDUCTION;
+      if (uprooted) return false;
+      return contribs.some((c) => c.power > 0 && els.includes(c.element));
+    });
+  const rooted = livingRoot([dayElement, resourceElement]);
 
   const isYang = dayPillar.stem.polarity === Polarity.YANG;
 
@@ -178,8 +201,31 @@ export const calculateStrength = (
     STEM_HE_HUA[dayStemChar] === monthPillar.branch.element;
   const heldByCombine = partners >= 2 || (partners === 1 && !huaInCommand);
 
+  // 判从强 (wangshuai §一.2): 克耗泄之干 衰于月令、地支无根（或根被拔）→ 从强，
+  // 否则只是偏旺。Structurally mirrored from the 从弱 gate: 克(官杀) and 耗(财)
+  // must have NO living root — floating stems are 衰弱至极 and cannot check the
+  // dominant camp. 泄(食伤) does not break the follow: the follow-strong favor
+  // map already treats it as 顺泄 (YongshenSelector), and 炎上-type charts carry
+  // rooted dry earth without breaking (validation case #96, 壬午丙午丁未壬寅 —
+  // two rootless 壬 vs a sea of fire; lived years confirm 喜木火). Requires 得令
+  // (month branch in the day master's camp — 从强 needs 旺极), 同党 well above
+  // the 强 line, and the 克耗 camp negligible relative to 同党 (泄 excluded from
+  // the dominance test — it flows with the 旺势 rather than against it).
+  const keHao =
+    power[CONTROLS[dayElement]] + power[CONTROLLED_BY[dayElement]];
+  const dangPower = power[dayElement] + power[resourceElement];
+  const opposingRooted = livingRoot([CONTROLS[dayElement], CONTROLLED_BY[dayElement]]);
+  const monthInParty =
+    monthPillar.branch.element === dayElement ||
+    monthPillar.branch.element === resourceElement;
+  const followStrongStruct =
+    monthInParty &&
+    !opposingRooted &&
+    supportShare > FOLLOW_STRONG_SHARE &&
+    dangPower / (dangPower + keHao || 1) > FOLLOW_STRONG_DOMINANCE;
+
   let category: StrengthCategory;
-  if (supportShare > (isYang ? 0.95 : 0.9)) category = 'follow-strong';
+  if (supportShare > (isYang ? 0.95 : 0.9) || followStrongStruct) category = 'follow-strong';
   else if (!rooted && !heldByCombine && supportShare < FOLLOW_WEAK_SHARE) category = 'follow-weak';
   else if (supportShare > 0.52) category = 'strong';
   else if (supportShare >= 0.48) category = 'balanced';
