@@ -10,18 +10,19 @@ const TONE_DOT: Record<LifeSeason['tone'], string> = {
 };
 
 // 用神 favorability of a decade → a wind (weather voice, not fortune): does the
-// 大运's 干支 bring what this nature needs, or test it?
+// 大运's 干支 bring what this nature needs, or test it? `band` widens the
+// neutral zone for borderline charts (honesty hedge — see utils/tokens.ts).
 type Wind = { label: string; hex: string; blurb: string };
-const windOf = (favor: number): Wind =>
-  favor > 0.15
+const windOf = (favor: number, band: number): Wind =>
+  favor > band
     ? { label: 'Tailwind', hex: WIND.tailwind, blurb: 'the weather leans your way — energy comes cheaper here' }
-    : favor < -0.15
+    : favor < -band
     ? { label: 'Headwind', hex: WIND.headwind, blurb: 'the weather tests you — a decade to conserve and root, not force' }
     : { label: 'Even wind', hex: WIND.even, blurb: 'neither with you nor against you — a decade of steady tending' };
 
 // "The seasons ahead" — the decade-long climates of a life (Da Yun). The card
 // you're living in is marked; tap any decade to read its detail in the panel.
-export const LifeSeasons: React.FC<{ seasons: LifeSeason[] }> = ({ seasons }) => {
+export const LifeSeasons: React.FC<{ seasons: LifeSeason[]; band?: number }> = ({ seasons, band = 0.15 }) => {
   const { accent, accentDeep } = useAccent();
   const currentIdx = seasons.findIndex((s) => s.current);
   const [selectedIdx, setSelectedIdx] = useState(currentIdx >= 0 ? currentIdx : 0);
@@ -31,7 +32,7 @@ export const LifeSeasons: React.FC<{ seasons: LifeSeason[] }> = ({ seasons }) =>
     ? 'Right now'
     : currentIdx < 0 ? 'This decade'
     : selectedIdx > currentIdx ? 'Ahead' : 'Earlier';
-  const sw = windOf(selected.favor);
+  const sw = windOf(selected.favor, band);
 
   return (
     <section>
@@ -62,7 +63,7 @@ export const LifeSeasons: React.FC<{ seasons: LifeSeason[] }> = ({ seasons }) =>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {seasons.map((s, i) => {
           const hex = ELEMENT_HEX[s.element];
-          const w = windOf(s.favor);
+          const w = windOf(s.favor, band);
           const isSel = i === selectedIdx;
           return (
             <button

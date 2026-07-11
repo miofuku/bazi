@@ -6,6 +6,7 @@ import { buildRelationships, buildLifeSeasons } from '../../content/xiangfa/rela
 import { buildInteractions } from '../../content/xiangfa/interactions';
 import { buildStoryline } from '../../content/xiangfa/narrative';
 import { AtmosphereProvider } from './AtmosphereContext';
+import { windBand } from '../../utils/tokens';
 import { NatureArt } from '../illustrations/NatureArt';
 import { YourNature } from './YourNature';
 import { SeasonEnvironment } from './SeasonEnvironment';
@@ -119,7 +120,7 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
         <Divider accent={atmo.accent} />
         <Relationships items={relationships} />
         <Divider accent={atmo.accent} />
-        <LifeSeasons seasons={lifeSeasons} />
+        <LifeSeasons seasons={lifeSeasons} band={windBand(chart.strength?.supportShare)} />
         <Divider accent={atmo.accent} />
         <DailyCalendar chart={chart} />
         <Divider accent={atmo.accent} />

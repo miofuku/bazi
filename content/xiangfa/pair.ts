@@ -2,6 +2,7 @@ import { BaziChart } from '../../types';
 import { XiangfaReading, buildXiangfaReading, ThriveNeed } from './index';
 import { RELATIONSHIPS, RelationshipId, relationBetween, buildLifeSeasons, LifeSeason } from './relationships';
 import { FORCE, BranchRelation, buildCrossRelations } from './interactions';
+import { windBand } from '../../utils/tokens';
 
 // The paired reading's composition layer: weave two complete single readings
 // into one relational narrative — what you are to each other, who holds whose
@@ -80,11 +81,13 @@ const bandFor = (label: string, seasons: LifeSeason[], from: number, to: number)
   return { label, segments };
 };
 
-const TAIL = 0.15;
-const jointWindows = (a: LifeSeason[], b: LifeSeason[], from: number, to: number): JointWindow[] => {
+// Neutral bands widen for borderline charts (honesty hedge — utils/tokens.ts).
+const jointWindows = (
+  a: LifeSeason[], b: LifeSeason[], from: number, to: number, bandA: number, bandB: number,
+): JointWindow[] => {
   const out: JointWindow[] = [];
   for (let y = from; y < to; y++) {
-    const joint = favorAt(a, y) > TAIL && favorAt(b, y) > TAIL;
+    const joint = favorAt(a, y) > bandA && favorAt(b, y) > bandB;
     const last = out[out.length - 1];
     if (joint) {
       if (last && last.toYear === y) last.toYear = y + 1;
@@ -94,7 +97,7 @@ const jointWindows = (a: LifeSeason[], b: LifeSeason[], from: number, to: number
   return out.filter((w) => w.toYear - w.fromYear >= 2);
 };
 
-const windWord = (f: number) => (f > TAIL ? 'tailwind' : f < -TAIL ? 'headwind' : 'even wind');
+const windWord = (f: number, band: number) => (f > band ? 'tailwind' : f < -band ? 'headwind' : 'even wind');
 
 // ── the assembled narrative ──────────────────────────────────────────────────
 export interface PairNarrative {
@@ -152,10 +155,12 @@ export function buildPairNarrative(
     bandFor(a.label, seasonsA, windowFrom, windowTo),
     bandFor(b.label, seasonsB, windowFrom, windowTo),
   ];
-  const joint = jointWindows(seasonsA, seasonsB, windowFrom, windowTo);
+  const bandA = windBand(a.chart.strength?.supportShare);
+  const bandB = windBand(b.chart.strength?.supportShare);
+  const joint = jointWindows(seasonsA, seasonsB, windowFrom, windowTo, bandA, bandB);
 
-  const wA = windWord(favorAt(seasonsA, nowYear));
-  const wB = windWord(favorAt(seasonsB, nowYear));
+  const wA = windWord(favorAt(seasonsA, nowYear), bandA);
+  const wB = windWord(favorAt(seasonsB, nowYear), bandB);
   const nowLine =
     wA === wB
       ? `Right now you are both in ${wA === 'tailwind' ? 'a tailwind — the weather carries you both' : wA === 'headwind' ? 'a headwind — a stretch to conserve and root, together' : 'even wind — steady tending weather for you both'}.`

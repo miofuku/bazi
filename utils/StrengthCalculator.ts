@@ -40,6 +40,19 @@ const UPROOT_REDUCTION = 0.85; // a root reduced this much (≈ two clashes) is 
 const FOLLOW_WEAK_SHARE = 0.3; // rootless day master under this 同党 share 从弱
 const PENG_CHONG_SCALE = 0.35; // 辰戌丑未 朋冲 — same-earth clash stirs, not destroys
 
+// 天干五合 + 化神 — used for the 合绊破从 gate below.
+const STEM_HE: Record<string, string> = {
+  '甲': '己', '己': '甲', '乙': '庚', '庚': '乙', '丙': '辛', '辛': '丙',
+  '丁': '壬', '壬': '丁', '戊': '癸', '癸': '戊',
+};
+const STEM_HE_HUA: Record<string, ElementType> = {
+  '甲': ElementType.EARTH, '己': ElementType.EARTH,
+  '乙': ElementType.METAL, '庚': ElementType.METAL,
+  '丙': ElementType.WATER, '辛': ElementType.WATER,
+  '丁': ElementType.WOOD, '壬': ElementType.WOOD,
+  '戊': ElementType.FIRE, '癸': ElementType.FIRE,
+};
+
 const emptyScores = (): Record<ElementType, number> => ({
   [ElementType.WOOD]: 0,
   [ElementType.FIRE]: 0,
@@ -146,9 +159,28 @@ export const calculateStrength = (
 
   const isYang = dayPillar.stem.polarity === Polarity.YANG;
 
+  // 合绊破从: 从 means the day master abandons its own camp — but a day master
+  // held in a 天干五合 that does NOT transform is 绊住 (tied), and 有情不从.
+  //   · 争合 (two-plus stems contending for the day master) never transforms —
+  //     the tie holds, follow is broken. Case #9 of docs/命理分析.csv
+  //     (戊子戊午癸未戊午, 三戊争合癸) reads as plain weak in real life, while
+  //     the structurally identical 命例四 (丙子甲午壬寅丙午, no 合) follows.
+  //   · A clean 1-1 合 whose 化神 rules the month (化神当令) transforms — the
+  //     day master goes WITH the dominant camp, so 从 stands (wangshuai's
+  //     丙申 case: 丙辛合化水于子月 → still 从). Otherwise 合而不化 = tied.
+  // Scoped to follow-WEAK only; same 争合/化 doctrine as the stem layer in
+  // content/xiangfa/interactions.ts.
+  const dayStemChar = dayPillar.stem.chinese;
+  const partners = pillars.filter(
+    (p, i) => i !== 2 && p.stem.chinese === STEM_HE[dayStemChar],
+  ).length;
+  const huaInCommand =
+    STEM_HE_HUA[dayStemChar] === monthPillar.branch.element;
+  const heldByCombine = partners >= 2 || (partners === 1 && !huaInCommand);
+
   let category: StrengthCategory;
   if (supportShare > (isYang ? 0.95 : 0.9)) category = 'follow-strong';
-  else if (!rooted && supportShare < FOLLOW_WEAK_SHARE) category = 'follow-weak';
+  else if (!rooted && !heldByCombine && supportShare < FOLLOW_WEAK_SHARE) category = 'follow-weak';
   else if (supportShare > 0.52) category = 'strong';
   else if (supportShare >= 0.48) category = 'balanced';
   else category = 'weak';

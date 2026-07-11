@@ -19,13 +19,21 @@ const byMonth = (values: number[]): Record<string, number> =>
   Object.fromEntries(MONTH_ORDER.map((b, i) => [b, values[i]]));
 
 // Element strength multiplier by month branch (寅月..丑月).
+//
+// 四时休旺 correction (docs/deling-dedi-deshi.md: the month commands ~50% of
+// strength; docs/普通人案例验证.md #8/#11): the book's table never dips below
+// 1.0, so 休囚死 carried no penalty at all — a summer-born metal read almost
+// as strong as an autumn one. Partial, evidence-driven adoption for the summer
+// columns where the validation set demanded it: 巳午(火旺) → 金死 0.5 · 水囚
+// 0.7; 未(土旺) → 水死 0.5. Autumn/winter columns left as-is until cases
+// demand them (calibrated against checkNormalCases + checkStrength).
 export const STEM_MONTH_STRENGTH: Record<ElementType, Record<string, number>> = {
   //                寅     卯     辰     巳     午     未     申     酉     戌     亥     子     丑
   [WOOD]:  byMonth([1.14, 1.2,  1.1,  1.0,  1.0,  1.04, 1.06, 1.0,  1.0,  1.2,  1.2,  1.06]),
   [FIRE]:  byMonth([1.2,  1.2,  1.06, 1.14, 1.2,  1.1,  1.0,  1.0,  1.04, 1.0,  1.0,  1.0 ]),
   [EARTH]: byMonth([1.06, 1.0,  1.1,  1.14, 1.2,  1.16, 1.0,  1.0,  1.14, 1.0,  1.0,  1.1 ]),
-  [METAL]: byMonth([1.0,  1.0,  1.1,  1.06, 1.0,  1.1,  1.14, 1.2,  1.16, 1.0,  1.0,  1.14]),
-  [WATER]: byMonth([1.0,  1.0,  1.04, 1.06, 1.0,  1.0,  1.2,  1.2,  1.06, 1.14, 1.2,  1.1 ]),
+  [METAL]: byMonth([1.0,  1.0,  1.1,  0.5,  0.5,  1.1,  1.14, 1.2,  1.16, 1.0,  1.0,  1.14]),
+  [WATER]: byMonth([1.0,  1.0,  1.04, 0.7,  0.7,  0.5,  1.2,  1.2,  1.06, 1.14, 1.2,  1.1 ]),
 };
 
 // Hidden-stem base shares from the book's branch table. Kept for reference /

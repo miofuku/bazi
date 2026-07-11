@@ -36,8 +36,16 @@ export const REL_TONE: Record<'clash' | 'punish' | 'harm' | 'combine' | 'bond', 
 };
 
 // The favour → wind bucket, one threshold shared across seasons / days / axes.
-export const windTone = (favor: number): WindTone =>
-  favor > 0.15 ? 'tailwind' : favor < -0.15 ? 'headwind' : 'even';
+// `band` widens the neutral zone for borderline charts (see windBand).
+export const windTone = (favor: number, band = 0.15): WindTone =>
+  favor > band ? 'tailwind' : favor < -band ? 'headwind' : 'even';
+
+// Honesty hedge (docs/普通人案例验证.md): when a chart's 旺衰 sits near the
+// strong/weak boundary (同党 share ~44–56%), its 用忌 could flip — so mid-sized
+// wind signals aren't trustworthy. Widen the "Even wind" band for those charts:
+// better to say less than to say it backwards.
+export const windBand = (supportShare?: number): number =>
+  supportShare !== undefined && Math.abs(supportShare - 0.5) <= 0.06 ? 0.3 : 0.15;
 
 // Continuous wind colour for a favour in [-1, 1] — lighter near zero, so days the
 // climate pushed into the same bucket still read as rank-distinct.

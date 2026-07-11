@@ -97,7 +97,14 @@ export const selectYongshen = (
       set([g.self, g.resource], 'unfavorable');
       primaryYong = heaviest(power, [g.output, g.wealth, g.authority]);
       primaryJi = g.resource; // 印最破从
-      note = `从弱，顺势：从旺${NOUN[primaryYong]}，喜财官食伤，忌${NOUN[g.resource]}${NOUN[g.self]}（印比破从）。`;
+      // 犯旺者凶: whatever CONTROLS the followed god turns against the follow.
+      // Concretely this bites 从杀 (食伤克官杀 must be 忌, not 喜) — for 从财/从儿
+      // the controller is 比劫/印, already unfavorable. Found via docs/命理分析.csv
+      // case #9, whose 从杀(土) map wrongly marked 木 (食伤) favorable.
+      const offender = controlledBy(primaryYong);
+      const flipped = favor[offender] === 'favorable';
+      if (flipped) favor[offender] = 'unfavorable';
+      note = `从弱，顺势：从旺${NOUN[primaryYong]}，喜财官食伤，忌${NOUN[g.resource]}${NOUN[g.self]}（印比破从）${flipped ? `，亦忌${NOUN[offender]}犯旺` : ''}。`;
       break;
     }
     case 'follow-strong': {
