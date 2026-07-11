@@ -172,14 +172,14 @@ const LABELS: Record<number, Labels> = {
   124: { years: { 2017: 1, 2021: 1, 2023: -1, 2024: -1 }, note: '17/21顺 23-24考研惜败 24父病' },
   125: { years: { 2001: 1, 2010: 1 }, note: '01入央企 10调省级 (中年案例)' },
   126: { weak: { 2023: 1 }, nowState: 1, note: '23入丙戌运转好 现备考公' },
-  127: { years: { 2020: -1, 2021: -1, 2023: -1 }, weak: { 2018: 1 }, note: '20-21抑郁 23工伤 18后逢凶化吉' },
+  127: { weak: { 2020: -1, 2021: -1, 2023: -1, 2018: 1 }, note: '20-21抑郁 23工伤 18后逢凶化吉（双面板转录出入，整例降级）' },
   128: { years: { 2017: -1, 2019: -1, 2022: 1 }, weak: { 2020: -1, 2021: -1 }, note: '17起厌学 19术败重创 22转好' },
   129: { years: { 2022: -1, 2024: 1 }, nowState: 1, note: '22延毕皮肤病 24入央企顺' },
   130: { years: { 2022: -1 }, weak: { 2020: 1, 2021: 1, 2025: 1 }, note: '20-21家暴富 22病休学 25复学' },
-  131: { nowState: -1, note: '22婚后孕难 现失业太背' },
+  131: { note: '22婚后孕难 现失业太背（结尾"要抑郁"为情绪化转录猜测，不评分）' },
   132: { years: { 2022: -1 }, note: '22失恋失业谷底 现平稳但内耗' },
   133: { years: { 2019: 1, 2020: 1 }, weak: { 2021: -1, 2022: -1, 2023: -1, 2024: -1, 2025: -1 }, nowState: -1, note: '丙申运差 唯19/20亥子年好' },
-  134: { years: { 2023: -1 }, note: '23轻生边缘 自感忌水' },
+  134: { weak: { 2023: -1 }, note: '23轻生边缘（"轻生"为转录猜测，降级）自感忌水' },
 };
 
 for (const id of Object.keys(LABELS)) {
@@ -238,6 +238,16 @@ const split = {
   train: { cases: [] as number[], cats: {} as Record<string, number> },
   test: { cases: [] as number[], cats: {} as Record<string, number> },
 };
+// Two diagnostics: (1) does nearness-to-中和 predict LOWER accuracy? (bucket by
+// |supportShare − 0.5| at windBand's 0.06 cutoff — if 近中和 isn't worse, windBand
+// hedge is unjustified). (2) does the OCR 模糊 tag predict worse labels? (bucket
+// by FUZZY — the transcription-noise audit; if 模糊 ≈ clean, the tag doesn't
+// flag label-wrongness). Both on 仅流年 strong labels.
+const conf = { hi: [0, 0], lo: [0, 0] };
+// Rows the user flagged as low-reliability transcription (自述较模糊 tag).
+const FUZZY = new Set([21, 41, 42, 44, 49, 53, 58, 59, 60, 63, 65, 67, 71, 77, 78,
+  81, 82, 84, 87, 90, 91, 93, 94, 96, 99, 107]);
+const rel = { clean: [0, 0], fuzzy: [0, 0] };
 // per-fold [hit, miss] on TRAIN, strong labels only (the headline signal)
 const cvY = Array.from({ length: CV_FOLDS }, () => [0, 0]); // 仅流年
 const cvB = Array.from({ length: CV_FOLDS }, () => [0, 0]); // 探索
@@ -283,6 +293,10 @@ for (const [id, row] of rows) {
       if (key === 'strong' && fold >= 0) {
         cvY[fold][okY ? 0 : 1]++;
         cvB[fold][okB ? 0 : 1]++;
+      }
+      if (key === 'strong') {
+        conf[Math.abs(strength.supportShare - 0.5) >= 0.06 ? 'hi' : 'lo'][okY ? 0 : 1]++;
+        rel[FUZZY.has(id) ? 'fuzzy' : 'clean'][okY ? 0 : 1]++;
       }
       const diff = ok === okY ? '' : okY ? '(年✓)' : '(年✗)';
       console.log(`   ${yr} ${yearGz(yr)} 预期${expected > 0 ? '好' : '差'} → 年${yf.toFixed(2)} 运${dy ? `${dy.gz}${df >= 0 ? '+' : ''}${df.toFixed(2)}` : '——'} 合${f.toFixed(2)} ${ok ? '✓' : '✗'}${diff}${key === 'weak' ? ' (weak)' : ''}`);
@@ -335,6 +349,10 @@ const cvReport = (folds: number[][], label: string) => {
   console.log(`${label}: ${folds.map((f, i) => `f${i} ${seg(f[0], f[1])}`).join(' · ')}`);
   console.log(`  均值 ${mean.toFixed(1)}% ± ${sd.toFixed(1)}%(折间SD) · SE ${se.toFixed(1)}% · 合并 ${seg(pooled[0], pooled[1])}`);
 };
+console.log(`\n════ 诊断 (仅流年强标注, 全集) ════`);
+console.log(`近中和: 远中和|share-.5|≥.06 ${seg(conf.hi[0], conf.hi[1])} · 近中和<.06 ${seg(conf.lo[0], conf.lo[1])}  ← 近中和不更差则windBand无据`);
+console.log(`转录: 清晰 ${seg(rel.clean[0], rel.clean[1])} · 模糊 ${seg(rel.fuzzy[0], rel.fuzzy[1])}  ← 模糊更差则确为噪声`);
+
 console.log(`\n════ 训练集 ${CV_FOLDS} 折交叉验证 · 强标注 (改进前后做配对比较) ════`);
 cvReport(cvY, '仅流年');
 cvReport(cvB, '探索  ');
