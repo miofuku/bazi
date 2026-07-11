@@ -150,7 +150,10 @@ function branchRelations(chart: BaziChart): BranchRelation[] {
     }
   }
 
-  // three-part punishments (恃势 / 无恩) — partial (2) or full (3)
+  // Three-part punishments, partial (2) or full (3). Attribution of the names
+  // is school-split: 三命通会 mainline says 寅巳申=无恩之刑、丑戌未=恃势之刑;
+  // some later books reverse them. Our themes are written to fit either, and
+  // the UI never surfaces the names (nature mask).
   if (['寅', '巳', '申'].filter(has).length >= 2) {
     out.push({ kind: 'punish', title: 'A recurring tangle', poleA: 'Push', poleB: 'Overreach', theme: 'a tangle of ambition and overstep — drive that keeps doubling back on you, where good intentions and overreach trade places.', where: 'It returns at the edges of your ambition.' });
     ['寅', '巳'].forEach((c) => claimedHarm.add(c));
