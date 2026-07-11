@@ -15,6 +15,11 @@
 // OCR → weak (reported, not headline); clear current-state statements →
 // nowState (scored vs 当前大运). Charts read at earlier years (#50 #89 #116
 // #117) get no nowState — their 大运 column isn't current.
+//
+// TRAIN/TEST: cases are split ~70/30 by a stable hash of the 四柱 string (see
+// isTest). All tuning/development happens against TRAIN; the 测试 column is the
+// honest out-of-sample number and must never be optimized against. The split is
+// stable under appends and keeps same-chart duplicates together.
 // Run: npx tsx scripts/checkNormalCases.ts
 
 import { readFileSync } from 'node:fs';
@@ -205,10 +210,37 @@ const CN: Record<ElementType, string> = {
 };
 const clamp1 = (n: number) => Math.max(-1, Math.min(1, n));
 
-// [oldHit, oldMiss, newHit, newMiss] — old = original 16 cases
+// Deterministic TRAIN/TEST split for honest generalization. Hashed on the 四柱
+// string (FNV-1a), so: (a) same-chart duplicates — #16/#101, #73/#75 — always
+// land on the same side (no leakage); (b) the split is stable as new cases are
+// appended (existing assignments never move). ~30% test. THE TEST SET IS SACRED:
+// develop/tune against TRAIN only; the 测试 column is the honest number.
+const fnv = (s: string): number => {
+  let hsh = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    hsh ^= s.charCodeAt(i);
+    hsh = Math.imul(hsh, 16777619);
+  }
+  return hsh >>> 0;
+};
+const isTest = (baziStr: string): boolean => fnv(baziStr) % 100 >= 70;
+// 5-fold CV over TRAIN only (test stays untouched). Salted hash → folds are
+// decorrelated from the train/test split. CV is for paired before/after
+// comparison during development, and to quantify the noise floor.
+const CV_FOLDS = 5;
+const foldOf = (baziStr: string): number => fnv(baziStr + '|cv') % CV_FOLDS;
+
+// [trainHit, trainMiss, testHit, testMiss]
 const T = { strong: [0, 0, 0, 0], weak: [0, 0, 0, 0], now: [0, 0, 0, 0] };   // 年+大运 合成
 const TY = { strong: [0, 0, 0, 0], weak: [0, 0, 0, 0] };                      // 仅流年（旧口径）
 const TB = { strong: [0, 0, 0, 0], weak: [0, 0, 0, 0] };                      // 流年主导，大运仅在死区补位（探索）
+const split = {
+  train: { cases: [] as number[], cats: {} as Record<string, number> },
+  test: { cases: [] as number[], cats: {} as Record<string, number> },
+};
+// per-fold [hit, miss] on TRAIN, strong labels only (the headline signal)
+const cvY = Array.from({ length: CV_FOLDS }, () => [0, 0]); // 仅流年
+const cvB = Array.from({ length: CV_FOLDS }, () => [0, 0]); // 探索
 
 for (const [id, row] of rows) {
   const lab = LABELS[id] ?? {};
@@ -217,7 +249,11 @@ for (const [id, row] of rows) {
   const strength = calculateStrength(pY, pM, pD, pH, rulingOf(DERIVED.get(id)?.birth, m.charAt(1)));
   const ys = selectYongshen(strength, m.charAt(1), d.charAt(0));
   const chartLike = { yearPillar: pY, monthPillar: pM, dayPillar: pD, hourPillar: pH, dayMaster: pD.stem } as unknown as BaziChart;
-  const base = id <= 16 ? 0 : 2;
+  const bucket = isTest(row.bazi.join('')) ? 'test' : 'train';
+  const base = bucket === 'test' ? 2 : 0;
+  const fold = bucket === 'train' ? foldOf(row.bazi.join('')) : -1;
+  split[bucket].cases.push(id);
+  split[bucket].cats[strength.category] = (split[bucket].cats[strength.category] ?? 0) + 1;
 
   const favorOf = (gz: string): number => {
     const p = pillar(gz, 'Yr');
@@ -244,6 +280,10 @@ for (const [id, row] of rows) {
       T[key][base + (ok ? 0 : 1)]++;
       TY[key][base + (okY ? 0 : 1)]++;
       TB[key][base + (okB ? 0 : 1)]++;
+      if (key === 'strong' && fold >= 0) {
+        cvY[fold][okY ? 0 : 1]++;
+        cvB[fold][okB ? 0 : 1]++;
+      }
       const diff = ok === okY ? '' : okY ? '(年✓)' : '(年✗)';
       console.log(`   ${yr} ${yearGz(yr)} 预期${expected > 0 ? '好' : '差'} → 年${yf.toFixed(2)} 运${dy ? `${dy.gz}${df >= 0 ? '+' : ''}${df.toFixed(2)}` : '——'} 合${f.toFixed(2)} ${ok ? '✓' : '✗'}${diff}${key === 'weak' ? ' (weak)' : ''}`);
     }
@@ -260,8 +300,17 @@ for (const [id, row] of rows) {
 }
 
 const seg = (h: number, ms: number) => (h + ms ? `${h}/${h + ms} (${((h / (h + ms)) * 100).toFixed(0)}%)` : 'n/a');
-const line = (t: number[]) => `旧16例 ${seg(t[0], t[1])} · 新增 ${seg(t[2], t[3])} · 合计 ${seg(t[0] + t[2], t[1] + t[3])}`;
-console.log(`\n════ 结果 ════`);
+// t = [trainHit, trainMiss, testHit, testMiss]
+const line = (t: number[]) => `训练 ${seg(t[0], t[1])} · 测试 ${seg(t[2], t[3])} · 合计 ${seg(t[0] + t[2], t[1] + t[3])}`;
+
+const catStr = (c: Record<string, number>) =>
+  Object.entries(c).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}:${v}`).join(' ');
+console.log(`\n════ 训练/测试划分 (四柱哈希, 测试集不可用于调参) ════`);
+console.log(`训练集 ${split.train.cases.length} 例 · ${catStr(split.train.cats)}`);
+console.log(`测试集 ${split.test.cases.length} 例 · ${catStr(split.test.cats)}`);
+console.log(`测试集序号: ${split.test.cases.join(' ')}`);
+
+console.log(`\n════ 结果 (测试列=诚实泛化数) ════`);
 console.log(`强标注流年(年+大运): ${line(T.strong)}  · 随机基线≈50%（三分类下更低）`);
 console.log(`  ├ 仅流年(旧口径):  ${line(TY.strong)}`);
 console.log(`  └ 流年主导+死区大运补位(探索): ${line(TB.strong)}`);
@@ -269,3 +318,23 @@ console.log(`弱标注流年(年+大运): ${line(T.weak)}`);
 console.log(`  ├ 仅流年(旧口径):  ${line(TY.weak)}`);
 console.log(`  └ 流年主导+死区大运补位(探索): ${line(TB.weak)}`);
 console.log(`当前大运 vs 现状: ${line(T.now)}`);
+
+// ── 训练集 K 折交叉验证 (强标注) ──────────────────────────────────────────────
+// Purpose: quantify the noise floor and enable PAIRED before/after comparison.
+// When a change lands, re-run and compare per-fold rates — the paired mean diff
+// is far more sensitive to small gains than either the pooled or test number.
+const rate = (t: number[]) => (t[0] + t[1] ? (t[0] / (t[0] + t[1])) * 100 : NaN);
+const cvReport = (folds: number[][], label: string) => {
+  const rates = folds.map(rate).filter((r) => !Number.isNaN(r));
+  const mean = rates.reduce((a, b) => a + b, 0) / rates.length;
+  const sd = rates.length > 1
+    ? Math.sqrt(rates.reduce((a, b) => a + (b - mean) ** 2, 0) / (rates.length - 1))
+    : 0;
+  const se = sd / Math.sqrt(rates.length);
+  const pooled = folds.reduce((a, f) => [a[0] + f[0], a[1] + f[1]], [0, 0]);
+  console.log(`${label}: ${folds.map((f, i) => `f${i} ${seg(f[0], f[1])}`).join(' · ')}`);
+  console.log(`  均值 ${mean.toFixed(1)}% ± ${sd.toFixed(1)}%(折间SD) · SE ${se.toFixed(1)}% · 合并 ${seg(pooled[0], pooled[1])}`);
+};
+console.log(`\n════ 训练集 ${CV_FOLDS} 折交叉验证 · 强标注 (改进前后做配对比较) ════`);
+cvReport(cvY, '仅流年');
+cvReport(cvB, '探索  ');
