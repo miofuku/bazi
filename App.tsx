@@ -11,6 +11,7 @@ import { BaziChart, Gender } from './types';
 import { Methodology } from './components/Methodology';
 import { TenNatures, StemMotif } from './components/TenNatures';
 import { Footer } from './components/Footer';
+import { Reveal } from './components/Reveal';
 import { encodeBirth, decodeBirth, encodePair, decodePair, SharedBirth } from './utils/shareUrl';
 
 // A quiet, growing-vine line that drifts across the background.
@@ -78,6 +79,8 @@ const App: React.FC = () => {
   const [pair, setPair] = useState<PairResult | null>(null);
   const [lens, setLens] = useState<RelationLens>('partner');
   const [error, setError] = useState<string | null>(null);
+  // The ceremonial pause before a fresh reading appears (components/Reveal.tsx).
+  const [revealing, setRevealing] = useState<null | 'single' | 'pair'>(null);
 
   const handleCalculate = (data: { year: number; month: number; day: number; hour?: number; minute: number; gender: Gender; geo?: ResolvedGeo }) => {
     try {
@@ -85,6 +88,7 @@ const App: React.FC = () => {
       const result = calculateBazi(data.year, data.month, data.day, data.hour, data.minute, data.gender, data.geo);
       result.date = new Date(data.year, data.month - 1, data.day, data.hour ?? 12, data.minute);
       setChart(result);
+      setRevealing('single');
       // The reading is deterministic from its birth data, so give it a URL —
       // this is what "Copy link" / "Email me my reading" share.
       history.replaceState(null, '', window.location.pathname + encodeBirth({
@@ -102,6 +106,7 @@ const App: React.FC = () => {
       setError(null);
       setLens(l);
       setPair(analyzePair(a, b, l));
+      setRevealing('pair');
       const share = (x: Birth) => ({ ...x, lon: x.geo?.longitude, tzOffsetHours: x.geo?.tzOffsetHours });
       history.replaceState(null, '', window.location.pathname + encodePair(share(a), share(b), l));
       window.scrollTo({ top: 0 });
@@ -114,6 +119,7 @@ const App: React.FC = () => {
   const resetApp = () => {
     setChart(null);
     setPair(null);
+    setRevealing(null);
     history.replaceState(null, '', window.location.pathname);
     window.scrollTo({ top: 0 });
   };
@@ -140,6 +146,7 @@ const App: React.FC = () => {
   if (pair) {
     return (
       <div className="relative min-h-screen text-ink font-sans">
+        {revealing === 'pair' && <Reveal pair onDone={() => setRevealing(null)} />}
         <Compatibility result={pair} lens={lens} onReset={resetApp} />
         <Footer />
       </div>
@@ -149,6 +156,7 @@ const App: React.FC = () => {
   if (chart) {
     return (
       <div className="relative min-h-screen text-ink font-sans">
+        {revealing === 'single' && <Reveal onDone={() => setRevealing(null)} />}
         <NatureResult chart={chart} onReset={resetApp} />
         <Footer />
       </div>

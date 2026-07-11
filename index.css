@@ -168,4 +168,25 @@
     88% { transform: scaleY(1); opacity: 1; }
     100% { transform: scaleY(1); opacity: 0; }
   }
+
+  /* ── The reveal — the ceremonial pause before a reading appears ─────────────
+     A sprout draws itself, two lines pass, the overlay fades to the hero.
+     (Reduced-motion users skip this overlay entirely in Reveal.tsx.) */
+  .reveal-overlay { animation: reveal-out 0.6s ease-in 2.15s forwards; }
+  @keyframes reveal-out { to { opacity: 0; } }
+
+  .reveal-grow {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: reveal-grow 1.1s ease-out forwards;
+  }
+  @keyframes reveal-grow { to { stroke-dashoffset: 0; } }
+
+  .reveal-line { opacity: 0; animation: reveal-line 1.5s ease-in-out forwards; }
+  @keyframes reveal-line {
+    0% { opacity: 0; transform: translateY(6px); }
+    22% { opacity: 1; transform: translateY(0); }
+    72% { opacity: 1; }
+    100% { opacity: 0; }
+  }
 }
