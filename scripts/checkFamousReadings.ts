@@ -16,7 +16,9 @@ const CAT: Record<string, string> = {
   'follow-weak': '从弱', 'weak': '身弱', 'balanced': '中和', 'strong': '身强', 'follow-strong': '从强',
 };
 
-const csv = fs.readFileSync('docs/名人AA级八字验证集.csv', 'utf8').replace(/^﻿/, '');
+const csv = fs
+  .readFileSync(new URL('../docs/名人AA级八字验证集.csv', import.meta.url), 'utf8')
+  .replace(/^﻿/, '');
 const rows = csv.split('\n').slice(1).filter((l) => l.trim());
 
 interface Rec { name: string; person: Person; chart: ReturnType<typeof calculateBazi>; summary: string; }
@@ -26,7 +28,10 @@ for (const line of rows) {
   const f = line.split(',');
   const name = f[0].split(' ')[0];
   const [y, mo, d] = f[2].split('-').map(Number);
-  const [ch, cm] = f[3].split(':').map(Number);
+  // 出生时刻 may be 未知 — then read as 三柱 (hour undefined), not a crash.
+  const hm = (f[3] ?? '').match(/^(\d+):(\d+)$/);
+  const ch = hm ? Number(hm[1]) : undefined;
+  const cm = hm ? Number(hm[2]) : 0;
   const lon = Number(f[6]);
   const off = f[7].match(/\(([-+]?\d+)\)/);
   const geo: Geo = { longitude: lon, tzOffsetHours: off ? Number(off[1]) : lon / 15 };
@@ -44,7 +49,7 @@ for (const line of rows) {
   const s = chart.strength!;
   const ys = chart.yongshen!;
   const bazi = [chart.yearPillar, chart.monthPillar, chart.dayPillar, chart.hourPillar]
-    .map((p) => p.stem.chinese + p.branch.chinese).join(' ');
+    .map((p) => (p ? p.stem.chinese + p.branch.chinese : '──')).join(' ');
   console.log(
     `${name.padEnd(6)} ${bazi}  ${CAT[s.category]}(${(s.supportShare * 100).toFixed(0)}%)` +
     ` 用${NOUN[ys.primaryYong]}忌${NOUN[ys.primaryJi]}  | ${summary.slice(0, 40)}`,
