@@ -1,11 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
 import { BaziChart } from '../../types';
-import { buildXiangfaReading } from '../../content/xiangfa';
-import { getAtmosphere } from '../../content/xiangfa/atmosphere';
-import { buildRelationships, buildLifeSeasons } from '../../content/xiangfa/relationships';
-import { buildInteractions } from '../../content/xiangfa/interactions';
-import { buildStoryline } from '../../content/xiangfa/narrative';
+import { buildReading } from '../../content/xiangfa/reading';
 import { AtmosphereProvider } from './AtmosphereContext';
+import { ResultShell } from './ResultShell';
 import { NatureArt } from '../illustrations/NatureArt';
 import { YourNature } from './YourNature';
 import { SeasonEnvironment } from './SeasonEnvironment';
@@ -25,17 +22,9 @@ const Divider: React.FC<{ accent: string }> = ({ accent }) => (
 );
 
 export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> = ({ chart, onReset }) => {
-  const reading = useMemo(() => buildXiangfaReading(chart), [chart]);
-  const atmo = useMemo(() => getAtmosphere(reading.stem.element, reading.season.season), [reading]);
-  const relationships = useMemo(() => buildRelationships(chart), [chart]);
-  const interactions = useMemo(() => buildInteractions(chart, reading), [chart, reading]);
-  const lifeSeasons = useMemo(
-    () => buildLifeSeasons(chart, reading, new Date().getFullYear()),
-    [chart, reading],
-  );
-  const storyline = useMemo(
-    () => buildStoryline(chart, reading, relationships, lifeSeasons, interactions),
-    [chart, reading, relationships, lifeSeasons, interactions],
+  const { reading, atmo, relationships, interactions, lifeSeasons, storyline } = useMemo(
+    () => buildReading(chart, new Date().getFullYear()),
+    [chart],
   );
 
   // Tint the page to the reading while it's open.
@@ -47,19 +36,14 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
 
   return (
     <AtmosphereProvider value={{ accent: atmo.accent, accentDeep: atmo.accentDeep }}>
-      {/* Fixed wash + a large faint illustration behind the scrolling reading */}
-      <div className="fixed inset-0 -z-10 overflow-hidden" style={{ background: atmo.wash }} aria-hidden>
-        <NatureArt id={reading.stem.symbol} accent={atmo.accent} className="absolute -right-32 bottom-[-10rem] h-[44rem] w-[44rem] opacity-30" />
-      </div>
-
-      {/* Floating back control */}
-      <button
-        onClick={onReset}
-        className="fixed top-6 left-6 z-50 flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-ink/70 backdrop-blur-md transition-colors hover:text-ink"
+      <ResultShell
+        onReset={onReset}
+        background={
+          <div className="fixed inset-0 -z-10 overflow-hidden" style={{ background: atmo.wash }} aria-hidden>
+            <NatureArt id={reading.stem.symbol} accent={atmo.accent} className="absolute -right-32 bottom-[-10rem] h-[44rem] w-[44rem] opacity-30" />
+          </div>
+        }
       >
-        <span>←</span> Read another
-      </button>
-
       {/* Floating share control — card + link in one action */}
       <ShareControl reading={reading} atmo={atmo} />
 
@@ -133,6 +117,7 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
 
         <TheFullChart chart={chart} />
       </div>
+      </ResultShell>
     </AtmosphereProvider>
   );
 };

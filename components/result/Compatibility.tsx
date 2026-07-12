@@ -12,6 +12,7 @@ import { UnlockPanel } from './UnlockPanel';
 import { paymentConfigured, hasEntitlement } from '../../services/entitlementService';
 import { buildPairNarrative } from '../../content/xiangfa/pair';
 import { PairDepth, PairStoryline } from './PairDepth';
+import { ResultShell } from './ResultShell';
 
 const A_HEX = PERSON.a; // person A — sage
 const B_HEX = PERSON.b; // person B — clay
@@ -268,17 +269,7 @@ export const Compatibility: React.FC<{
   const lensLabel = lens === 'partner' ? 'Work' : 'Love';
 
   return (
-    <div className="relative min-h-screen">
-      <div className="fixed inset-0 -z-10 season-sky" aria-hidden />
-
-      {/* Floating back control — matches the single-nature result page */}
-      <button
-        onClick={onReset}
-        className="fixed top-6 left-6 z-50 flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-ink/70 backdrop-blur-md transition-colors hover:text-ink"
-      >
-        <span>←</span> Read another
-      </button>
-
+    <ResultShell onReset={onReset} background={<div className="fixed inset-0 -z-10 season-sky" aria-hidden />}>
       <div className="mx-auto max-w-5xl px-6 py-16">
         {/* Header — the two natures shown as glyphs, echoing the single reading's hero */}
         <div className="flex flex-col items-center text-center">
@@ -364,6 +355,6 @@ export const Compatibility: React.FC<{
         </div>
         </>)}
       </div>
-    </div>
+    </ResultShell>
   );
 };
