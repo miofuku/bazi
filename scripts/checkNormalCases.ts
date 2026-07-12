@@ -212,6 +212,20 @@ const clamp1 = (n: number) => Math.max(-1, Math.min(1, n));
 // A year's wind sign at the same ±0.1 threshold the scorer uses.
 const tone = (f: number) => (f > 0.1 ? 1 : f < -0.1 ? -1 : 0);
 
+// 岁运 (大运↔流年) structural markers — favor-INDEPENDENT jolts (the #2 lever).
+// Counting how many labeled years actually carry one bounds what that lever
+// could ever move: 并临/反吟 are rare, so a sparse hit-count = underpowered test.
+const CHONG: Record<string, string> = {
+  子: '午', 午: '子', 丑: '未', 未: '丑', 寅: '申', 申: '寅',
+  卯: '酉', 酉: '卯', 辰: '戌', 戌: '辰', 巳: '亥', 亥: '巳',
+};
+const CTRL: Record<ElementType, ElementType> = {
+  [ElementType.WOOD]: ElementType.EARTH, [ElementType.EARTH]: ElementType.WATER,
+  [ElementType.WATER]: ElementType.FIRE, [ElementType.FIRE]: ElementType.METAL,
+  [ElementType.METAL]: ElementType.WOOD,
+};
+const keEl = (a: ElementType, b: ElementType) => CTRL[a] === b || CTRL[b] === a;
+
 // Deterministic TRAIN/TEST split for honest generalization. Hashed on the 四柱
 // string (FNV-1a), so: (a) same-chart duplicates — #16/#101, #73/#75 — always
 // land on the same side (no leakage); (b) the split is stable as new cases are
@@ -257,6 +271,8 @@ const rel = { clean: [0, 0], fuzzy: [0, 0] };
 // value); if they're on par, the split is honest posture only. Bucketed on the
 // whole set and on near-中和 charts (where the UI actually forks).
 const splitDx = { all: { split: [0, 0], agree: [0, 0] }, bdy: { split: [0, 0], agree: [0, 0] } };
+// #2 lever ceiling: labeled years carrying a 岁运 (大运↔流年) structural marker.
+const suiyun = { total: 0, bing: 0, fan: 0, chong: 0 };
 // per-fold [hit, miss] on TRAIN, strong labels only (the headline signal)
 const cvY = Array.from({ length: CV_FOLDS }, () => [0, 0]); // 仅流年
 const cvB = Array.from({ length: CV_FOLDS }, () => [0, 0]); // 探索
@@ -295,6 +311,14 @@ for (const [id, row] of rows) {
       const yr = Number(yrS);
       const yf = favorOf(yearGz(yr));
       const dy = dySeq?.filter((e) => yr >= e.year && yr < e.year + 10).pop();
+      if (dy) {
+        suiyun.total++;
+        const dp = pillar(dy.gz, 'DY'), yp2 = pillar(yearGz(yr), 'Yr');
+        const chong = CHONG[dp.branch.chinese] === yp2.branch.chinese;
+        if (dp.stem.chinese === yp2.stem.chinese && dp.branch.chinese === yp2.branch.chinese) suiyun.bing++;
+        else if (chong && keEl(dp.stem.element, yp2.stem.element)) suiyun.fan++;
+        else if (chong) suiyun.chong++;
+      }
       const df = dy ? favorOf(dy.gz) : 0;
       const f = dy ? clamp1(yf + df) : yf;
       const ok = expected > 0 ? f > 0.1 : f < -0.1;
@@ -381,6 +405,8 @@ const dxRate = (d: { split: number[]; agree: number[] }) => {
 };
 console.log(`两读发散率(身强map vs 身弱map 对该年判向相反): 全集 ${dxRate(splitDx.all)} · 近中和 ${dxRate(splitDx.bdy)}`);
 console.log(`  → 近乎处处相反(非"个别十年分歧"); 而committed口径近中和仍61%(见上) ⇒ 该committed其一, 勿并列双读`);
+const suiHit = suiyun.bing + suiyun.fan + suiyun.chong;
+console.log(`岁运标记(#2上限): 有大运标注年 ${suiyun.total} · 命中 ${suiHit} (${((suiHit / suiyun.total) * 100).toFixed(0)}%) = 并临${suiyun.bing}+反吟${suiyun.fan}+大运冲流年${suiyun.chong}  ← 命中太少则#2测不出(n不足)`);
 
 console.log(`\n════ 训练集 ${CV_FOLDS} 折交叉验证 · 强标注 (改进前后做配对比较) ════`);
 cvReport(cvY, '仅流年');

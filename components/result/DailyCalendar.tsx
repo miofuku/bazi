@@ -57,7 +57,7 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
       </p>
       <h2 className="mt-2 font-display text-3xl font-semibold text-ink md:text-4xl">Every day has its own weather</h2>
       <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink/70">
-        Every day carries its own element. Read against your nature, each one becomes a kind of weather — a day to push out, to gather, to rest. Just the sort of day it is for you, and how to grow with it.
+        Every day carries its own element. Read against your nature, each one leans a little with you or against you — a day to push out, to gather, or to rest. These are small differences within your larger weather, not good days and bad ones: read them against each other, for the sort of day it is and how to grow with it.
       </p>
 
       <div className="mt-8 grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
@@ -181,7 +181,7 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
 
             {reading.layers && (
               <p className="mt-2 text-[11px] leading-relaxed text-stone/70">
-                Set against a {windOf(reading.layers.year).label.toLowerCase()} year and a {windOf(reading.layers.daYun).label.toLowerCase()} decade.
+                Set within a {windOf(reading.layers.year).label.toLowerCase()} year and a {windOf(reading.layers.daYun).label.toLowerCase()} decade — the day moves inside that larger weather, not past it.
               </p>
             )}
           </div>
