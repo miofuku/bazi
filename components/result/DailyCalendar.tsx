@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { BaziChart, ElementType } from '../../types';
 import { buildDailyReading, getDayPillar, computeDayFavor } from '../../services/dailyService';
 import { NatureArt } from '../illustrations/NatureArt';
 import { STEM_PROFILES } from '../../content/xiangfa';
+import { GOALS, GoalId, goalAdvice, goalWindNote } from '../../content/xiangfa/goals';
 import { ELEMENT_HEX, WIND, windTone, windHex } from '../../utils/tokens';
 import { useAccent } from './AtmosphereContext';
 
@@ -26,6 +27,19 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
   const { accent, accentDeep } = useAccent();
   const today = useMemo(() => new Date(), []);
   const [selected, setSelected] = useState<Date>(today);
+
+  // A short-term goal the daily posture is re-voiced toward — persisted locally
+  // (the reading never leaves the device). Toggling the active goal clears it.
+  const [goal, setGoal] = useState<GoalId | null>(() => {
+    if (typeof window === 'undefined') return null;
+    const s = window.localStorage.getItem('rootwise.dailyGoal');
+    return GOALS.some((g) => g.id === s) ? (s as GoalId) : null;
+  });
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (goal) window.localStorage.setItem('rootwise.dailyGoal', goal);
+    else window.localStorage.removeItem('rootwise.dailyGoal');
+  }, [goal]);
 
   const reading = useMemo(() => buildDailyReading(chart, selected), [chart, selected]);
   // The day's own nature (丙 = Sun, 丁 = Flame …) — keyed on the stem, not just
@@ -59,6 +73,30 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
       <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink/70">
         Every day carries its own element. Read against your nature, each one leans a little with you or against you — a day to push out, to gather, or to rest. These are small differences within your larger weather, not good days and bad ones: read them against each other, for the sort of day it is and how to grow with it.
       </p>
+
+      {/* Optional goal lens — re-voices each day's posture toward what you're
+          working on. Pacing advice, not a forecast; toggling clears it. */}
+      <div className="mt-5 flex flex-wrap items-center gap-2">
+        <span className="mr-1 text-[11px] font-semibold uppercase tracking-wider text-ink/45">Working toward something?</span>
+        {GOALS.map((g) => {
+          const on = goal === g.id;
+          return (
+            <button
+              key={g.id}
+              type="button"
+              onClick={() => setGoal(on ? null : g.id)}
+              aria-pressed={on}
+              className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sage ${
+                on
+                  ? 'border-sage bg-sage text-white'
+                  : 'border-sage/40 text-sage-deep hover:border-sage hover:bg-sage/10'
+              }`}
+            >
+              {g.label}
+            </button>
+          );
+        })}
+      </div>
 
       <div className="mt-8 grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         {/* ---- Month grid ---- */}
@@ -174,6 +212,21 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
               <span className="font-semibold text-ink/80">Ease off: </span>
               {reading.content.easeOff}
             </p>
+
+            {goal && (() => {
+              const g = GOALS.find((x) => x.id === goal)!;
+              const wind = reading.favor != null ? windTone(reading.favor) : 'even';
+              const note = goalWindNote(wind);
+              return (
+                <div className="mt-4 rounded-xl p-4 ring-1" style={{ background: `${accent}12`, ['--tw-ring-color' as any]: `${accent}33` }}>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: accentDeep }}>
+                    Toward your {g.toward}
+                  </p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-ink/85">{goalAdvice(goal, reading.mode)}</p>
+                  {note && <p className="mt-2 text-xs italic leading-relaxed text-stone">{note}</p>}
+                </div>
+              );
+            })()}
 
             <p className="mt-4 border-t border-ink/5 pt-3 text-xs italic leading-relaxed text-stone">
               {reading.balanceNote}

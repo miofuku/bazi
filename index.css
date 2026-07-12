@@ -25,6 +25,19 @@
     outline-offset: 2px;
     border-radius: 2px;
   }
+
+  /* Every actionable control shows the hand cursor (a native <button> defaults to
+     an arrow, so the "is this clickable?" cue was missing). Disabled = not-allowed.
+     Explicit here so affordance never depends on a per-component cursor-pointer. */
+  button:not(:disabled),
+  [role="button"],
+  summary {
+    cursor: pointer;
+  }
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
 }
 
 @layer components {

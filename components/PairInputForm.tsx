@@ -84,7 +84,7 @@ export const PairInputForm: React.FC<Props> = ({ onAnalyze }) => {
         <div className="inline-flex rounded-full border border-ink/10 p-1">
           {(['partner', 'marriage'] as RelationLens[]).map((l) => (
             <button key={l} type="button" onClick={() => setLens(l)}
-              className={`rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${lens === l ? 'bg-sage text-white' : 'text-stone hover:text-sage'}`}>
+              className={`rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${lens === l ? 'bg-sage text-white' : 'text-stone hover:bg-sage/10 hover:text-sage-deep'}`}>
               {l === 'partner' ? 'Work' : 'Love'}
             </button>
           ))}
