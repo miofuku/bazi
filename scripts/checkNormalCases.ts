@@ -30,7 +30,7 @@ import { selectYongshen } from '../utils/YongshenSelector';
 import { getRulingStem } from '../utils/qiLing';
 import { pillarFavor } from '../utils/timeFavor';
 import { structuralFavor } from '../utils/structural';
-import { BaziChart, ElementType, Pillar } from '../types';
+import { BaziChart, ElementType, Favor, Pillar } from '../types';
 
 const pillar = (gz: string, name: string): Pillar => ({
   stem: STEMS[gz.charAt(0)],
@@ -209,6 +209,8 @@ const CN: Record<ElementType, string> = {
   [ElementType.METAL]: '金', [ElementType.WATER]: '水',
 };
 const clamp1 = (n: number) => Math.max(-1, Math.min(1, n));
+// A year's wind sign at the same ±0.1 threshold the scorer uses.
+const tone = (f: number) => (f > 0.1 ? 1 : f < -0.1 ? -1 : 0);
 
 // Deterministic TRAIN/TEST split for honest generalization. Hashed on the 四柱
 // string (FNV-1a), so: (a) same-chart duplicates — #16/#101, #73/#75 — always
@@ -248,6 +250,13 @@ const conf = { hi: [0, 0], lo: [0, 0] };
 const FUZZY = new Set([21, 41, 42, 44, 49, 53, 58, 59, 60, 63, 65, 67, 71, 77, 78,
   81, 82, 84, 87, 90, 91, 93, 94, 96, 99, 107]);
 const rel = { clean: [0, 0], fuzzy: [0, 0] };
+// (3) TWO-READ PREMISE: on a boundary chart the 身强(抑) and 身弱(扶) maps read
+// opposite winds for some years — those are where the UI would show "the two
+// readings split". Does a split year predict LOWER 仅流年 accuracy? If split
+// years are much worse, the split flags real misclassification (diagnostic
+// value); if they're on par, the split is honest posture only. Bucketed on the
+// whole set and on near-中和 charts (where the UI actually forks).
+const splitDx = { all: { split: [0, 0], agree: [0, 0] }, bdy: { split: [0, 0], agree: [0, 0] } };
 // per-fold [hit, miss] on TRAIN, strong labels only (the headline signal)
 const cvY = Array.from({ length: CV_FOLDS }, () => [0, 0]); // 仅流年
 const cvB = Array.from({ length: CV_FOLDS }, () => [0, 0]); // 探索
@@ -258,6 +267,10 @@ for (const [id, row] of rows) {
   const pY = pillar(y, 'Year'), pM = pillar(m, 'Month'), pD = pillar(d, 'Day'), pH = pillar(h, 'Hour');
   const strength = calculateStrength(pY, pM, pD, pH, rulingOf(DERIVED.get(id)?.birth, m.charAt(1)));
   const ys = selectYongshen(strength, m.charAt(1), d.charAt(0));
+  // The two readings of the strong/weak fork — selectYongshen branches only on
+  // `category`, so flipping it (power/司令/调候 unchanged) yields the alternate map.
+  const strongMap = selectYongshen({ ...strength, category: 'strong' }, m.charAt(1), d.charAt(0)).favor;
+  const weakMap = selectYongshen({ ...strength, category: 'weak' }, m.charAt(1), d.charAt(0)).favor;
   const chartLike = { yearPillar: pY, monthPillar: pM, dayPillar: pD, hourPillar: pH, dayMaster: pD.stem } as unknown as BaziChart;
   const bucket = isTest(row.bazi.join('')) ? 'test' : 'train';
   const base = bucket === 'test' ? 2 : 0;
@@ -265,10 +278,11 @@ for (const [id, row] of rows) {
   split[bucket].cases.push(id);
   split[bucket].cats[strength.category] = (split[bucket].cats[strength.category] ?? 0) + 1;
 
-  const favorOf = (gz: string): number => {
+  const favorWith = (map: Record<ElementType, Favor>, gz: string): number => {
     const p = pillar(gz, 'Yr');
-    return clamp1(pillarFavor(ys.favor, p) + structuralFavor(p, chartLike, ys.favor).delta);
+    return clamp1(pillarFavor(map, p) + structuralFavor(p, chartLike, map).delta);
   };
+  const favorOf = (gz: string): number => favorWith(ys.favor, gz);
 
   const fmt = (Object.keys(ys.favor) as ElementType[])
     .filter((e) => ys.favor[e] !== 'neutral')
@@ -295,8 +309,12 @@ for (const [id, row] of rows) {
         cvB[fold][okB ? 0 : 1]++;
       }
       if (key === 'strong') {
-        conf[Math.abs(strength.supportShare - 0.5) >= 0.06 ? 'hi' : 'lo'][okY ? 0 : 1]++;
+        const near = Math.abs(strength.supportShare - 0.5) < 0.06;
+        conf[near ? 'lo' : 'hi'][okY ? 0 : 1]++;
         rel[FUZZY.has(id) ? 'fuzzy' : 'clean'][okY ? 0 : 1]++;
+        const isSplit = tone(favorWith(strongMap, yearGz(yr))) !== tone(favorWith(weakMap, yearGz(yr)));
+        splitDx.all[isSplit ? 'split' : 'agree'][okY ? 0 : 1]++;
+        if (near) splitDx.bdy[isSplit ? 'split' : 'agree'][okY ? 0 : 1]++;
       }
       const diff = ok === okY ? '' : okY ? '(年✓)' : '(年✗)';
       console.log(`   ${yr} ${yearGz(yr)} 预期${expected > 0 ? '好' : '差'} → 年${yf.toFixed(2)} 运${dy ? `${dy.gz}${df >= 0 ? '+' : ''}${df.toFixed(2)}` : '——'} 合${f.toFixed(2)} ${ok ? '✓' : '✗'}${diff}${key === 'weak' ? ' (weak)' : ''}`);
@@ -352,6 +370,17 @@ const cvReport = (folds: number[][], label: string) => {
 console.log(`\n════ 诊断 (仅流年强标注, 全集) ════`);
 console.log(`近中和: 远中和|share-.5|≥.06 ${seg(conf.hi[0], conf.hi[1])} · 近中和<.06 ${seg(conf.lo[0], conf.lo[1])}  ← 近中和不更差则windBand无据`);
 console.log(`转录: 清晰 ${seg(rel.clean[0], rel.clean[1])} · 模糊 ${seg(rel.fuzzy[0], rel.fuzzy[1])}  ← 模糊更差则确为噪声`);
+// FINDING: 身强(抑) and 身弱(扶) maps are near-complementary, so they read
+// OPPOSITE winds for almost every year — "split" is not a few contested decades,
+// it's near-total. Report the divergence RATE (the real signal); the committed
+// map's boundary accuracy is the 近中和 line above.
+const nOf = (p: number[]) => p[0] + p[1];
+const dxRate = (d: { split: number[]; agree: number[] }) => {
+  const s = nOf(d.split), a = nOf(d.agree);
+  return `${s}/${s + a} (${s + a ? ((s / (s + a)) * 100).toFixed(0) : '0'}% 判向相反)`;
+};
+console.log(`两读发散率(身强map vs 身弱map 对该年判向相反): 全集 ${dxRate(splitDx.all)} · 近中和 ${dxRate(splitDx.bdy)}`);
+console.log(`  → 近乎处处相反(非"个别十年分歧"); 而committed口径近中和仍61%(见上) ⇒ 该committed其一, 勿并列双读`);
 
 console.log(`\n════ 训练集 ${CV_FOLDS} 折交叉验证 · 强标注 (改进前后做配对比较) ════`);
 cvReport(cvY, '仅流年');

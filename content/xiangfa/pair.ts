@@ -2,7 +2,6 @@ import { BaziChart } from '../../types';
 import { XiangfaReading, buildXiangfaReading, ThriveNeed } from './index';
 import { RELATIONSHIPS, RelationshipId, relationBetween, buildLifeSeasons, LifeSeason } from './relationships';
 import { FORCE, BranchRelation, buildCrossRelations } from './interactions';
-import { windBand } from '../../utils/tokens';
 
 // The paired reading's composition layer: weave two complete single readings
 // into one relational narrative — what you are to each other, who holds whose
@@ -81,7 +80,7 @@ const bandFor = (label: string, seasons: LifeSeason[], from: number, to: number)
   return { label, segments };
 };
 
-// Neutral bands widen for borderline charts (honesty hedge — utils/tokens.ts).
+// Fixed ±0.15 neutral band per person (the borderline-widening hedge is retired).
 const jointWindows = (
   a: LifeSeason[], b: LifeSeason[], from: number, to: number, bandA: number, bandB: number,
 ): JointWindow[] => {
@@ -155,12 +154,11 @@ export function buildPairNarrative(
     bandFor(a.label, seasonsA, windowFrom, windowTo),
     bandFor(b.label, seasonsB, windowFrom, windowTo),
   ];
-  const bandA = windBand(a.chart.strength?.supportShare);
-  const bandB = windBand(b.chart.strength?.supportShare);
-  const joint = jointWindows(seasonsA, seasonsB, windowFrom, windowTo, bandA, bandB);
+  const band = 0.15;
+  const joint = jointWindows(seasonsA, seasonsB, windowFrom, windowTo, band, band);
 
-  const wA = windWord(favorAt(seasonsA, nowYear), bandA);
-  const wB = windWord(favorAt(seasonsB, nowYear), bandB);
+  const wA = windWord(favorAt(seasonsA, nowYear), band);
+  const wB = windWord(favorAt(seasonsB, nowYear), band);
   const nowLine =
     wA === wB
       ? `Right now you are both in ${wA === 'tailwind' ? 'a tailwind — the weather carries you both' : wA === 'headwind' ? 'a headwind — a stretch to conserve and root, together' : 'even wind — steady tending weather for you both'}.`

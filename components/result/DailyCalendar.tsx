@@ -3,7 +3,7 @@ import { BaziChart, ElementType } from '../../types';
 import { buildDailyReading, getDayPillar, computeDayFavor } from '../../services/dailyService';
 import { NatureArt } from '../illustrations/NatureArt';
 import { STEM_PROFILES } from '../../content/xiangfa';
-import { ELEMENT_HEX, WIND, windTone, windHex, windBand } from '../../utils/tokens';
+import { ELEMENT_HEX, WIND, windTone, windHex } from '../../utils/tokens';
 import { useAccent } from './AtmosphereContext';
 
 const sameDay = (a: Date, b: Date) =>
@@ -14,8 +14,8 @@ const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 // A day's 顺涩 (climate-bounded: 流日 weather within the 大运/流年 climate) → a wind.
 // Same voice as the life-seasons, pointed at the day. Not luck; the sort of day it is.
 const WIND_LABEL: Record<ReturnType<typeof windTone>, string> = { tailwind: 'Tailwind', even: 'Even', headwind: 'Headwind' };
-const windOf = (favor: number, band: number) => {
-  const t = windTone(favor, band);
+const windOf = (favor: number) => {
+  const t = windTone(favor);
   return { label: WIND_LABEL[t], hex: WIND[t] };
 };
 
@@ -28,8 +28,6 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
   const [selected, setSelected] = useState<Date>(today);
 
   const reading = useMemo(() => buildDailyReading(chart, selected), [chart, selected]);
-  // Wider "Even" band on borderline charts — the honesty hedge (utils/tokens.ts).
-  const band = windBand(chart.strength?.supportShare);
   // The day's own nature (丙 = Sun, 丁 = Flame …) — keyed on the stem, not just
   // the element, so consecutive Yang/Yin days read distinctly.
   const dayNature = reading ? STEM_PROFILES[reading.dayPillar.stem.chinese as keyof typeof STEM_PROFILES] : null;
@@ -148,7 +146,7 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
               </div>
             </div>
 
-            {reading.favor != null && (() => { const w = windOf(reading.favor, band); return (
+            {reading.favor != null && (() => { const w = windOf(reading.favor); return (
               <div className="mb-4 flex flex-wrap items-center gap-2">
                 <span className="rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider" style={{ background: `${w.hex}1f`, color: w.hex }}>{w.label}</span>
               </div>
@@ -183,7 +181,7 @@ export const DailyCalendar: React.FC<{ chart: BaziChart }> = ({ chart }) => {
 
             {reading.layers && (
               <p className="mt-2 text-[11px] leading-relaxed text-stone/70">
-                Set against a {windOf(reading.layers.year, band).label.toLowerCase()} year and a {windOf(reading.layers.daYun, band).label.toLowerCase()} decade.
+                Set against a {windOf(reading.layers.year).label.toLowerCase()} year and a {windOf(reading.layers.daYun).label.toLowerCase()} decade.
               </p>
             )}
           </div>
