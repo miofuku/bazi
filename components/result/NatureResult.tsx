@@ -1,9 +1,13 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { BaziChart } from '../../types';
 import { buildReading } from '../../content/xiangfa/reading';
+import { computeDayFavor } from '../../services/dailyService';
+import { windHex } from '../../utils/tokens';
 import { AtmosphereProvider } from './AtmosphereContext';
 import { ResultShell } from './ResultShell';
 import { NatureArt } from '../illustrations/NatureArt';
+import { ReadingGist } from './ReadingGist';
+import { MovementHeader } from './Movement';
 import { YourNature } from './YourNature';
 import { SeasonEnvironment } from './SeasonEnvironment';
 import { ThriveNeeds } from './ThriveNeeds';
@@ -34,6 +38,27 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
     return () => { document.body.style.background = prev; };
   }, [atmo]);
 
+  // A quick path to today's weather. The daily section is the surface a returning
+  // reader comes back for, yet it sits deep in the scroll — so a floating jump
+  // stays available (even from the hero), and fades out only while it's on screen.
+  const dailyRef = useRef<HTMLDivElement>(null);
+  const [atDaily, setAtDaily] = useState(false);
+  useEffect(() => {
+    const el = dailyRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setAtDaily(e.isIntersecting), { threshold: 0.15 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  const jumpToDaily = () => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    dailyRef.current?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  };
+  // A live preview on the jump button: today's date, ringed in today's own
+  // weather colour (the same wind gradient the calendar uses).
+  const todayDate = new Date().getDate();
+  const todayFavor = useMemo(() => computeDayFavor(chart, new Date())?.favor ?? 0, [chart]);
+
   return (
     <AtmosphereProvider value={{ accent: atmo.accent, accentDeep: atmo.accentDeep }}>
       <ResultShell
@@ -46,6 +71,26 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
       >
       {/* Floating share control — card + link in one action */}
       <ShareControl reading={reading} atmo={atmo} />
+
+      {/* Floating jump to today's weather — the return-visitor's fast path.
+          Fades out while the daily section is on screen. */}
+      <button
+        onClick={jumpToDaily}
+        aria-label="Jump to today's weather"
+        className={`group fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-full bg-white/80 py-1.5 pl-2 pr-4 shadow-lift ring-1 ring-ink/5 backdrop-blur-md transition-all hover:-translate-y-0.5 hover:bg-white ${atDaily ? 'pointer-events-none translate-y-2 opacity-0' : 'opacity-100'}`}
+      >
+        <span
+          className="grid h-7 w-7 place-items-center rounded-full bg-white text-xs font-bold tabular-nums text-ink shadow-sm ring-2"
+          style={{ ['--tw-ring-color' as any]: windHex(todayFavor) }}
+          aria-hidden
+        >
+          {todayDate}
+        </span>
+        <span className="text-[11px] font-semibold uppercase tracking-widest text-ink/70">Today’s weather</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-ink/35 transition-transform group-hover:translate-y-0.5" aria-hidden>
+          <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
 
       {/* ---- HERO: immersive, themed to element + season ---- */}
       <section
@@ -87,6 +132,17 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
 
       {/* ---- READING: over the soft themed wash ---- */}
       <div className="relative z-10 mx-auto max-w-4xl space-y-20 px-4 py-24 md:px-6">
+        <ReadingGist
+          current={lifeSeasons.find((s) => s.current)}
+          topNeed={reading.needStatus.find((n) => n.status === 'scarce')}
+        />
+
+        <MovementHeader
+          id="part-nature"
+          kicker="Part one"
+          title="The living thing you are"
+          desc="Your nature, and the conditions it grows in."
+        />
         <YourNature stem={reading.stem} />
         <Divider accent={atmo.accent} />
         <SeasonEnvironment season={reading.season} />
@@ -102,11 +158,25 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
         <Interactions data={interactions} />
         <Divider accent={atmo.accent} />
         <Relationships items={relationships} />
-        <Divider accent={atmo.accent} />
+
+        <MovementHeader
+          id="part-weather"
+          kicker="Part two"
+          title="The weather you grow in"
+          desc="The long seasons of your life — and the day you’re in."
+        />
         <LifeSeasons seasons={lifeSeasons} />
         <Divider accent={atmo.accent} />
-        <DailyCalendar chart={chart} />
-        <Divider accent={atmo.accent} />
+        <div id="daily-weather" ref={dailyRef}>
+          <DailyCalendar chart={chart} />
+        </div>
+
+        <MovementHeader
+          id="part-practice"
+          kicker="Part three"
+          title="Growing on purpose"
+          desc="Your whole story in one line, and how to carry it on."
+        />
         <Storyline beats={storyline} />
 
         <p className="pt-4 text-center font-display text-lg italic text-stone">
