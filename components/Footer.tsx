@@ -1,12 +1,5 @@
 import React from 'react';
-
-const Sprig: React.FC<{ className?: string }> = ({ className }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M12 22V8" />
-    <path d="M12 13C12 13 6 11 6 6.5C6 3.8 8.6 2.8 12 7" />
-    <path d="M12 11C12 11 18 9.5 18 5.5C18 3.2 15.6 2.4 12 6" />
-  </svg>
-);
+import { Sprig } from './Sprig';
 
 export const Footer: React.FC = () => (
   <footer className="border-t border-black/5 py-20 bg-mist relative overflow-hidden">

@@ -139,7 +139,7 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
 
         <MovementHeader
           id="part-nature"
-          kicker="Part one"
+          numeral="I"
           title="The living thing you are"
           desc="Your nature, and the conditions it grows in."
         />
@@ -161,7 +161,7 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
 
         <MovementHeader
           id="part-weather"
-          kicker="Part two"
+          numeral="II"
           title="The weather you grow in"
           desc="The long seasons of your life — and the day you’re in."
         />
@@ -173,7 +173,7 @@ export const NatureResult: React.FC<{ chart: BaziChart; onReset: () => void }> =
 
         <MovementHeader
           id="part-practice"
-          kicker="Part three"
+          numeral="III"
           title="Growing on purpose"
           desc="Your whole story in one line, and how to carry it on."
         />

@@ -12,6 +12,7 @@ import { Methodology } from './components/Methodology';
 import { TenNatures, StemMotif } from './components/TenNatures';
 import { Footer } from './components/Footer';
 import { Reveal } from './components/Reveal';
+import { Sprig } from './components/Sprig';
 import { encodeBirth, decodeBirth, encodePair, decodePair, SharedBirth } from './utils/shareUrl';
 
 // A quiet, growing-vine line that drifts across the background.
@@ -30,14 +31,6 @@ const GrowthFlow = () => (
       <path d="M-100,300 C300,200 600,500 900,300 C1200,100 1400,400 1600,300" stroke="url(#leaf-grad)" strokeWidth="0.8" fill="none" className="animate-flow [animation-delay:-7s]" />
     </svg>
   </div>
-);
-
-const Sprig: React.FC<{ className?: string }> = ({ className }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M12 22V8" />
-    <path d="M12 13C12 13 6 11 6 6.5C6 3.8 8.6 2.8 12 7" />
-    <path d="M12 11C12 11 18 9.5 18 5.5C18 3.2 15.6 2.4 12 6" />
-  </svg>
 );
 
 const Header: React.FC<{ onHome: () => void }> = ({ onHome }) => (

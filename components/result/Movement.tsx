@@ -7,19 +7,25 @@ import { useAccent } from './AtmosphereContext';
 // centered than a section heading, with extra space above for the gear-shift;
 // each is also an anchor (id) for wayfinding. No card, no ornament — the
 // whitespace and scale carry the boundary, keeping the reading calm.
-export const MovementHeader: React.FC<{ id: string; kicker: string; title: string; desc: string }> = ({
+export const MovementHeader: React.FC<{ id: string; numeral: string; title: string; desc: string }> = ({
   id,
-  kicker,
+  numeral,
   title,
   desc,
 }) => {
-  const { accentDeep } = useAccent();
+  const { accent } = useAccent();
   return (
     <div id={id} className="scroll-mt-6 pt-10 text-center md:pt-16">
-      <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.5em]" style={{ color: accentDeep }}>
-        {kicker}
-      </p>
-      <h2 className="mt-3 font-display text-4xl font-semibold leading-tight text-ink sm:text-5xl">{title}</h2>
+      {/* A large, faint serif numeral gives each act its own editorial identity
+          (Act I / II / III) — the one rhythm break, kept at the boundary only. */}
+      <span
+        className="block font-display text-6xl font-semibold leading-none sm:text-7xl"
+        style={{ color: accent, opacity: 0.16 }}
+        aria-hidden
+      >
+        {numeral}
+      </span>
+      <h2 className="mt-2 font-display text-4xl font-semibold leading-tight text-ink sm:text-5xl">{title}</h2>
       <p className="mx-auto mt-3 max-w-md text-[15px] italic leading-relaxed text-ink/55">{desc}</p>
     </div>
   );
